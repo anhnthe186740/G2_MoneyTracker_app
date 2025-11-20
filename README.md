@@ -1,3 +1,5 @@
+****Ứng dụng quản lý tài chính cá nhân****
+
 Cách lấy code + chạy lần đầu (chỉ làm 1 lần):
 
 1. Clone repo:
