@@ -56,7 +56,7 @@ export default function Register() {
       // Đăng nhập luôn sau khi đăng ký thành công
       const success = await login(email, password);
       if (success) {
-        navigate('/');
+        navigate('/dashboard');
       }
     } catch (err) {
       setError('Đã có lỗi xảy ra, vui lòng thử lại');
