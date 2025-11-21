@@ -1,7 +1,8 @@
 // src/App.tsx
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard'; // bạn sẽ tạo sau
+import Dashboard from './pages/Dashboard'; 
+import LandingPage from './pages/LandingPage';
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 import Register from './pages/Register';
@@ -14,11 +15,17 @@ function App() {
 
   return (
     <BrowserRouter>
-      <LogoutButton />
+      {/* Chỉ hiển thị LogoutButton khi đã đăng nhập */}
+      {user && <LogoutButton />}
       <Routes>
-        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-        <Route path="/" element={user ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
+        {/* Landing Page - công khai, không cần đăng nhập */}
+        <Route path="/" element={<LandingPage />} />
+        {/* Dashboard - yêu cầu đăng nhập */}
+        <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
+        {/* Login - redirect nếu đã đăng nhập */}
+        <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <Login />} />
+        {/* Register - redirect nếu đã đăng nhập */}
+        <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <Register />} />
       </Routes>
     </BrowserRouter>
   );

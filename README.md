@@ -1,73 +1,36 @@
-# React + TypeScript + Vite
+****Ứng dụng quản lý tài chính cá nhân****
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Cách lấy code + chạy lần đầu (chỉ làm 1 lần):
 
-Currently, two official plugins are available:
+1. Clone repo:
+   git clone https://github.com/anhnthe186740/G2_MoneyTracker_app.git
+   cd G2_MoneyTracker_app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2. Chuyển sang nhánh develop (quan trọng!):
+   git checkout develop
+   git pull origin develop
 
-## React Compiler
+3. Cài dependencies:
+   npm install
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+4. Chạy project:
+   npm run dev
 
-## Expanding the ESLint configuration
+Quy tắc làm việc:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Luôn pull develop mới nhất:
+   git checkout develop
+   git pull origin develop
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+2. Tạo nhánh mới cho chức năng mình làm (không được code trên nhánh develop) :
+   git checkout -b feature/tên-chức-năng
+   (ví dụ: feature/dashboard, feature/transactions, feature/wallets...)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+3. Code xong → commit + push nhánh của mình
+   git add .
+   git commit -m "feat: mô tả ngắn"
+   git push origin feature/tên-chức-năng
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+4. Vào GitHub tạo Pull Request merge vào develop
+5. Tag người khác review → merge → xóa nhánh
+6. Nhánh main sẽ để đến khi nào xong dự án trưởng nhóm sẽ merge từ nhánh develop sang để nộp

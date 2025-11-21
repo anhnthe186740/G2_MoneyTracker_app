@@ -20,7 +20,7 @@ export default function Login() {
 
     const success = await login(email, password);
     if (success) {
-      navigate('/'); // chuyển về dashboard
+      navigate('/dashboard'); // chuyển về dashboard
     } else {
       setError('Email/username hoặc mật khẩu không đúng');
     }
