@@ -3,6 +3,7 @@ import { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Loader2, Mail, Lock } from 'lucide-react';
+import { ChevronRight, PieChart, TrendingUp, Target, BarChart3 } from 'lucide-react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -33,7 +34,7 @@ export default function Login() {
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <div className="bg-indigo-600 rounded-2xl p-4 shadow-lg">
-            <span className="text-white text-4xl font-bold">₫</span>
+            <span className="text-white text-4xl font-bold"><PieChart className="w-7 h-7 text-white" /></span>
           </div>
         </div>
 

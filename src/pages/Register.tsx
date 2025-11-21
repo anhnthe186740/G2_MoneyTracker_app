@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import api from '../services/api';
-
+import { ChevronRight, PieChart, TrendingUp, Target, BarChart3 } from 'lucide-react';
 export default function Register() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -70,7 +70,7 @@ export default function Register() {
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <div className="bg-indigo-600 rounded-2xl p-4 shadow-lg">
-            <span className="text-white text-4xl font-bold">₫</span>
+          <span className="text-white text-4xl font-bold"><PieChart className="w-7 h-7 text-white" /></span>
           </div>
         </div>
 
