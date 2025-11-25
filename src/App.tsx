@@ -1,9 +1,8 @@
 // src/App.tsx
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard'; 
 import LandingPage from './pages/LandingPage';
-import TransactionManagement from './pages/TransactionManagement';
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 import Register from './pages/Register';
@@ -23,8 +22,6 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         {/* Dashboard - yêu cầu đăng nhập */}
         <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
-        {/* Transaction Management - yêu cầu đăng nhập */}
-        <Route path="/transactions" element={user ? <TransactionManagement /> : <Navigate to="/login" />} />
         {/* Login - redirect nếu đã đăng nhập */}
         <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <Login />} />
         {/* Register - redirect nếu đã đăng nhập */}
