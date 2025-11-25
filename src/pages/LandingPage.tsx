@@ -59,7 +59,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
             <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
               <PieChart className="w-7 h-7 text-white" />
             </div>
-            <span className="text-2xl text-blue-900">MoneyMaster</span>
+            <span className="text-2xl text-blue-900">MoneyTracker</span>
           </div>
           
           <div className="flex gap-3">
@@ -115,7 +115,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       <footer className="container mx-auto px-6 py-8 text-center text-gray-600">
-        <p>© 2025 MoneyMaster. Quản lý tài chính cá nhân thông minh của G2-FA team.</p>
+        <p>© 2025 MoneyTracker. Quản lý tài chính cá nhân thông minh của G2-FA team.</p>
       </footer>
     </div>
   );
