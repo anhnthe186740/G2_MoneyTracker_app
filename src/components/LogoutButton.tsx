@@ -10,7 +10,7 @@ export default function LogoutButton() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
   };
 
   if (!user) return null;
