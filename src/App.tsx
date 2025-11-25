@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import LandingPage from './pages/LandingPage';
-import TransactionManagement from './pages/TransactionManagement';
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 
