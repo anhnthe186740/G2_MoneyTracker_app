@@ -1,0 +1,32 @@
+{
+  "appName": "MoneyTracker",
+  "common": {
+    "save": "Save Changes",
+    "reset": "Reset",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "close": "Close"
+  },
+  "currency": {
+    "VND": "VND (Vietnamese Dong)",
+    "USD": "USD (US Dollar)",
+    "EUR": "EUR (Euro)"
+  },
+  "language": {
+    "vi": "Vietnamese",
+    "en": "English"
+  }
+}
+

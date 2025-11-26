@@ -1,0 +1,26 @@
+{
+  "title": "Cài đặt hệ thống",
+  "subtitle": "Tùy chỉnh giao diện và hành vi ứng dụng",
+  "display": {
+    "title": "Giao diện",
+    "heading": "Chế độ hiển thị",
+    "lightMode": {
+      "title": "Chế độ sáng",
+      "description": "Tông màu sáng, sắc nét"
+    },
+    "darkMode": {
+      "title": "Chế độ tối",
+      "description": "Tối giản, dịu mắt ban đêm"
+    }
+  },
+  "language": {
+    "title": "Ngôn ngữ & Tiền tệ",
+    "heading": "Tùy chọn hiển thị",
+    "languageLabel": "Ngôn ngữ",
+    "currencyLabel": "Đơn vị tiền tệ"
+  },
+  "notifications": {
+    "title": "Thông báo"
+  }
+}
+

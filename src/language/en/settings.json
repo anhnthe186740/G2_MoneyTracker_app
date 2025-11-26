@@ -1,0 +1,26 @@
+{
+  "title": "System Settings",
+  "subtitle": "Customize interface and application behavior",
+  "display": {
+    "title": "Interface",
+    "heading": "Display Mode",
+    "lightMode": {
+      "title": "Light Mode",
+      "description": "Bright, sharp color tones"
+    },
+    "darkMode": {
+      "title": "Dark Mode",
+      "description": "Minimalist, eye-friendly at night"
+    }
+  },
+  "language": {
+    "title": "Language & Currency",
+    "heading": "Display Options",
+    "languageLabel": "Language",
+    "currencyLabel": "Currency Unit"
+  },
+  "notifications": {
+    "title": "Notifications"
+  }
+}
+

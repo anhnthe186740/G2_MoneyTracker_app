@@ -1,0 +1,18 @@
+{
+  "menu": {
+    "dashboard": "Dashboard",
+    "transactions": "Transactions",
+    "accounts": "Accounts",
+    "budget": "Budget",
+    "goals": "Goals",
+    "recurring": "Recurring",
+    "analytics": "Analytics",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "settings": "Settings",
+    "export": "Export Reports"
+  },
+  "logout": "Logout",
+  "logoutConfirm": "Are you sure you want to logout?"
+}
+

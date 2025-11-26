@@ -1,0 +1,16 @@
+{
+  "title": "Login to Account",
+  "email": "Email",
+  "emailPlaceholder": "example@email.com",
+  "password": "Password",
+  "passwordPlaceholder": "••••••",
+  "forgotPassword": "Forgot Password?",
+  "loginButton": "Login",
+  "loggingIn": "Logging in...",
+  "or": "Or",
+  "noAccount": "Don't have an account?",
+  "registerNow": "Sign up now",
+  "backHome": "← Back to Home",
+  "error": "Email/username or password is incorrect"
+}
+

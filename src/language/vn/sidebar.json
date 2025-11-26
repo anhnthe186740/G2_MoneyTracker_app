@@ -1,0 +1,18 @@
+{
+  "menu": {
+    "dashboard": "Tổng quan",
+    "transactions": "Giao dịch",
+    "accounts": "Tài khoản",
+    "budget": "Ngân sách",
+    "goals": "Mục tiêu",
+    "recurring": "Định kỳ",
+    "analytics": "Phân tích",
+    "notifications": "Thông báo",
+    "profile": "Hồ sơ",
+    "settings": "Cài đặt",
+    "export": "Xuất báo cáo"
+  },
+  "logout": "Đăng xuất",
+  "logoutConfirm": "Bạn có chắc chắn muốn đăng xuất không?"
+}
+
