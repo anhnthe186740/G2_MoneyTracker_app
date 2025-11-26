@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useState, useEffect, type ReactNode, useContext } from 'react';
 import api from '../services/api';
 import { type User } from '../types';
 
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (identifier: string, password: string) => {
     try {
       const res = await api.get<User[]>('/users');
-      const foundUser = res.data.find(u => 
+      const foundUser = res.data.find(u =>
         (u.username === identifier || u.email === identifier) && u.password === password
       );
 
@@ -47,9 +47,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
   };
 
+
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth phải được dùng trong AuthProvider");
+  }
+  return context;
+};
+
