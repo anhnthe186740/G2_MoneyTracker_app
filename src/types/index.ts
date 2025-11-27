@@ -47,6 +47,17 @@ export interface Goal {
   deadline: string;
 }
 
+export interface Notification {
+  id: string;
+  user_id: number;
+  type: "WARNING" | "SUCCESS" | "INFO" | "REMINDER";
+  title: string;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}
+
+
 export interface RecurringTransaction {
   id: number | string;
   userId: number;

@@ -14,7 +14,7 @@ import {
   LogOut,
   PieChart,
 } from 'lucide-react';
-
+import { useNotificationsContext } from '../context/NotificationContext';
 export interface SidebarMenuItem {
   id: string;
   label: string;
@@ -44,6 +44,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ currentScreen, onNavigate, onLogout, userName }: SidebarProps) {
+  const { unreadCount } = useNotificationsContext();
   const handleLogoutClick = () => {
     if (window.confirm('Bạn có chắc chắn muốn đăng xuất không?')) {
       onLogout();
@@ -82,14 +83,21 @@ export default function Sidebar({ currentScreen, onNavigate, onLogout, userName 
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                  isActive
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${isActive
                     ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-800'
                     : 'text-foreground hover:bg-accent'
-                }`}
+                  }`}
               >
-                <Icon className="w-5 h-5" />
-                <span>{item.label}</span>
+                <div className="flex items-center gap-3">
+                  <Icon className="w-5 h-5" />
+                  <span>{item.label}</span>
+                </div>
+
+                {item.id === 'notifications' && unreadCount > 0 && (
+                  <span className="inline-flex min-w-[1.5rem] justify-center rounded-full bg-red-500 px-2 py-0.5 text-xs font-semibold text-white">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
               </button>
             );
           })}
