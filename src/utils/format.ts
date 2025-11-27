@@ -10,3 +10,6 @@ export const formatCurrency = (amount: number): string => {
 export const formatDate = (dateString: string): string => {
   return format(new Date(dateString), 'dd/MM/yyyy');
 };
+export const formatDateTime = (dateString: string): string => {
+  return format(new Date(dateString), 'dd/MM/yyyy HH:mm');
+};

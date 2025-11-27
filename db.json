@@ -439,6 +439,7 @@
     {
       "id": "1",
       "user_id": 1,
+      "type": "INFO",
       "title": "Chào mừng trở lại!",
       "message": "Cập nhật tình hình tài chính của bạn hôm nay nào.",
       "is_read": true,
@@ -447,50 +448,101 @@
     {
       "id": "2",
       "user_id": 1,
+      "type": "WARNING",
       "title": "Chi tiêu tháng 3",
-      "message": "Bạn đã chi 4,245,000₫ trong tháng 3. Tiếp tục phát huy nhé!",
+      "message": "Bạn đã chi 4,245,000₫ trong tháng 3. Hãy xem lại các khoản chi nhé!",
       "is_read": false,
       "created_at": "2024-03-22T08:00:00Z"
     },
     {
       "id": "3",
       "user_id": 1,
+      "type": "SUCCESS",
       "title": "Tiến độ mục tiêu",
-      "message": "Bạn đã đạt 55% mục tiêu 'Mua MacBook Pro M3'",
+      "message": "Bạn đã đạt 55% mục tiêu 'Mua MacBook Pro M3'. Rất tốt!",
       "is_read": false,
       "created_at": "2024-03-20T15:30:00Z"
     },
     {
       "id": "4",
       "user_id": 1,
+      "type": "REMINDER",
       "title": "Giao dịch định kỳ",
-      "message": "Lương tháng sẽ được nhận vào ngày 05/04/2024",
+      "message": "Lương tháng sẽ được nhận vào ngày 05/04/2024.",
       "is_read": false,
       "created_at": "2024-03-25T10:00:00Z"
     },
     {
       "id": "5",
       "user_id": 2,
+      "type": "INFO",
       "title": "Chào mừng đến với Money Tracker!",
-      "message": "Bắt đầu hành trình quản lý tài chính thông minh.",
+      "message": "Bắt đầu hành trình quản lý tài chính thông minh ngay nào.",
       "is_read": false,
       "created_at": "2024-03-21T11:20:00Z"
     },
     {
       "id": "6",
       "user_id": 2,
+      "type": "WARNING",
       "title": "Chi tiêu tháng 3",
-      "message": "Bạn đã chi 1,300,000₫ trong tháng 3",
+      "message": "Bạn đã chi 1,300,000₫ trong tháng 3.",
       "is_read": false,
       "created_at": "2024-03-22T09:30:00Z"
     },
     {
       "id": "7",
       "user_id": 2,
+      "type": "SUCCESS",
       "title": "Tiến độ mục tiêu",
-      "message": "Bạn đã đạt 44% mục tiêu 'Mua iPhone 15 Pro'",
-      "is_read": false,
+      "message": "Bạn đã đạt 44% mục tiêu 'Mua iPhone 15 Pro'. Tuyệt!",
+      "is_read": true,
       "created_at": "2024-03-19T14:15:00Z"
+    },
+    {
+      "id": "8",
+      "user_id": 1,
+      "type": "WARNING",
+      "title": "Ví sắp cạn!",
+      "message": "Số dư ví Tiền mặt của bạn còn dưới 200,000₫.",
+      "is_read": false,
+      "created_at": "2024-03-26T08:20:00Z"
+    },
+    {
+      "id": "9",
+      "user_id": 1,
+      "type": "REMINDER",
+      "title": "Nhắc nhở tiết kiệm",
+      "message": "Bạn còn 10 ngày để đạt mục tiêu tháng này.",
+      "is_read": false,
+      "created_at": "2024-03-26T09:00:00Z"
+    },
+    {
+      "id": "10",
+      "user_id": 1,
+      "type": "SUCCESS",
+      "title": "Đã nhận 20,000₫ cashback",
+      "message": "Chúc mừng! Bạn vừa nhận hoàn tiền từ ShopeePay.",
+      "is_read": false,
+      "created_at": "2024-03-26T12:15:00Z"
+    },
+    {
+      "id": "11",
+      "user_id": 2,
+      "type": "INFO",
+      "title": "Cập nhật phiên bản mới",
+      "message": "Money Tracker đã được cập nhật với nhiều tính năng mới.",
+      "is_read": false,
+      "created_at": "2024-03-26T13:40:00Z"
+    },
+    {
+      "id": "12",
+      "user_id": 2,
+      "type": "REMINDER",
+      "title": "Hóa đơn Internet",
+      "message": "Bạn cần thanh toán hóa đơn Internet trước ngày 30/03.",
+      "is_read": true,
+      "created_at": "2024-03-26T14:10:00Z"
     }
   ],
   "app_settings": [
