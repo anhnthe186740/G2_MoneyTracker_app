@@ -27,7 +27,7 @@ export interface Category {
 }
 
 export interface Transaction {
-  id: number;
+  id: number | string;
   userId: number;
   walletId: number;
   categoryId: number;
@@ -58,3 +58,18 @@ export interface Notification {
 }
 
 
+export interface RecurringTransaction {
+  id: number | string;
+  userId: number;
+  walletId: number;
+  categoryId: number;
+  amount: number;
+  type: "INCOME" | "EXPENSE";
+  description: string;
+  frequency: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
+  startDate: string;
+  endDate?: string;
+  nextDate: string;
+  isActive: boolean;
+  createdAt: string;
+}

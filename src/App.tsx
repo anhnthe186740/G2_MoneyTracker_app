@@ -1,12 +1,13 @@
 // src/App.tsx
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import LandingPage from './pages/LandingPage';
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
-import LandingPage from './pages/LandingPage';
-import Login from './pages/Login';
 import Register from './pages/Register';
 import SidebarLayout from './pages/SidebarLayout';
-import Dashboard from './pages/Dashboard';
+
 import Transactions from './pages/Transactions';
 import Accounts from './pages/Accounts';
 import Budget from './pages/Budget';
@@ -50,8 +51,8 @@ function App() {
         <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <Register />} />
         {/* Fallback */}
         <Route path="*" element={<Navigate to={user ? '/dashboard' : '/'} replace />} />
-      </Routes>
-    </BrowserRouter>
+      </Routes >
+    </BrowserRouter >
   );
 }
 
