@@ -350,7 +350,8 @@
       "amount": 20000000,
       "description": "Lương tháng công ty chính",
       "frequency": "MONTHLY",
-      "next_date": "2024-04-05"
+      "next_date": "2024-04-05",
+      "is_active": false
     },
     {
       "id": "2",
