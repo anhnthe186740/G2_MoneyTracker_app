@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Wallet, Loader2 } from "lucide-react";
+import { Wallet, Loader2, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
@@ -11,25 +11,42 @@ interface WalletType {
   color: string;
 }
 
+interface Transaction {
+  id: string;
+  user_id: number;
+  wallet_id: string;
+  amount: number;
+  type: "INCOME" | "EXPENSE";
+  description: string;
+  date: string;
+  category?: { name: string; icon?: string };
+}
+
 export default function Dashboard() {
   const [wallets, setWallets] = useState<WalletType[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const { user } = useAuth();
+
   useEffect(() => {
-    const fetchWallets = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/wallets");
-        setWallets(response.data);
+        const [walletsRes, transRes] = await Promise.all([
+          axios.get("http://localhost:3001/wallets"),
+          axios.get("http://localhost:3001/transactions"),
+        ]);
+        setWallets(walletsRes.data);
+        setTransactions(transRes.data);
         setLoading(false);
       } catch (err) {
-        console.error("Lỗi khi lấy ví:", err);
+        console.error("Lỗi khi tải dữ liệu:", err);
         setLoading(false);
       }
     };
 
-    fetchWallets();
+    fetchData();
   }, []);
-
-  const { user } = useAuth();
 
   if (!user) {
     return (
@@ -42,17 +59,26 @@ export default function Dashboard() {
       </section>
     );
   }
+
   const currentUserId = Number(user.id);
+  const myWallets = wallets.filter((w) => w.user_id === currentUserId);
+  const totalBalance = myWallets.reduce((sum, w) => sum + w.balance, 0);
 
-  const myWallets = wallets.filter((wallet) => wallet.user_id === currentUserId);
+  const myTransactions = transactions
+    .filter((t) => t.user_id === currentUserId)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 6);
 
-  const totalBalance = myWallets.reduce((sum, wallet) => sum + wallet.balance, 0);
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("vi-VN");
+  };
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-8">
       <header className="space-y-1">
         <h1 className="text-3xl font-bold text-foreground">Tổng quan tài chính</h1>
-        <p className="text-muted-foreground">!</p>
+        <p className="text-muted-foreground">Chào mừng trở lại!</p>
       </header>
 
       <div className="rounded-2xl border bg-card shadow-lg overflow-hidden">
@@ -86,10 +112,7 @@ export default function Dashboard() {
                 className="flex items-center justify-between p-4 rounded-xl bg-white border shadow-sm"
               >
                 <div className="flex items-center gap-3">
-                  <div
-                    className="w-3 h-12 rounded-full"
-                    style={{ backgroundColor: wallet.color }}
-                  />
+                  <div className="w-3 h-12 rounded-full" style={{ backgroundColor: wallet.color }} />
                   <div>
                     <p className="font-medium">{wallet.name}</p>
                     <p className="text-xs text-muted-foreground">
@@ -100,6 +123,58 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      <div className="rounded-2xl border bg-card shadow-lg">
+        <div className="p-6">
+          <h3 className="text-xl font-semibold mb-4">Giao dịch gần đây</h3>
+
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : myTransactions.length === 0 ? (
+            <p className="text-center text-muted-foreground py-8">Chưa có giao dịch nào</p>
+          ) : (
+            <div className="space-y-3">
+              {myTransactions.map((t) => (
+                <div key={t.id} className="flex items-center justify-between py-3 border-b last:border-0">
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`p-2 rounded-full ${t.type === "INCOME" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
+                        }`}
+                    >
+                      {t.type === "INCOME" ? (
+                        <ArrowUpRight className="h-5 w-5" />
+                      ) : (
+                        <ArrowDownRight className="h-5 w-5" />
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-medium">{t.description}</p>
+                      <p className="text-sm text-muted-foreground">{formatDate(t.date)}</p>
+                    </div>
+                  </div>
+                  <span
+                    className={`font-semibold ${t.type === "INCOME" ? "text-green-600" : "text-red-600"
+                      }`}
+                  >
+                    {t.type === "INCOME" ? "+" : "-"}
+                    {t.amount.toLocaleString("vi-VN")} đ
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {myTransactions.length > 0 && (
+            <div className="mt-4 text-center">
+              <a href="/transactions" className="text-sm text-primary hover:underline">
+                Xem tất cả giao dịch →
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </section>
