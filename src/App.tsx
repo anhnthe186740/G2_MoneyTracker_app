@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 import Register from './pages/Register';
 import LogoutButton from './components/LogoutButton';
-
+import Profile from './pages/Profile'
 function App() {
   const { user, loading } = useContext(AuthContext)!;
 
@@ -18,6 +18,7 @@ function App() {
       {/* Chỉ hiển thị LogoutButton khi đã đăng nhập */}
       {user && <LogoutButton />}
       <Routes>
+        <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
         {/* Landing Page - công khai, không cần đăng nhập */}
         <Route path="/" element={<LandingPage />} />
         {/* Dashboard - yêu cầu đăng nhập */}
