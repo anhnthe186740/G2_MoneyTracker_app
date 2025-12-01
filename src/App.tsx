@@ -5,8 +5,6 @@ import Dashboard from './pages/Dashboard';
 import LandingPage from './pages/LandingPage';
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
-
-
 import Register from './pages/Register';
 import SidebarLayout from './pages/SidebarLayout';
 
