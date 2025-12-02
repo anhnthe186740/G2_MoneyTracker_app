@@ -13,12 +13,12 @@ import type { Wallet, Category, Transaction } from '../types';
 type TabType = 'overview' | 'transactions' | 'categories';
 
 // Category Management Tab Component
-function CategoryManagementTab({ 
-  categories, 
-  onUpdate, 
-  onOpenCategoryForm 
-}: { 
-  categories: Category[]; 
+function CategoryManagementTab({
+  categories,
+  onUpdate,
+  onOpenCategoryForm
+}: {
+  categories: Category[];
   onUpdate: () => void;
   onOpenCategoryForm: () => void;
 }) {
@@ -139,7 +139,7 @@ export default function Transactions() {
   }
 
   const { user } = authContext;
-  
+
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [showTransactionForm, setShowTransactionForm] = useState(false);
@@ -147,7 +147,7 @@ export default function Transactions() {
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [editTransaction, setEditTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState(true);
-  
+
   // Get active tab from URL params or default to 'overview'
   const activeTab = (searchParams.get('tab') as TabType) || 'overview';
 
@@ -216,11 +216,11 @@ export default function Transactions() {
     try {
       setLoading(true);
       const validCategoryIds = categories.map(c => String(c.id));
-      
+
       // Get all transactions
       const transactionsRes = await api.get(`/transactions?user_id=${user.id}`);
       const allTransactions = transactionsRes.data;
-      
+
       // Find and delete invalid transactions
       let deletedCount = 0;
       for (const t of allTransactions) {
@@ -230,7 +230,7 @@ export default function Transactions() {
           deletedCount++;
         }
       }
-      
+
       alert(`Đã xóa ${deletedCount} giao dịch không hợp lệ`);
       await handleUpdate();
     } catch (error) {
@@ -268,7 +268,7 @@ export default function Transactions() {
   const handleCategorySuccess = async () => {
     console.log('[Transactions] Category created successfully');
     setShowCategoryForm(false);
-    
+
     // Just reload data once
     await loadData();
     console.log('[Transactions] Data reloaded successfully');
@@ -330,11 +330,10 @@ export default function Transactions() {
             <button
               key={tab.id}
               onClick={() => changeTab(tab.id)}
-              className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${
-                activeTab === tab.id
+              className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === tab.id
                   ? 'border-b-2 border-blue-600 text-blue-600'
                   : 'text-muted-foreground hover:text-foreground'
-              }`}
+                }`}
             >
               <Icon size={20} />
               {tab.label}
@@ -383,11 +382,10 @@ export default function Transactions() {
               <button
                 onClick={() => setShowTransactionForm(true)}
                 disabled={hasNoData}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-                  hasNoData 
-                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg ${hasNoData
+                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
                     : 'bg-blue-600 text-white hover:bg-blue-700'
-                }`}
+                  }`}
                 title={hasNoData ? 'Vui lòng tạo ví và danh mục trước' : 'Thêm giao dịch mới'}
               >
                 <Plus size={20} />

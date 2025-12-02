@@ -46,12 +46,12 @@ export default function RecurringTransactionForm({
             // Helper function to safely format date
             const formatDate = (dateValue: string | undefined): string => {
                 if (!dateValue) return new Date().toISOString().split('T')[0];
-                
+
                 // If already in YYYY-MM-DD format, return as is
                 if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
                     return dateValue;
                 }
-                
+
                 // Try to parse and format
                 const date = new Date(dateValue);
                 if (isNaN(date.getTime())) {
@@ -61,14 +61,14 @@ export default function RecurringTransactionForm({
             };
 
             // Safely convert IDs, handling null/undefined/NaN
-            const safeWalletId = editTransaction.walletId !== null && 
-                                 editTransaction.walletId !== undefined && 
-                                 editTransaction.walletId !== 'NaN' 
-                ? String(editTransaction.walletId) 
+            const safeWalletId = editTransaction.walletId !== null &&
+                editTransaction.walletId !== undefined &&
+                editTransaction.walletId !== 'NaN'
+                ? String(editTransaction.walletId)
                 : '';
-            const safeCategoryId = editTransaction.categoryId !== null && 
-                                   editTransaction.categoryId !== undefined && 
-                                   editTransaction.categoryId !== 'NaN'
+            const safeCategoryId = editTransaction.categoryId !== null &&
+                editTransaction.categoryId !== undefined &&
+                editTransaction.categoryId !== 'NaN'
                 ? String(editTransaction.categoryId)
                 : '';
 
@@ -91,7 +91,7 @@ export default function RecurringTransactionForm({
     const validWallets = wallets.filter(w => w.id !== null && w.id !== undefined && w.id !== 'NaN' && !Number.isNaN(w.id));
     const validCategories = categories.filter(c => c.id !== null && c.id !== undefined && c.id !== 'NaN' && !Number.isNaN(c.id));
     const filteredCategories = validCategories.filter(c => c.type === formData.type);
-    
+
     console.log('RecurringTransactionForm - categories:', categories.length);
     console.log('RecurringTransactionForm - validCategories:', validCategories.length);
     console.log('RecurringTransactionForm - filteredCategories:', filteredCategories.length, 'for type:', formData.type);

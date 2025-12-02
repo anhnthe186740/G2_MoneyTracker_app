@@ -209,7 +209,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
                 // Check if it's time to create a transaction
                 if (nextDate <= today) {
                     console.log(`Processing recurring transaction: ${rt.id}, nextDate: ${nextDate.toDateString()}, today: ${today.toDateString()}`);
-                    
+
                     // Check if end date has passed
                     if (rt.endDate && new Date(rt.endDate) < today) {
                         console.log(`End date passed for recurring transaction ${rt.id}, deactivating...`);
@@ -298,7 +298,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
     // Helper function to update wallet balance
     const updateWalletBalance = async (walletId: number | string, amount: number, type: 'INCOME' | 'EXPENSE') => {
         console.log(`Updating wallet balance: walletId=${walletId}, amount=${amount}, type=${type}`);
-        
+
         try {
             const walletResponse = await api.get<any>(`/wallets/${walletId}`);
             const wallet = walletResponse.data;

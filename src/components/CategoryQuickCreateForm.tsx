@@ -85,8 +85,8 @@ export default function CategoryQuickCreateForm({ userId, onClose, onSuccess }: 
                   type="radio"
                   value="EXPENSE"
                   checked={formData.type === 'EXPENSE'}
-                  onChange={(e) => setFormData({ 
-                    ...formData, 
+                  onChange={(e) => setFormData({
+                    ...formData,
                     type: e.target.value as 'EXPENSE',
                     color: '#EF4444',
                     icon: '💸'
@@ -100,8 +100,8 @@ export default function CategoryQuickCreateForm({ userId, onClose, onSuccess }: 
                   type="radio"
                   value="INCOME"
                   checked={formData.type === 'INCOME'}
-                  onChange={(e) => setFormData({ 
-                    ...formData, 
+                  onChange={(e) => setFormData({
+                    ...formData,
                     type: e.target.value as 'INCOME',
                     color: '#10B981',
                     icon: '💰'

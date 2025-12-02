@@ -13,12 +13,12 @@ import type { Wallet, Category, RecurringTransaction } from '../types';
 type TabType = 'recurring' | 'categories';
 
 // Category Management Tab Component
-function CategoryManagementTab({ 
-  categories, 
-  onUpdate, 
-  onOpenCategoryForm 
-}: { 
-  categories: Category[]; 
+function CategoryManagementTab({
+  categories,
+  onUpdate,
+  onOpenCategoryForm
+}: {
+  categories: Category[];
   onUpdate: () => void;
   onOpenCategoryForm: () => void;
 }) {
@@ -145,7 +145,7 @@ export default function Recurring() {
 
   const { user } = authContext;
   const { processRecurringTransactions } = recurringContext;
-  
+
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [showRecurringForm, setShowRecurringForm] = useState(false);
@@ -153,7 +153,7 @@ export default function Recurring() {
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [editRecurringTransaction, setEditRecurringTransaction] = useState<RecurringTransaction | null>(null);
   const [loading, setLoading] = useState(true);
-  
+
   // Get active tab from URL params or default to 'recurring'
   const activeTab = (searchParams.get('tab') as TabType) || 'recurring';
 
@@ -217,7 +217,7 @@ export default function Recurring() {
         console.error('=== RECURRING PAGE: Error processing recurring transactions ===', error);
       }
     };
-    
+
     initializePage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.id]);
@@ -234,11 +234,11 @@ export default function Recurring() {
     try {
       setLoading(true);
       const validCategoryIds = categories.map(c => String(c.id));
-      
+
       // Get all recurring transactions
       const recurringRes = await api.get(`/recurring_transactions?user_id=${user.id}`);
       const allRecurring = recurringRes.data;
-      
+
       // Find and delete invalid recurring transactions
       let deletedCount = 0;
       for (const rt of allRecurring) {
@@ -248,7 +248,7 @@ export default function Recurring() {
           deletedCount++;
         }
       }
-      
+
       alert(`Đã xóa ${deletedCount} giao dịch định kỳ không hợp lệ`);
       await handleUpdate();
     } catch (error) {
@@ -262,17 +262,17 @@ export default function Recurring() {
   const handleCategorySuccess = async () => {
     console.log('=== Category created successfully ===');
     setShowCategoryForm(false);
-    
+
     // Đóng form recurring để reload
     const wasOpen = showRecurringForm;
     if (wasOpen) {
       setShowRecurringForm(false);
     }
-    
+
     // Just reload data once
     await loadData();
     console.log('=== Data reloaded successfully ===');
-    
+
     // Mở lại form recurring
     if (wasOpen) {
       setTimeout(() => {
@@ -359,11 +359,10 @@ export default function Recurring() {
             <button
               key={tab.id}
               onClick={() => changeTab(tab.id)}
-              className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${
-                activeTab === tab.id
+              className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === tab.id
                   ? 'border-b-2 border-purple-600 text-purple-600'
                   : 'text-muted-foreground hover:text-foreground'
-              }`}
+                }`}
             >
               <Icon size={20} />
               {tab.label}
@@ -406,11 +405,10 @@ export default function Recurring() {
               <button
                 onClick={() => setShowRecurringForm(true)}
                 disabled={hasNoData}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                  hasNoData 
-                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${hasNoData
+                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
                     : 'bg-purple-600 text-white hover:bg-purple-700'
-                }`}
+                  }`}
                 title={hasNoData ? 'Vui lòng tạo ví và danh mục trước' : 'Thêm thu/chi định kỳ'}
               >
                 <Plus size={20} />

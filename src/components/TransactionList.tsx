@@ -68,15 +68,15 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
             console.warn('[getCategoryName] Invalid categoryId:', categoryId);
             return '[Danh m\u1ee5c b\u1ecb x\u00f3a]';
         }
-        
+
         const category = categories.find(c => {
             // Try multiple comparison methods to handle type mismatches
-            const match = c.id === categoryId || 
-                   String(c.id) === String(categoryId) || 
-                   Number(c.id) === Number(categoryId);
+            const match = c.id === categoryId ||
+                String(c.id) === String(categoryId) ||
+                Number(c.id) === Number(categoryId);
             return match;
         });
-        
+
         if (!category) {
             console.error('[getCategoryName] Category NOT FOUND:', {
                 searchedId: categoryId,
@@ -92,7 +92,7 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
                 }))
             });
         }
-        
+
         return category?.name || `[Danh m\u1ee5c #${categoryId} \u0111\u00e3 x\u00f3a]`;
     };
 
@@ -101,11 +101,11 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
         if (Number.isNaN(categoryId) || categoryId === 'NaN' || !categoryId) {
             return '#6B7280'; // gray-500
         }
-        
+
         const category = categories.find(c => {
-            return c.id === categoryId || 
-                   String(c.id) === String(categoryId) || 
-                   Number(c.id) === Number(categoryId);
+            return c.id === categoryId ||
+                String(c.id) === String(categoryId) ||
+                Number(c.id) === Number(categoryId);
         });
         return category?.color || '#6B7280'; // gray-500 for deleted categories
     };

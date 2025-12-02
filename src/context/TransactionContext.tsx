@@ -227,7 +227,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
     const updateWalletBalance = async (walletId: number | string, amount: number, type: 'INCOME' | 'EXPENSE') => {
         try {
             console.log('Updating wallet balance:', { walletId, amount, type });
-            
+
             const walletResponse = await api.get<any>(`/wallets/${walletId}`);
             const wallet = walletResponse.data;
 
@@ -240,7 +240,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             console.log('New balance:', newBalance);
 
             await api.patch(`/wallets/${walletId}`, { balance: newBalance });
-            
+
             console.log('Wallet balance updated successfully');
         } catch (err) {
             console.error('Error updating wallet balance:', err);

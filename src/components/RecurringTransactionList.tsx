@@ -76,22 +76,22 @@ export default function RecurringTransactionList({
             console.warn('[RecurringTransactionList] Invalid categoryId:', categoryId);
             return '[Danh m\u1ee5c b\u1ecb x\u00f3a]';
         }
-        
+
         const category = categories.find(c => {
             // Try multiple comparison methods to handle type mismatches
-            return c.id === categoryId || 
-                   String(c.id) === String(categoryId) || 
-                   Number(c.id) === Number(categoryId);
+            return c.id === categoryId ||
+                String(c.id) === String(categoryId) ||
+                Number(c.id) === Number(categoryId);
         });
-        
+
         if (!category) {
-            console.error('[RecurringTransactionList] Category NOT FOUND:', 
-                'ID:', categoryId, 
+            console.error('[RecurringTransactionList] Category NOT FOUND:',
+                'ID:', categoryId,
                 'Type:', typeof categoryId,
                 'Available:', categories.map(c => `${c.id}(${typeof c.id})`).join(', ')
             );
         }
-        
+
         return category?.name || `[Danh mục #${categoryId} đã xóa]`;
     };
 
@@ -100,11 +100,11 @@ export default function RecurringTransactionList({
         if (Number.isNaN(categoryId) || categoryId === 'NaN' || !categoryId) {
             return '#6B7280'; // gray-500
         }
-        
+
         const category = categories.find(c => {
-            return c.id === categoryId || 
-                   String(c.id) === String(categoryId) || 
-                   Number(c.id) === Number(categoryId);
+            return c.id === categoryId ||
+                String(c.id) === String(categoryId) ||
+                Number(c.id) === Number(categoryId);
         });
         return category?.color || '#6B7280'; // gray-500 for deleted categories
     };

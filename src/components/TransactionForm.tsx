@@ -28,21 +28,21 @@ export default function TransactionForm({
     }
 
     const { createTransaction, updateTransaction } = transactionContext;
-    
+
     // Filter out invalid wallets and categories
     const validWallets = wallets.filter(w => w.id !== null && w.id !== undefined && w.id !== 'NaN' && !Number.isNaN(w.id));
     const validCategories = categories.filter(c => c.id !== null && c.id !== undefined && c.id !== 'NaN' && !Number.isNaN(c.id));
-    
+
     // Initialize form data based on edit mode
     const getInitialFormData = () => {
         if (editTransaction) {
-            const walletId = editTransaction.walletId !== null && editTransaction.walletId !== undefined && editTransaction.walletId !== 'NaN' 
-                ? String(editTransaction.walletId) 
+            const walletId = editTransaction.walletId !== null && editTransaction.walletId !== undefined && editTransaction.walletId !== 'NaN'
+                ? String(editTransaction.walletId)
                 : '';
             const categoryId = editTransaction.categoryId !== null && editTransaction.categoryId !== undefined && editTransaction.categoryId !== 'NaN'
                 ? String(editTransaction.categoryId)
                 : '';
-            
+
             return {
                 walletId,
                 categoryId,
@@ -52,7 +52,7 @@ export default function TransactionForm({
                 date: new Date(editTransaction.date).toISOString().split('T')[0],
             };
         }
-        
+
         return {
             walletId: '',
             categoryId: '',
@@ -62,7 +62,7 @@ export default function TransactionForm({
             date: new Date().toISOString().split('T')[0],
         };
     };
-    
+
     const [formData, setFormData] = useState(getInitialFormData);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
