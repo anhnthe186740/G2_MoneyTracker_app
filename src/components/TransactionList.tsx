@@ -24,6 +24,7 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
     useEffect(() => {
+        console.log('[TransactionList] Loading transactions for user:', userId);
         getTransactions(userId);
     }, [userId, getTransactions]);
 
@@ -57,16 +58,56 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
         }
     };
 
-    const getWalletName = (walletId: number) => {
-        return wallets.find(w => w.id === walletId)?.name || 'Unknown';
+    const getWalletName = (walletId: number | string) => {
+        return wallets.find(w => String(w.id) === String(walletId))?.name || 'Unknown';
     };
 
-    const getCategoryName = (categoryId: number) => {
-        return categories.find(c => c.id === categoryId)?.name || 'Unknown';
+    const getCategoryName = (categoryId: number | string) => {
+        // Handle NaN case
+        if (Number.isNaN(categoryId) || categoryId === 'NaN' || !categoryId) {
+            console.warn('[getCategoryName] Invalid categoryId:', categoryId);
+            return '[Danh m\u1ee5c b\u1ecb x\u00f3a]';
+        }
+        
+        const category = categories.find(c => {
+            // Try multiple comparison methods to handle type mismatches
+            const match = c.id === categoryId || 
+                   String(c.id) === String(categoryId) || 
+                   Number(c.id) === Number(categoryId);
+            return match;
+        });
+        
+        if (!category) {
+            console.error('[getCategoryName] Category NOT FOUND:', {
+                searchedId: categoryId,
+                searchedIdType: typeof categoryId,
+                categoriesCount: categories.length,
+                availableCategories: categories.map(c => ({
+                    id: c.id,
+                    idType: typeof c.id,
+                    name: c.name,
+                    match1: c.id === categoryId,
+                    match2: String(c.id) === String(categoryId),
+                    match3: Number(c.id) === Number(categoryId)
+                }))
+            });
+        }
+        
+        return category?.name || `[Danh m\u1ee5c #${categoryId} \u0111\u00e3 x\u00f3a]`;
     };
 
-    const getCategoryColor = (categoryId: number) => {
-        return categories.find(c => c.id === categoryId)?.color || '#999';
+    const getCategoryColor = (categoryId: number | string) => {
+        // Handle NaN or invalid IDs
+        if (Number.isNaN(categoryId) || categoryId === 'NaN' || !categoryId) {
+            return '#6B7280'; // gray-500
+        }
+        
+        const category = categories.find(c => {
+            return c.id === categoryId || 
+                   String(c.id) === String(categoryId) || 
+                   Number(c.id) === Number(categoryId);
+        });
+        return category?.color || '#6B7280'; // gray-500 for deleted categories
     };
 
     if (loading) {

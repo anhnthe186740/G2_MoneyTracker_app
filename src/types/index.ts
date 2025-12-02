@@ -8,8 +8,8 @@ export interface User {
   createdAt: string;
 }
 export interface Wallet {
-  id: number;
-  userId: number;
+  id: number | string;
+  userId: number | string;
   name: string;
   type: "BANK" | "E_WALLET" | "CASH";
   balance: number;
@@ -18,8 +18,8 @@ export interface Wallet {
 }
 
 export interface Category {
-  id: number;
-  userId: number;
+  id: number | string;
+  userId: number | string;
   name: string;
   type: "INCOME" | "EXPENSE";
   color: string;
@@ -28,14 +28,15 @@ export interface Category {
 
 export interface Transaction {
   id: number | string;
-  userId: number;
-  walletId: number;
-  categoryId: number;
+  userId: number | string;
+  walletId: number | string;
+  categoryId: number | string;
   amount: number;
   type: "INCOME" | "EXPENSE";
   description: string;
   date: string;
   createdAt: string;
+  recurringTransactionId?: number | string; // ID của recurring transaction tạo ra transaction này
 }
 
 export interface Goal {
@@ -49,9 +50,9 @@ export interface Goal {
 
 export interface RecurringTransaction {
   id: number | string;
-  userId: number;
-  walletId: number;
-  categoryId: number;
+  userId: number | string;
+  walletId: number | string;
+  categoryId: number | string;
   amount: number;
   type: "INCOME" | "EXPENSE";
   description: string;
