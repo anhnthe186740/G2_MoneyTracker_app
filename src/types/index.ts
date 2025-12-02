@@ -2,7 +2,7 @@ export interface User {
   id: number;
   username: string;
   email: string;
-  password?: string;       // optional vì sẽ xóa khi lưu
+  password?: string;       
   fullName: string;
   currency: string;
   createdAt: string;

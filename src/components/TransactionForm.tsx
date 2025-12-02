@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { TransactionContext } from '../context/TransactionContext';
 import type { Category, Wallet, Transaction } from '../types';
+import { checkExpensesWarning, checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
 
 interface TransactionFormProps {
     userId: number;
@@ -65,7 +66,7 @@ export default function TransactionForm({
             setLoading(true);
 
             if (editTransaction) {
-                // Update existing transaction
+                // Cập nhật giao dịch
                 await updateTransaction(editTransaction.id, {
                     walletId: Number(formData.walletId),
                     categoryId: Number(formData.categoryId),
@@ -75,7 +76,7 @@ export default function TransactionForm({
                     date: new Date(formData.date).toISOString(),
                 });
             } else {
-                // Create new transaction
+                // Tạo giao dịch mới
                 await createTransaction({
                     userId,
                     walletId: Number(formData.walletId),
@@ -86,6 +87,12 @@ export default function TransactionForm({
                     date: new Date(formData.date).toISOString(),
                 });
             }
+
+            // Kiểm tra và gửi thông báo tự động
+            checkExpensesWarning(userId.toString(), Number(formData.amount), 5000000);
+            checkLowBalance(userId.toString(), { name: 'tiền mặt', balance: Number(formData.amount) });
+            checkLargeTransaction(userId.toString(), { description: formData.description, amount: Number(formData.amount) });
+
 
             onSuccess();
             onClose();

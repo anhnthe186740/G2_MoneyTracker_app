@@ -1,6 +1,7 @@
 import { createContext, useState, useCallback, type ReactNode } from 'react';
 import api from '../services/api';
 import type { RecurringTransaction } from '../types';
+import { sendNotification } from '../services/notificationService';  // Import hàm gửi thông báo
 
 interface RecurringTransactionContextType {
     recurringTransactions: RecurringTransaction[];
@@ -236,6 +237,9 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
                     await api.patch(`/recurring_transactions/${rt.id}`, {
                         next_date: newNextDate.toISOString()
                     });
+
+                    // Gửi thông báo nhắc nhở giao dịch định kỳ
+                    sendNotification(rt.userId, 'REMINDER', 'Giao dịch định kỳ', `Giao dịch định kỳ của bạn "${rt.description}" sắp đến hạn. Bạn nhớ kiểm tra!`);
                 }
             }
 

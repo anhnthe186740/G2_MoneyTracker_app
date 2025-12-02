@@ -1,6 +1,7 @@
 import { createContext, useState, useCallback, type ReactNode } from 'react';
 import api from '../services/api';
 import type { Transaction } from '../types';
+import { checkExpensesWarning, checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
 
 interface TransactionContextType {
     transactions: Transaction[];
@@ -97,6 +98,11 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             // Update wallet balance
             await updateWalletBalance(transaction.walletId, transaction.amount, transaction.type);
 
+            // Kiểm tra và gửi thông báo tự động
+            checkExpensesWarning(transaction.userId?.toString() ?? "", transaction.amount ?? 0, 10000000);  
+            checkLowBalance(transaction.userId?.toString() ?? "", { name: 'Tiền mặt', balance: transaction.amount ?? 0 });
+            checkLargeTransaction(transaction.userId?.toString() ?? "", { description: transaction.description ?? "", amount: transaction.amount ?? 0 });
+
             // Reload transactions
             await getTransactions(transaction.userId);
         } catch (err) {
@@ -140,6 +146,11 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             if (transaction.walletId && transaction.amount && transaction.type) {
                 await updateWalletBalance(transaction.walletId, transaction.amount, transaction.type);
             }
+
+            // Kiểm tra và gửi thông báo tự động
+            checkExpensesWarning(transaction.userId?.toString() ?? "", transaction.amount ?? 0, 10000000);  
+            checkLowBalance(transaction.userId?.toString() ?? "", { name: 'tiền mặt', balance: transaction.amount ?? 0 });
+            checkLargeTransaction(transaction.userId?.toString() ?? "", { description: transaction.description ?? "", amount: transaction.amount ?? 0 });
 
             // Reload transactions
             await getTransactions(oldTransaction.userId);

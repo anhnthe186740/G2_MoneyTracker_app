@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { RecurringTransactionContext } from '../context/RecurringTransactionContext';
 import type { Category, Wallet, RecurringTransaction } from '../types';
+import { checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
 
 interface RecurringTransactionFormProps {
     userId: number;
@@ -119,6 +120,10 @@ export default function RecurringTransactionForm({
                     isActive: formData.isActive,
                 });
             }
+
+            // Kiểm tra và gửi thông báo tự động
+            checkLowBalance(userId.toString(), { name: 'Tiền mặt', balance: Number(formData.amount) });
+            checkLargeTransaction(userId.toString(), { description: formData.description, amount: Number(formData.amount) });
 
             onSuccess();
             onClose();
