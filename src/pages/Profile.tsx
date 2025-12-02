@@ -76,24 +76,24 @@ export default function Profile() {
     setIsLoading(true);
 
     if (!formData.fullName.trim()) {
-        setMessage({ text: 'Họ và tên không được để trống!', type: 'error' });
-        setIsLoading(false);
-        return;
-      }
+      setMessage({ text: 'Họ và tên không được để trống!', type: 'error' });
+      setIsLoading(false);
+      return;
+    }
 
-      if (!formData.email.trim()) {
-        setMessage({ text: 'Email không được để trống!', type: 'error' });
-        setIsLoading(false);
-        return;
-      }
+    if (!formData.email.trim()) {
+      setMessage({ text: 'Email không được để trống!', type: 'error' });
+      setIsLoading(false);
+      return;
+    }
 
-      if (!formData.email.includes('@')) {
-        setMessage({ text: 'Email phải chứa ký tự @', type: 'error' });
-        setIsLoading(false);
-        return;
-      }
+    if (!formData.email.includes('@')) {
+      setMessage({ text: 'Email phải chứa ký tự @', type: 'error' });
+      setIsLoading(false);
+      return;
+    }
 
-      try {
+    try {
       const payload = {
         fullName: formData.fullName,
         email: formData.email,
@@ -170,7 +170,7 @@ export default function Profile() {
             onClick={() => navigate('/dashboard')}
             className="text-gray-500 hover:text-indigo-600 font-medium transition mr-4"
           >
-          Quay lại
+            Quay lại
           </button>
           <h1 className="text-2xl font-bold text-gray-800">Hồ sơ người dùng</h1>
         </div>

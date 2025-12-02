@@ -1,13 +1,25 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { AuthProvider } from './context/AuthContext.tsx';
+import { NotificationProvider } from './context/NotificationContext.tsx';
+import { Toaster } from 'sonner';
+import { TransactionProvider } from './context/TransactionContext.tsx';
+import { RecurringTransactionProvider } from './context/RecurringTransactionContext.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      <NotificationProvider>
+        <Toaster position="top-right" richColors />
+        <TransactionProvider>
+          <RecurringTransactionProvider>
+            <App />
+          </RecurringTransactionProvider>
+        </TransactionProvider>
+      </NotificationProvider>
     </AuthProvider>
   </React.StrictMode>
 );
