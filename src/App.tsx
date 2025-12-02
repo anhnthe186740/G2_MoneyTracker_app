@@ -26,7 +26,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
         {/* Landing Page - công khai, không cần đăng nhập */}
         <Route path="/" element={<LandingPage />} />
         {/* Dashboard - yêu cầu đăng nhập */}
@@ -51,8 +50,8 @@ function App() {
         <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <Register />} />
         {/* Fallback */}
         <Route path="*" element={<Navigate to={user ? '/dashboard' : '/'} replace />} />
-      </Routes >
-    </BrowserRouter >
+      </Routes>
+    </BrowserRouter>
   );
 }
 

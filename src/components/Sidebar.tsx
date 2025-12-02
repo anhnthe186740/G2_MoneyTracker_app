@@ -84,8 +84,8 @@ export default function Sidebar({ currentScreen, onNavigate, onLogout, userName 
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${isActive
-                    ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-800'
-                    : 'text-foreground hover:bg-accent'
+                  ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-800'
+                  : 'text-foreground hover:bg-accent'
                   }`}
               >
                 <div className="flex items-center gap-3">
