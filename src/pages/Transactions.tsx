@@ -10,49 +10,67 @@ import type { Wallet, Category, Transaction } from '../types';
 
 type TabType = 'overview' | 'transactions';
 
+interface WalletResponse {
+  id: string;
+  user_id: number;
+  name: string;
+  type: string;
+  balance: number;
+  color: string;
+  created_at: string;
+}
+
+interface CategoryResponse {
+  id: string;
+  user_id: number;
+  name: string;
+  type: string;
+  color: string;
+  icon: string;
+}
+
 export default function Transactions() {
   const [searchParams, setSearchParams] = useSearchParams();
   const authContext = useContext(AuthContext);
+  const [wallets, setWallets] = useState<Wallet[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [showTransactionForm, setShowTransactionForm] = useState(false);
+  const [editTransaction, setEditTransaction] = useState<Transaction | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Get active tab from URL params or default to 'overview'
+  const activeTab = (searchParams.get('tab') as TabType) || 'overview';
 
   if (!authContext || !authContext.user) {
     return <div>Vui lòng đăng nhập</div>;
   }
 
   const { user } = authContext;
-  
-  const [wallets, setWallets] = useState<Wallet[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [showTransactionForm, setShowTransactionForm] = useState(false);
-  const [editTransaction, setEditTransaction] = useState<Transaction | null>(null);
-  const [loading, setLoading] = useState(true);
-  
-  // Get active tab from URL params or default to 'overview'
-  const activeTab = (searchParams.get('tab') as TabType) || 'overview';
 
   const loadData = async () => {
     try {
       setLoading(true);
       const [walletsRes, categoriesRes] = await Promise.all([
-        api.get<any[]>(`/wallets?user_id=${user.id}`),
-        api.get<any[]>(`/categories?user_id=${user.id}`)
+        api.get<WalletResponse[]>(`/wallets?user_id=${user.id}`),
+        api.get<CategoryResponse[]>(`/categories?user_id=${user.id}`)
       ]);
 
       // Map snake_case to camelCase
-      const mappedWallets = walletsRes.data.map((w: any) => ({
+      const mappedWallets = walletsRes.data.map((w: WalletResponse) => ({
         id: Number(w.id),
         userId: w.user_id,
         name: w.name,
-        type: w.type,
+        type: w.type as "BANK" | "E_WALLET" | "CASH",
         balance: w.balance,
         color: w.color,
         createdAt: w.created_at
       }));
 
-      const mappedCategories = categoriesRes.data.map((c: any) => ({
+      const mappedCategories = categoriesRes.data.map((c: CategoryResponse) => ({
         id: Number(c.id),
         userId: c.user_id,
         name: c.name,
-        type: c.type,
+        type: c.type as "INCOME" | "EXPENSE",
         color: c.color,
         icon: c.icon
       }));
@@ -67,8 +85,11 @@ export default function Transactions() {
   };
 
   useEffect(() => {
-    loadData();
-  }, [user.id]);
+    if (user) {
+      loadData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   // Function to change tab
   const changeTab = (tab: TabType) => {
@@ -123,11 +144,10 @@ export default function Transactions() {
             <button
               key={tab.id}
               onClick={() => changeTab(tab.id)}
-              className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${
-                activeTab === tab.id
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
+              className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === tab.id
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-muted-foreground hover:text-foreground'
+                }`}
             >
               <Icon size={20} />
               {tab.label}

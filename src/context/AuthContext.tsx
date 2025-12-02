@@ -1,10 +1,10 @@
-import { createContext, useState, type ReactNode, type Dispatch, type SetStateAction } from 'react';
+import { createContext, useContext, useState, type ReactNode, type Dispatch, type SetStateAction } from 'react';
 import api from '../services/api';
 import { type User } from '../types';
 
 interface AuthContextType {
   user: User | null;
-  setUser: Dispatch<SetStateAction<User | null>>; 
+  setUser: Dispatch<SetStateAction<User | null>>;
   login: (identifier: string, password: string) => Promise<boolean>;
   logout: () => void;
   loading: boolean;
@@ -35,8 +35,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       setLoading(true); // Có thể thêm loading state khi đang call API
       const res = await api.get<User[]>('/users');
-      
-      const foundUser = res.data.find(u => 
+
+      const foundUser = res.data.find(u =>
         (u.username === identifier || u.email === identifier) && u.password === password
       );
 
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // FIX LỖI 3: Thêm comment ignore dòng destructuring password không dùng tới
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password: _unused, ...safeUser } = foundUser;
-        
+
         localStorage.setItem('user', JSON.stringify(safeUser));
         setUser(safeUser as User);
         setLoading(false);

@@ -4,6 +4,7 @@ export interface User {
   email: string;
   password?: string;       // optional vì sẽ xóa khi lưu
   fullName: string;
+  avatar?: string;
   currency: string;
   createdAt: string;
 }
