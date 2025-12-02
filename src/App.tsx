@@ -9,7 +9,7 @@ import Register from './pages/Register';
 import SidebarLayout from './pages/SidebarLayout';
 
 import Transactions from './pages/Transactions';
-import Accounts from './pages/Accounts';
+import Wallets from './pages/Wallets';
 import Budget from './pages/Budget';
 import Goals from './pages/Goals';
 import Recurring from './pages/Recurring';
@@ -35,7 +35,7 @@ function App() {
         >
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/transactions" element={<Transactions />} />
-          <Route path="/accounts" element={<Accounts />} />
+          <Route path="/wallets" element={<Wallets />} />
           <Route path="/budget" element={<Budget />} />
           <Route path="/goals" element={<Goals />} />
           <Route path="/recurring" element={<Recurring />} />
