@@ -287,7 +287,7 @@ export default function Wallets() {
         }}
       >
         <DialogContent 
-          className="w-[1000px] p-5"
+          className="w-[480px] p-5"
           onClose={() => {
             setIsDialogOpen(false);
             resetForm();
