@@ -62,8 +62,12 @@ interface DialogContentProps {
 }
 
 export function DialogContent({ children, className = '', onClose }: DialogContentProps) {
+  // Check if custom width class is provided to override default max-w-md
+  const hasCustomWidth = className.includes('w-[') || className.includes('max-w-');
+  const defaultWidthClass = hasCustomWidth ? '' : 'max-w-md w-full';
+  
   return (
-    <div className={`bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto relative ${className}`}>
+    <div className={`bg-white rounded-2xl shadow-2xl mx-4 max-h-[90vh] overflow-y-auto relative ${defaultWidthClass} ${className}`}>
       {onClose && (
         <button
           onClick={onClose}
