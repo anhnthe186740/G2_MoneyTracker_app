@@ -354,8 +354,8 @@ export default function Recurring() {
               key={tab.id}
               onClick={() => changeTab(tab.id)}
               className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === tab.id
-                  ? 'border-b-2 border-purple-600 text-purple-600'
-                  : 'text-muted-foreground hover:text-foreground'
+                ? 'border-b-2 border-purple-600 text-purple-600'
+                : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               <Icon size={20} />
@@ -400,8 +400,8 @@ export default function Recurring() {
                 onClick={() => setShowRecurringForm(true)}
                 disabled={hasNoData}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${hasNoData
-                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                    : 'bg-purple-600 text-white hover:bg-purple-700'
+                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                  : 'bg-purple-600 text-white hover:bg-purple-700'
                   }`}
                 title={hasNoData ? 'Vui lòng tạo ví và danh mục trước' : 'Thêm thu/chi định kỳ'}
               >

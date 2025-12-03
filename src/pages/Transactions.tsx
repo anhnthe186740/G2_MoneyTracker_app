@@ -331,8 +331,8 @@ export default function Transactions() {
               key={tab.id}
               onClick={() => changeTab(tab.id)}
               className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === tab.id
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-muted-foreground hover:text-foreground'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               <Icon size={20} />
@@ -383,8 +383,8 @@ export default function Transactions() {
                 onClick={() => setShowTransactionForm(true)}
                 disabled={hasNoData}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg ${hasNoData
-                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
                   }`}
                 title={hasNoData ? 'Vui lòng tạo ví và danh mục trước' : 'Thêm giao dịch mới'}
               >
