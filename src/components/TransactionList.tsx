@@ -36,11 +36,11 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
             filtered = filtered.filter(t => t.type === filterType);
         }
 
-        // Apply sort
+        // Apply sort - Sort by creation time (newest first by default)
         filtered.sort((a, b) => {
-            const dateA = new Date(a.date).getTime();
-            const dateB = new Date(b.date).getTime();
-            return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+            const timeA = new Date(a.createdAt).getTime();
+            const timeB = new Date(b.createdAt).getTime();
+            return sortOrder === 'asc' ? timeA - timeB : timeB - timeA;
         });
 
         setFilteredTransactions(filtered);
@@ -134,7 +134,7 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
                         </select>
                     </div>
 
-                    {/* Sort */}
+                    {/* Sort Order */}
                     <button
                         onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                         className="flex items-center gap-2 border rounded px-3 py-2 hover:bg-gray-50"

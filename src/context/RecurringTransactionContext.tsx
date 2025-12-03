@@ -6,12 +6,12 @@ interface RecurringTransactionContextType {
     recurringTransactions: RecurringTransaction[];
     loading: boolean;
     error: string | null;
-    getRecurringTransactions: (userId: number) => Promise<void>;
+    getRecurringTransactions: (userId: number | string) => Promise<void>;
     getRecurringTransactionById: (id: number | string) => Promise<RecurringTransaction | null>;
     createRecurringTransaction: (recurringTransaction: Omit<RecurringTransaction, 'id' | 'createdAt'>) => Promise<void>;
     updateRecurringTransaction: (id: number | string, recurringTransaction: Partial<RecurringTransaction>) => Promise<void>;
     deleteRecurringTransaction: (id: number | string) => Promise<void>;
-    processRecurringTransactions: (userId: number) => Promise<void>;
+    processRecurringTransactions: (userId: number | string) => Promise<void>;
 }
 
 export const RecurringTransactionContext = createContext<RecurringTransactionContextType | undefined>(undefined);
@@ -21,7 +21,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const getRecurringTransactions = useCallback(async (userId: number) => {
+    const getRecurringTransactions = useCallback(async (userId: number | string) => {
         try {
             setLoading(true);
             setError(null);
@@ -176,7 +176,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
         }
     }, [getRecurringTransactionById, getRecurringTransactions]);
 
-    const processRecurringTransactions = useCallback(async (userId: number) => {
+    const processRecurringTransactions = useCallback(async (userId: number | string) => {
         try {
             setLoading(true);
             setError(null);
