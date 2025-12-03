@@ -105,6 +105,17 @@ export default function RecurringTransactionForm({
             return;
         }
 
+        // Validate amount for EXPENSE type
+        if (formData.type === 'EXPENSE') {
+            const selectedWallet = validWallets.find(w => String(w.id) === String(formData.walletId));
+            const amount = Number(formData.amount);
+            
+            if (selectedWallet && amount > selectedWallet.balance) {
+                setError(`Số tiền chi tiêu (${amount.toLocaleString('vi-VN')} ₫) vượt quá số dư trong ví (${selectedWallet.balance.toLocaleString('vi-VN')} ₫)`);
+                return;
+            }
+        }
+
         try {
             setLoading(true);
 

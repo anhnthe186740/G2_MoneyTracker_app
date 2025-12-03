@@ -1,11 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
-import { Plus, RefreshCw, Trash2, FolderOpen } from 'lucide-react';
+import { Plus, Trash2, FolderOpen, RefreshCw } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { RecurringTransactionContext } from '../context/RecurringTransactionContext';
 import RecurringTransactionList from '../components/RecurringTransactionList';
 import RecurringTransactionForm from '../components/RecurringTransactionForm';
-import WalletQuickCreateForm from '../components/WalletQuickCreateForm';
 import CategoryQuickCreateForm from '../components/CategoryQuickCreateForm';
 import api from '../services/api';
 import type { Wallet, Category, RecurringTransaction } from '../types';
@@ -134,15 +133,6 @@ export default function Recurring() {
   const [searchParams, setSearchParams] = useSearchParams();
   const authContext = useContext(AuthContext);
   const recurringContext = useContext(RecurringTransactionContext);
-import { Plus, RefreshCw } from 'lucide-react';
-import { AuthContext } from '../context/AuthContext';
-import RecurringTransactionList from '../components/RecurringTransactionList';
-import RecurringTransactionForm from '../components/RecurringTransactionForm';
-import api from '../services/api';
-import type { Wallet, Category, RecurringTransaction } from '../types';
-
-export default function Recurring() {
-  const authContext = useContext(AuthContext);
 
   if (!authContext || !authContext.user) {
     return <div>Vui lòng đăng nhập</div>;
@@ -158,7 +148,6 @@ export default function Recurring() {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [showRecurringForm, setShowRecurringForm] = useState(false);
-  const [showWalletForm, setShowWalletForm] = useState(false);
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [editRecurringTransaction, setEditRecurringTransaction] = useState<RecurringTransaction | null>(null);
   const [loading, setLoading] = useState(true);
@@ -175,17 +164,7 @@ export default function Recurring() {
     try {
       setLoading(true);
       console.log('=== RECURRING: Loading data ===');
-  const { user } = authContext;
-  
-  const [wallets, setWallets] = useState<Wallet[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [showRecurringForm, setShowRecurringForm] = useState(false);
-  const [editRecurringTransaction, setEditRecurringTransaction] = useState<RecurringTransaction | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  const loadData = async () => {
-    try {
-      setLoading(true);
       const [walletsRes, categoriesRes] = await Promise.all([
         api.get<any[]>(`/wallets?user_id=${user.id}`),
         api.get<any[]>(`/categories?user_id=${user.id}`)
@@ -193,8 +172,7 @@ export default function Recurring() {
 
       // Map snake_case to camelCase
       const mappedWallets = walletsRes.data.map((w: any) => ({
-        id: w.id, // Keep original ID (string or number)
-        id: Number(w.id),
+        id: w.id,
         userId: w.user_id,
         name: w.name,
         type: w.type,
@@ -204,8 +182,7 @@ export default function Recurring() {
       }));
 
       const mappedCategories = categoriesRes.data.map((c: any) => ({
-        id: c.id, // Keep original ID (string or number)
-        id: Number(c.id),
+        id: c.id,
         userId: c.user_id,
         name: c.name,
         type: c.type,
@@ -303,15 +280,6 @@ export default function Recurring() {
     }
   };
 
-  const handleWalletSuccess = () => {
-    setShowWalletForm(false);
-    loadData();
-  }, [user.id]);
-
-  const handleUpdate = () => {
-    loadData();
-  };
-
   const handleEditRecurringTransaction = (transaction: RecurringTransaction) => {
     setEditRecurringTransaction(transaction);
     setShowRecurringForm(true);
@@ -367,9 +335,9 @@ export default function Recurring() {
               <div className="ml-3">
                 <p className="text-sm text-yellow-700">
                   <strong>Chưa thể thêm thu/chi định kỳ!</strong>
-                  {wallets.length === 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một ví và một danh mục (cả Thu nhập và Chi tiêu). Vui lòng click nút "Thêm định kỳ" và sử dụng nút [+] bên cạnh Danh mục.'}
+                  {wallets.length === 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một ví và một danh mục (cả Thu nhập và Chi tiêu). Vui lòng chuyển sang tab "Quản lý danh mục".'}
                   {wallets.length === 0 && categories.length > 0 && ' Bạn cần tạo ít nhất một ví.'}
-                  {wallets.length > 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một danh mục (cả Thu nhập và Chi tiêu). Vui lòng click nút "Thêm định kỳ" và sử dụng nút [+] bên cạnh Danh mục.'}
+                  {wallets.length > 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một danh mục (cả Thu nhập và Chi tiêu). Vui lòng chuyển sang tab "Quản lý danh mục".'}
                 </p>
               </div>
             </div>
@@ -426,7 +394,7 @@ export default function Recurring() {
                 title="Xóa các giao dịch định kỳ có danh mục đã bị xóa"
               >
                 <Trash2 size={18} />
-                Dọn dẹp
+                Xóa hết
               </button>
               <button
                 onClick={() => setShowRecurringForm(true)}
@@ -464,51 +432,6 @@ export default function Recurring() {
           />
         )}
       </div>
-  return (
-    <section className="space-y-6">
-      <header className="flex items-center justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <RefreshCw className="h-8 w-8 text-blue-600" />
-            <h1 className="text-3xl font-bold text-foreground">Thu/Chi định kỳ</h1>
-          </div>
-          <p className="text-muted-foreground">Quản lý các giao dịch tự động lặp lại theo chu kỳ</p>
-        </div>
-        <button
-          onClick={() => setShowRecurringForm(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-md"
-        >
-          <Plus size={20} />
-          Thêm thu/chi định kỳ
-        </button>
-      </header>
-
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-card rounded-lg shadow p-6 border border-border">
-          <h3 className="text-lg font-semibold text-muted-foreground mb-2">Tổng số ví</h3>
-          <p className="text-3xl font-bold text-blue-600">{wallets.length}</p>
-        </div>
-        <div className="bg-card rounded-lg shadow p-6 border border-border">
-          <h3 className="text-lg font-semibold text-muted-foreground mb-2">Tổng số dư</h3>
-          <p className="text-3xl font-bold text-green-600">
-            {wallets.reduce((sum, w) => sum + w.balance, 0).toLocaleString('vi-VN')} ₫
-          </p>
-        </div>
-        <div className="bg-card rounded-lg shadow p-6 border border-border">
-          <h3 className="text-lg font-semibold text-muted-foreground mb-2">Danh mục</h3>
-          <p className="text-3xl font-bold text-purple-600">{categories.length}</p>
-        </div>
-      </div>
-
-      {/* Recurring Transaction List */}
-      <RecurringTransactionList
-        userId={user.id}
-        wallets={wallets}
-        categories={categories}
-        onUpdate={handleUpdate}
-        onEdit={handleEditRecurringTransaction}
-      />
 
       {/* Recurring Transaction Form Modal */}
       {showRecurringForm && (
@@ -523,14 +446,7 @@ export default function Recurring() {
         />
       )}
 
-      {/* Quick Create Forms */}
-      {showWalletForm && (
-        <WalletQuickCreateForm
-          userId={user.id}
-          onClose={() => setShowWalletForm(false)}
-          onSuccess={handleWalletSuccess}
-        />
-      )}
+      {/* Category Quick Create Form */}
       {showCategoryForm && (
         <CategoryQuickCreateForm
           userId={user.id}
