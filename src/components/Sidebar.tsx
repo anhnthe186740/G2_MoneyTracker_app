@@ -29,7 +29,6 @@ export const SIDEBAR_MENU: SidebarMenuItem[] = [
   { id: 'budget', icon: PiggyBank, label: 'Ngân sách', path: '/budget' },
   { id: 'goals', icon: Target, label: 'Mục tiêu', path: '/goals' },
   { id: 'recurring', icon: RefreshCw, label: 'Định kỳ', path: '/recurring' },
-  { id: 'analytics', icon: BarChart3, label: 'Phân tích', path: '/analytics' },
   { id: 'notifications', icon: Bell, label: 'Thông báo', path: '/notifications' },
   { id: 'profile', icon: User, label: 'Hồ sơ', path: '/profile' },
   { id: 'settings', icon: Settings, label: 'Cài đặt', path: '/settings' },
