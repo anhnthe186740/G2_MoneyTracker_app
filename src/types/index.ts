@@ -2,7 +2,7 @@ export interface User {
   id: number;
   username: string;
   email: string;
-  password?: string;       // optional vì sẽ xóa khi lưu
+  password?: string;
   fullName: string;
   currency: string;
   createdAt: string;
@@ -74,3 +74,17 @@ export interface RecurringTransaction {
   isActive: boolean;
   createdAt: string;
 }
+
+export interface Budget {
+  id: string;
+  user_id: number;
+  category_id: number | string;
+  limit_amount: number;
+  start_date: string;
+  end_date: string;
+  created_at: string;
+  description: string;
+  status: 'ACTIVE' | 'COMPLETED' | 'CANCELLED';  // Trạng thái ngân sách
+}
+
+

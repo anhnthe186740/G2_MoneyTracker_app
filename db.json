@@ -61,7 +61,10 @@
       "user_id": 1,
       "name": "Vietcombank",
       "type": "BANK",
+
+
       "balance": 7000000,
+
       "color": "#3498db",
       "created_at": "2024-01-15T09:00:00Z",
       "note": ""
@@ -71,7 +74,10 @@
       "user_id": 1,
       "name": "Ví Momo",
       "type": "E_WALLET",
+
+
       "balance": 8000000,
+
       "color": "#8e44ad",
       "created_at": "2024-01-20T11:30:00Z"
     },
@@ -1091,6 +1097,96 @@
       "message": "Bạn cần thanh toán hóa đơn Internet trước ngày 30/03.",
       "is_read": true,
       "created_at": "2024-03-26T14:10:00Z"
+    },
+    {
+      "id": "c7e2",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Ví Vietcombank sắp cạn",
+      "message": "Số dư ví Vietcombank của bạn còn dưới 200.000₫. Hãy bổ sung thêm tiền!",
+      "is_read": false,
+      "created_at": "2025-12-03T15:18:56.706Z"
+    },
+    {
+      "id": "33d4",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục 1 đã vượt hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:42:16.173Z"
+    },
+    {
+      "id": "73da",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục 4 đã đạt 50% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:44:06.740Z"
+    },
+    {
+      "id": "a4f7",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục 1 đã vượt hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:48:37.299Z"
+    },
+    {
+      "id": "974e",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Ăn uống\" đã vượt 100% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:57:38.274Z"
+    },
+    {
+      "id": "657c",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Di chuyển\" đã đạt 50% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:57:38.275Z"
+    },
+    {
+      "id": "86f7",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Ăn uống\" đã vượt 100% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:57:38.284Z"
+    },
+    {
+      "id": "bff9",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Ăn uống\" đã vượt 100% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T16:06:47.055Z"
+    },
+    {
+      "id": "2d3f",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Giải trí\" đã đạt 80% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T16:06:47.058Z"
+    },
+    {
+      "id": "9af9",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Di chuyển\" đã đạt 50% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T16:06:47.056Z"
     }
   ],
   "app_settings": [
@@ -1118,6 +1214,78 @@
       "id": "5",
       "key": "date_format",
       "value": "dd/MM/yyyy"
+    }
+  ],
+  "budgets": [
+    {
+      "id": "3e3f",
+      "user_id": "1",
+      "category_id": "1",
+      "limit_amount": 6000000,
+      "start_date": "2025-11-30",
+      "end_date": "2025-12-30",
+      "description": "Ngân sách ăn uống tháng 12",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "3d09",
+      "user_id": "1",
+      "category_id": 3,
+      "limit_amount": 6000000,
+      "start_date": "2025-12-03",
+      "end_date": "2025-12-30",
+      "description": "Ngân sách ăn uống tháng 12",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "cb7c",
+      "user_id": "1",
+      "category_id": 4,
+      "limit_amount": 1000000,
+      "start_date": "2025-12-03",
+      "end_date": "2025-12-18",
+      "description": "Test",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "d474",
+      "user_id": "1",
+      "category_id": 1,
+      "limit_amount": 5000000,
+      "start_date": "2026-01-01",
+      "end_date": "2026-01-06",
+      "description": "",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "1e30",
+      "user_id": "1",
+      "category_id": 5,
+      "limit_amount": 200000,
+      "start_date": "2025-11-30",
+      "end_date": "2025-12-30",
+      "description": "",
+      "status": "CANCELLED"
+    },
+    {
+      "id": "6edb",
+      "user_id": "1",
+      "category_id": 7,
+      "limit_amount": 500000,
+      "start_date": "2026-01-01",
+      "end_date": "2026-01-21",
+      "description": "",
+      "status": "CANCELLED"
+    },
+    {
+      "id": "3b18",
+      "user_id": "1",
+      "category_id": 6,
+      "limit_amount": 1000000,
+      "start_date": "2025-11-21",
+      "end_date": "2025-12-18",
+      "description": "Test Ngân SÁch",
+      "status": "ACTIVE"
     }
   ]
 }

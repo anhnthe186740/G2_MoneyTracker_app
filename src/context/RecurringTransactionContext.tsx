@@ -1,6 +1,7 @@
-import { createContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import api from '../services/api';
 import type { RecurringTransaction } from '../types';
+import { sendRecurringTransactionReminder } from '../services/notificationService';
 
 interface RecurringTransactionContextType {
     recurringTransactions: RecurringTransaction[];
@@ -45,6 +46,22 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
             }));
 
             setRecurringTransactions(mapped);
+
+            // Kiểm tra và gửi thông báo nhắc nhở cho các giao dịch định kỳ sắp đến hạn
+            for (const rt of mapped) {
+                if (rt.isActive && rt.nextDate) {
+                    try {
+                        await sendRecurringTransactionReminder(rt.userId, {
+                            id: rt.id,
+                            description: rt.description,
+                            nextDate: rt.nextDate,
+                            amount: rt.amount,
+                        });
+                    } catch (notifyErr) {
+                        console.error(`Error sending reminder for recurring transaction ${rt.id}:`, notifyErr);
+                    }
+                }
+            }
         } catch (err) {
             console.error('Error loading recurring transactions:', err);
             setError('Không thể tải danh sách giao dịch định kỳ');
@@ -62,7 +79,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
             return {
                 id: rt.id, // Keep original ID
                 userId: rt.user_id,
-                walletId: rt.wallet_id,
+walletId: rt.wallet_id,
                 categoryId: rt.category_id,
                 amount: rt.amount,
                 type: rt.type,
@@ -133,7 +150,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
             if (recurringTransaction.userId !== undefined) updateData.user_id = recurringTransaction.userId;
             if (recurringTransaction.walletId !== undefined) updateData.wallet_id = recurringTransaction.walletId;
             if (recurringTransaction.categoryId !== undefined) updateData.category_id = recurringTransaction.categoryId;
-            if (recurringTransaction.amount !== undefined) updateData.amount = recurringTransaction.amount;
+if (recurringTransaction.amount !== undefined) updateData.amount = recurringTransaction.amount;
             if (recurringTransaction.type !== undefined) updateData.type = recurringTransaction.type;
             if (recurringTransaction.description !== undefined) updateData.description = recurringTransaction.description;
             if (recurringTransaction.frequency !== undefined) updateData.frequency = recurringTransaction.frequency;
@@ -194,7 +211,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
                 startDate: rt.start_date,
                 endDate: rt.end_date,
                 nextDate: rt.next_date,
-                isActive: rt.is_active,
+isActive: rt.is_active,
                 createdAt: rt.created_at
             }));
             const today = new Date();
@@ -253,7 +270,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
                     await updateWalletBalance(rt.walletId, rt.amount, rt.type, rt.userId);
 
                     // Calculate next date based on frequency
-                    const newNextDate = calculateNextDate(nextDate, rt.frequency);
+const newNextDate = calculateNextDate(nextDate, rt.frequency);
                     console.log(`Updating next_date from ${nextDate.toDateString()} to ${newNextDate.toDateString()}`);
                     await api.patch(`/recurring_transactions/${rt.id}`, {
                         next_date: newNextDate.toISOString()
@@ -346,7 +363,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
                 processRecurringTransactions,
             }}
         >
-            {children}
+{children}
         </RecurringTransactionContext.Provider>
     );
 };

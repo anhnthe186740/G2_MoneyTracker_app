@@ -1,6 +1,7 @@
-import { createContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import api from '../services/api';
 import type { Transaction } from '../types';
+import { checkInactivity, checkLowBalance, checkLargeTransaction } from '../services/notificationService';
 
 interface TransactionContextType {
     transactions: Transaction[];
@@ -40,6 +41,23 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             }));
 
             setTransactions(mappedTransactions);
+
+            // Kiểm tra inactivity sau khi load transactions
+            if (mappedTransactions.length > 0) {
+                // Tìm giao dịch mới nhất
+                const latestTransaction = mappedTransactions.reduce((latest, current) => {
+                    const latestDate = new Date(latest.date);
+                    const currentDate = new Date(current.date);
+                    return currentDate > latestDate ? current : latest;
+                });
+
+                // Kiểm tra inactivity (chỉ check nếu có giao dịch)
+                try {
+                    await checkInactivity(userId, latestTransaction.date);
+                } catch (notifyErr) {
+                    console.error('Error checking inactivity:', notifyErr);
+                }
+            }
         } catch (err) {
             console.error('Error loading transactions:', err);
             setError('Không thể tải danh sách giao dịch');
@@ -183,7 +201,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             setError(null);
 
             // Try to find the transaction locally first to avoid an extra network call
-            let transaction = transactions.find(t => String(t.id) === String(id));
+            let transaction: Transaction | null | undefined = transactions.find(t => String(t.id) === String(id));
 
             // Fallback to fetching the transaction if it's not present locally
             if (!transaction) {
