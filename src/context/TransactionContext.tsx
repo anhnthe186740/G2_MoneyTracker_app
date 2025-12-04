@@ -249,8 +249,8 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
                 wallet = walletResponse.data;
             }
 
-            console.log('Current wallet:', { 
-                id: wallet.id, 
+            console.log('Current wallet:', {
+                id: wallet.id,
                 user_id: wallet.user_id,
                 name: wallet.name,
                 balance: wallet.balance,
@@ -260,7 +260,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
 
             const currentBalance = Number(wallet.balance);
             const amountNum = Number(amount);
-            
+
             if (isNaN(currentBalance) || isNaN(amountNum)) {
                 throw new Error(`Invalid numbers: balance=${wallet.balance}, amount=${amount}`);
             }
@@ -276,7 +276,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             // Since we got the correct wallet via query, use PUT to update it completely
             const updatedWallet = { ...wallet, balance: newBalance };
             console.log('Attempting to PUT wallet:', wallet.id, 'user_id:', wallet.user_id, 'new balance:', newBalance);
-            
+
             const putResponse = await api.put(`/wallets/${wallet.id}`, updatedWallet);
             console.log('PUT response:', putResponse.data);
 
