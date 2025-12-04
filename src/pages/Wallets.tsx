@@ -118,15 +118,17 @@ export default function Wallets() {
         setWallets(prev => prev.map(w => w.id === editingWallet.id ? data : w));
         toast.success('Cập nhật ví thành công!');
       } else {
-        let maxId = 0;
-        wallets.forEach(w => {
-          const walletId = Number(w.id);
-          if (!isNaN(walletId) && walletId > maxId) {
-            maxId = walletId;
-          }
-        });
-        
-        const newWalletId = String(maxId + 1); // Chuyển thành string
+       
+        const now = new Date();
+        const newWalletId = [
+          now.getDate().toString().padStart(2, '0'),
+          (now.getMonth() + 1).toString().padStart(2, '0'),
+          now.getFullYear(),
+          now.getHours().toString().padStart(2, '0'),
+          now.getMinutes().toString().padStart(2, '0'),
+          now.getSeconds().toString().padStart(2, '0'),
+          now.getMilliseconds().toString().padStart(3, '0')
+        ].join('');
         
         const payload = {
           id: newWalletId,
@@ -166,34 +168,9 @@ export default function Wallets() {
   const handleDelete = async (id: number | string) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa ví này?')) {
       try {
-      
         await api.delete(`/wallets/${id}`);
-        
-       
-        const remainingWallets = wallets.filter(w => w.id !== id);
-        
-      
-        const sortedWallets = remainingWallets.sort((a, b) => Number(a.id) - Number(b.id));
-        
-     
-        for (let i = 0; i < sortedWallets.length; i++) {
-          const wallet = sortedWallets[i];
-          const newId = i + 1;
-          
-          
-          if (Number(wallet.id) !== newId) {
-            await api.put(`/wallets/${wallet.id}`, {
-              ...wallet,
-              id: newId
-            });
-            
-            wallet.id = newId;
-          }
-        }
-        
-       
-        setWallets(sortedWallets);
-        toast.success('Xóa ví và sắp xếp lại ID thành công!');
+        setWallets(prev => prev.filter(w => w.id !== id));
+        toast.success('Xóa ví thành công!');
       } catch (error) {
         console.error('Lỗi khi xóa ví:', error);
         toast.error('Không thể xóa ví');
