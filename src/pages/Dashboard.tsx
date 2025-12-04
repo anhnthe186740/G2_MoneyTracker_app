@@ -140,8 +140,12 @@ export default function Dashboard() {
     });
   };
 
-  const formatMoney = (amount: number) =>
-    amount.toLocaleString("vi-VN") + " đ";
+  const formatMoney = (amount?: number | null): string => {
+    if (amount === null || amount === undefined || isNaN(Number(amount))) {
+      return "0 đ";
+    }
+    return Number(amount).toLocaleString("vi-VN") + " đ";
+  };
 
   const getPeriodLabel = () => {
     switch (period) {

@@ -18,7 +18,7 @@ export default function Goals() {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [open, setOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [title, setTitle] = useState<string>("");
@@ -41,7 +41,7 @@ export default function Goals() {
       try {
         const { data } = await api.get<Goal[]>("/goals");
         console.log("All goals:", data);
-        
+
         if (user?.id && Array.isArray(data)) {
           // Filter: goal.user_id must match user.id (compare as strings)
           const filtered = data.filter(g => String(g.user_id) === String(user.id));

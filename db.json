@@ -61,10 +61,7 @@
       "user_id": 1,
       "name": "Vietcombank",
       "type": "BANK",
-
-
       "balance": 7000000,
-
       "color": "#3498db",
       "created_at": "2024-01-15T09:00:00Z",
       "note": ""
@@ -74,10 +71,7 @@
       "user_id": 1,
       "name": "Ví Momo",
       "type": "E_WALLET",
-
-
       "balance": 8000000,
-
       "color": "#8e44ad",
       "created_at": "2024-01-20T11:30:00Z"
     },
@@ -923,32 +917,36 @@
       "user_id": 1,
       "name": "Mua MacBook Pro M3",
       "target_amount": 45000000,
-      "current_amount": 25000000,
-      "deadline": "2024-08-30"
+      "wallet_id": 1,
+      "deadline": "2024-08-30",
+      "status": "In Progress"
     },
     {
       "id": "2",
       "user_id": 1,
       "name": "Du lịch Đà Lạt",
-      "target_amount": 8000000,
-      "current_amount": 3200000,
-      "deadline": "2024-05-30"
+      "target_amount": 9000000,
+      "wallet_id": 2,
+      "deadline": "2024-05-30",
+      "status": "In Progress"
     },
     {
       "id": "3",
       "user_id": 1,
       "name": "Học khoá React Master",
       "target_amount": 5000000,
-      "current_amount": 2000000,
-      "deadline": "2024-06-15"
+      "wallet_id": 5,
+      "deadline": "2024-06-15",
+      "status": "Completed"
     },
     {
       "id": "4",
       "user_id": 2,
       "name": "Mua iPhone 15 Pro",
-      "target_amount": 28000000,
-      "current_amount": 12500000,
-      "deadline": "2024-09-20"
+      "target_amount": 19000000,
+      "wallet_id": 3,
+      "deadline": "2024-09-20",
+      "status": "In Progress"
     },
     {
       "id": "5",
