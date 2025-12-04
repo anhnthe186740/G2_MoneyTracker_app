@@ -202,7 +202,6 @@ export default function Dashboard() {
         <p className="text-muted-foreground">Chào mừng bạn trở lại!</p>
       </header>
 
-      {/* ==================== TỔNG DƯ + VÍ + THU CHI (giữ nguyên) ==================== */}
       <div className="rounded-2xl border bg-card shadow-lg overflow-hidden">
         <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-8 text-white">
           <div className="flex items-center justify-between mb-4">
