@@ -250,7 +250,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
 
                     // Update wallet balance
                     console.log('Updating wallet balance...');
-                    await updateWalletBalance(rt.walletId, rt.amount, rt.type);
+                    await updateWalletBalance(rt.walletId, rt.amount, rt.type, rt.userId);
 
                     // Calculate next date based on frequency
                     const newNextDate = calculateNextDate(nextDate, rt.frequency);
@@ -296,19 +296,34 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
     };
 
     // Helper function to update wallet balance
-    const updateWalletBalance = async (walletId: number | string, amount: number, type: 'INCOME' | 'EXPENSE') => {
-        console.log(`Updating wallet balance: walletId=${walletId}, amount=${amount}, type=${type}`);
+    const updateWalletBalance = async (walletId: number | string, amount: number, type: 'INCOME' | 'EXPENSE', userId?: number | string) => {
+        console.log(`Updating wallet balance: walletId=${walletId}, amount=${amount}, type=${type}, userId=${userId}`);
 
         try {
-            const walletResponse = await api.get<any>(`/wallets/${walletId}`);
-            const wallet = walletResponse.data;
-            console.log(`Current wallet balance: ${wallet.balance}`);
+            // If userId is provided, use it to filter wallets to avoid ID collision
+            let wallet;
+            if (userId) {
+                const walletsResponse = await api.get<any[]>(`/wallets?id=${walletId}&user_id=${userId}`);
+                if (walletsResponse.data && walletsResponse.data.length > 0) {
+                    wallet = walletsResponse.data[0];
+                    console.log(`Found wallet via query: id=${wallet.id}, user_id=${wallet.user_id}, balance=${wallet.balance}`);
+                } else {
+                    throw new Error(`Wallet not found: id=${walletId}, user_id=${userId}`);
+                }
+            } else {
+                const walletResponse = await api.get<any>(`/wallets/${walletId}`);
+                wallet = walletResponse.data;
+                console.log(`Found wallet via direct GET: id=${wallet.id}, balance=${wallet.balance}`);
+            }
+
+            const currentBalance = Number(wallet.balance);
+            const amountNum = Number(amount);
 
             const newBalance = type === 'INCOME'
-                ? wallet.balance + amount
-                : wallet.balance - amount;
+                ? currentBalance + amountNum
+                : currentBalance - amountNum;
 
-            console.log(`New wallet balance: ${newBalance}`);
+            console.log(`Balance update: ${currentBalance} ${type === 'INCOME' ? '+' : '-'} ${amountNum} = ${newBalance}`);
             await api.patch(`/wallets/${walletId}`, { balance: newBalance });
             console.log('Wallet balance updated successfully');
         } catch (error) {
