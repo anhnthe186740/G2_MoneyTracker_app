@@ -5,31 +5,44 @@ import { useAuth } from "../context/AuthContext";
 
 interface WalletType {
   id: string;
-  user_id: number;
+  user_id: number | string;
   name: string;
   balance: number;
   color: string;
 }
 
+interface TransactionType {
+  id: string;
+  user_id: string | number;
+  amount: number;
+  type: "INCOME" | "EXPENSE";
+}
+
 export default function Dashboard() {
   const [wallets, setWallets] = useState<WalletType[]>([]);
+  const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [hideBalance, setHideBalance] = useState(true);
   const [visibleWallets, setVisibleWallets] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    const fetchWallets = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/wallets");
-        setWallets(response.data);
+        const [walletsRes, transactionsRes] = await Promise.all([
+          axios.get("http://localhost:3001/wallets"),
+          axios.get("http://localhost:3001/transactions"),
+        ]);
+
+        setWallets(walletsRes.data);
+        setTransactions(transactionsRes.data);
         setLoading(false);
       } catch (err) {
-        console.error("Lỗi khi lấy ví:", err);
+        console.error("Lỗi khi lấy dữ liệu:", err);
         setLoading(false);
       }
     };
-    fetchWallets();
+    fetchData();
   }, []);
 
   const { user } = useAuth();
@@ -46,9 +59,25 @@ export default function Dashboard() {
     );
   }
 
-  const currentUserId = Number(user.id);
-  const myWallets = wallets.filter((wallet) => wallet.user_id === currentUserId);
+  const userIdStr = String(user.id);
+
+  const myWallets = wallets.filter(
+    (wallet) => String(wallet.user_id) === userIdStr
+  );
+
   const totalBalance = myWallets.reduce((sum, wallet) => sum + wallet.balance, 0);
+
+  const myTransactions = transactions.filter(
+    (t) => String(t.user_id) === userIdStr
+  );
+
+  const totalIncome = myTransactions
+    .filter((t) => t.type === "INCOME")
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const totalExpense = myTransactions
+    .filter((t) => t.type === "EXPENSE")
+    .reduce((sum, t) => sum + t.amount, 0);
 
   const toggleWalletVisibility = (walletId: string) => {
     const newVisible = new Set(visibleWallets);
@@ -66,6 +95,9 @@ export default function Dashboard() {
     }
     return amount.toLocaleString("vi-VN") + " đ";
   };
+
+  const formatMoney = (amount: number) =>
+    amount.toLocaleString("vi-VN") + " đ";
 
   return (
     <section className="space-y-6">
@@ -142,6 +174,22 @@ export default function Dashboard() {
                 </div>
               );
             })}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8 pt-6 border-t">
+            <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+              <p className="text-green-700 font-medium mb-2">Tổng thu nhập</p>
+              <p className="text-3xl font-bold text-green-600">
+                {formatMoney(totalIncome)}
+              </p>
+            </div>
+
+            <div className="bg-red-50 rounded-xl p-6 border border-red-200">
+              <p className="text-red-700 font-medium mb-2">Tổng chi tiêu</p>
+              <p className="text-3xl font-bold text-red-600">
+                {formatMoney(totalExpense)}
+              </p>
+            </div>
           </div>
         </div>
       </div>

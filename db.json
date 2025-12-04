@@ -52,16 +52,17 @@
       "user_id": 1,
       "name": "Vietcombank",
       "type": "BANK",
-      "balance": 42500000,
+      "balance": 2000000,
       "color": "#3498db",
-      "created_at": "2024-01-15T09:00:00Z"
+      "created_at": "2024-01-15T09:00:00Z",
+      "note": ""
     },
     {
       "id": "2",
       "user_id": 1,
       "name": "Ví Momo",
       "type": "E_WALLET",
-      "balance": 7500000,
+      "balance": 500000,
       "color": "#8e44ad",
       "created_at": "2024-01-20T11:30:00Z"
     },
@@ -617,6 +618,64 @@
       "date": "2025-12-01T17:00:00.000Z",
       "created_at": "2025-12-02T09:10:57.930Z",
       "recurring_transaction_id": "06ad"
+    },
+    {
+      "id": "4184",
+      "user_id": "7bc0",
+      "wallet_id": null,
+      "category_id": null,
+      "amount": 1000000,
+      "type": "EXPENSE",
+      "description": "tiền du lịch",
+      "date": "2025-12-02T17:00:00.000Z",
+      "created_at": "2025-12-03T08:51:31.692Z",
+      "recurring_transaction_id": "c5a0"
+    },
+    {
+      "id": "5bf5",
+      "user_id": "7bc0",
+      "wallet_id": null,
+      "category_id": null,
+      "amount": 1000000,
+      "type": "EXPENSE",
+      "description": "tiền du lịch",
+      "date": "2025-12-02T17:00:00.000Z",
+      "created_at": "2025-12-03T08:51:31.723Z",
+      "recurring_transaction_id": "c5a0"
+    },
+    {
+      "id": "17e7",
+      "user_id": "7bc0",
+      "wallet_id": null,
+      "category_id": null,
+      "amount": 999998,
+      "type": "EXPENSE",
+      "description": "tiền ăn hàng ngày",
+      "date": "2025-12-02T17:00:00.000Z",
+      "created_at": "2025-12-03T08:51:34.292Z",
+      "recurring_transaction_id": "d051"
+    },
+    {
+      "id": "f548",
+      "user_id": "1",
+      "wallet_id": "2",
+      "category_id": "2",
+      "amount": 500000,
+      "type": "INCOME",
+      "description": "",
+      "date": "2025-12-03T00:00:00.000Z",
+      "created_at": "2025-12-03T09:16:57.532Z"
+    },
+    {
+      "id": "17d7",
+      "user_id": "1",
+      "wallet_id": "2",
+      "category_id": "1",
+      "amount": 7000000,
+      "type": "EXPENSE",
+      "description": "",
+      "date": "2025-12-03T00:00:00.000Z",
+      "created_at": "2025-12-03T09:17:27.491Z"
     }
   ],
   "recurring_transactions": [
