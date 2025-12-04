@@ -5,11 +5,11 @@ import { AuthContext } from "../context/AuthContext";
 
 type Goal = {
   id: string;
-  user_id?: number | string;
-  wallet_id: number;
+  user_id: string | number;
   name: string;
   target_amount: number;
-  deadline?: string;
+  current_amount: number;
+  deadline: string;
   status: string;
 };
 
@@ -27,7 +27,7 @@ export default function Goals() {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const getWallet = (walletId: number) => wallets.find(w => Number(w.id) === Number(walletId));
   const calcProgress = (goalId: string) => {
     const goal = goals.find(g => g.id === goalId);
@@ -221,11 +221,10 @@ export default function Goals() {
                   return (
                     <div
                       key={g.id}
-                      className={`rounded-xl p-4 ${
-                        completed
+                      className={`rounded-xl p-4 ${completed
                           ? "bg-green-50 border-2 border-green-400 shadow-sm"
                           : "bg-white border border-gray-200 shadow-sm"
-                      }`}
+                        }`}
                     >
                       <div className="flex justify-between items-start mb-2">
                         <div>
@@ -286,11 +285,10 @@ export default function Goals() {
                       </div>
 
                       <div className="h-2.5 bg-gray-200 rounded-full overflow-hidden mb-2">
-                        <div 
-                          className={`h-full ${
-                            completed ? 'bg-green-500' : 'bg-blue-500'
-                          }`}
-                          style={{ width: `${Math.min(100, percent)}%` }} 
+                        <div
+                          className={`h-full ${completed ? 'bg-green-500' : 'bg-blue-500'
+                            }`}
+                          style={{ width: `${Math.min(100, percent)}%` }}
                         />
                       </div>
                       <div className="text-center text-xs text-gray-500 mb-2">
