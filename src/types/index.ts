@@ -2,14 +2,14 @@ export interface User {
   id: number;
   username: string;
   email: string;
-  password?: string;       
+  password?: string;
   fullName: string;
   currency: string;
   createdAt: string;
 }
 export interface Wallet {
-  id: number;
-  userId: number;
+  id: number | string;
+  userId: number | string;
   name: string;
   type: "BANK" | "E_WALLET" | "CASH";
   balance: number;
@@ -18,8 +18,8 @@ export interface Wallet {
 }
 
 export interface Category {
-  id: number;
-  userId: number;
+  id: number | string;
+  userId: number | string;
   name: string;
   type: "INCOME" | "EXPENSE";
   color: string;
@@ -28,14 +28,15 @@ export interface Category {
 
 export interface Transaction {
   id: number | string;
-  userId: number;
-  walletId: number;
-  categoryId: number;
+  userId: number | string;
+  walletId: number | string;
+  categoryId: number | string;
   amount: number;
   type: "INCOME" | "EXPENSE";
   description: string;
   date: string;
   createdAt: string;
+  recurringTransactionId?: number | string; // ID của recurring transaction tạo ra transaction này
 }
 
 export interface Goal {
@@ -60,9 +61,9 @@ export interface Notification {
 
 export interface RecurringTransaction {
   id: number | string;
-  userId: number;
-  walletId: number;
-  categoryId: number;
+  userId: number | string;
+  walletId: number | string;
+  categoryId: number | string;
   amount: number;
   type: "INCOME" | "EXPENSE";
   description: string;
@@ -73,3 +74,17 @@ export interface RecurringTransaction {
   isActive: boolean;
   createdAt: string;
 }
+
+export interface Budget {
+  id: string;
+  user_id: number;
+  category_id: number | string;
+  limit_amount: number;
+  start_date: string;
+  end_date: string;
+  created_at: string;
+  description: string;
+  status: 'ACTIVE' | 'COMPLETED' | 'CANCELLED';  // Trạng thái ngân sách
+}
+
+

@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import { RecurringTransactionContext } from '../context/RecurringTransactionContext';
 import type { Category, Wallet, RecurringTransaction } from '../types';
 import { checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
+import { useBudgetContext } from '../context/BudgetContext';
 
 interface RecurringTransactionFormProps {
     userId: number;
@@ -27,6 +28,7 @@ export default function RecurringTransactionForm({
     }
 
     const { createRecurringTransaction, updateRecurringTransaction } = recurringTransactionContext;
+    const { recheckBudgetsProgress } = useBudgetContext();
     const [formData, setFormData] = useState({
         walletId: '',
         categoryId: '',
@@ -47,12 +49,12 @@ export default function RecurringTransactionForm({
             // Helper function to safely format date
             const formatDate = (dateValue: string | undefined): string => {
                 if (!dateValue) return new Date().toISOString().split('T')[0];
-                
+
                 // If already in YYYY-MM-DD format, return as is
                 if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
                     return dateValue;
                 }
-                
+
                 // Try to parse and format
                 const date = new Date(dateValue);
                 if (isNaN(date.getTime())) {
@@ -61,9 +63,21 @@ export default function RecurringTransactionForm({
                 return date.toISOString().split('T')[0];
             };
 
+            // Safely convert IDs, handling null/undefined/NaN
+            const safeWalletId = editTransaction.walletId !== null &&
+                editTransaction.walletId !== undefined &&
+                editTransaction.walletId !== 'NaN'
+                ? String(editTransaction.walletId)
+                : '';
+            const safeCategoryId = editTransaction.categoryId !== null &&
+                editTransaction.categoryId !== undefined &&
+                editTransaction.categoryId !== 'NaN'
+                ? String(editTransaction.categoryId)
+                : '';
+
             setFormData({
-                walletId: String(editTransaction.walletId),
-                categoryId: String(editTransaction.categoryId),
+                walletId: safeWalletId,
+                categoryId: safeCategoryId,
                 amount: String(editTransaction.amount),
                 type: editTransaction.type,
                 description: editTransaction.description,
@@ -76,7 +90,14 @@ export default function RecurringTransactionForm({
         }
     }, [editTransaction]);
 
-    const filteredCategories = categories.filter(c => c.type === formData.type);
+    // Filter out invalid wallets and categories
+    const validWallets = wallets.filter(w => w.id !== null && w.id !== undefined && w.id !== 'NaN' && !Number.isNaN(w.id));
+    const validCategories = categories.filter(c => c.id !== null && c.id !== undefined && c.id !== 'NaN' && !Number.isNaN(c.id));
+    const filteredCategories = validCategories.filter(c => c.type === formData.type);
+
+    console.log('RecurringTransactionForm - categories:', categories.length);
+    console.log('RecurringTransactionForm - validCategories:', validCategories.length);
+    console.log('RecurringTransactionForm - filteredCategories:', filteredCategories.length, 'for type:', formData.type);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -93,8 +114,8 @@ export default function RecurringTransactionForm({
             if (editTransaction) {
                 // Update existing recurring transaction
                 await updateRecurringTransaction(editTransaction.id, {
-                    walletId: Number(formData.walletId),
-                    categoryId: Number(formData.categoryId),
+                    walletId: formData.walletId,
+                    categoryId: formData.categoryId,
                     amount: Number(formData.amount),
                     type: formData.type,
                     description: formData.description,
@@ -108,8 +129,8 @@ export default function RecurringTransactionForm({
                 // Create new recurring transaction
                 await createRecurringTransaction({
                     userId,
-                    walletId: Number(formData.walletId),
-                    categoryId: Number(formData.categoryId),
+                    walletId: formData.walletId,
+                    categoryId: formData.categoryId,
                     amount: Number(formData.amount),
                     type: formData.type,
                     description: formData.description,
@@ -121,9 +142,35 @@ export default function RecurringTransactionForm({
                 });
             }
 
-            // Kiểm tra và gửi thông báo tự động
-            checkLowBalance(userId.toString(), { name: 'Tiền mặt', balance: Number(formData.amount) });
-            checkLargeTransaction(userId.toString(), { description: formData.description, amount: Number(formData.amount) });
+            // Kiểm tra và gửi thông báo tự động + cập nhật tiến độ ngân sách
+            try {
+                const selectedWallet = validWallets.find(w => String(w.id) === String(formData.walletId));
+                const amountNumber = Number(formData.amount);
+
+                if (selectedWallet) {
+                    const newBalance = formData.type === 'EXPENSE'
+                        ? selectedWallet.balance - amountNumber
+                        : selectedWallet.balance + amountNumber;
+
+                    void checkLowBalance(userId.toString(), {
+                        name: selectedWallet.name,
+                        balance: newBalance,
+                    });
+                }
+
+                if (formData.type === 'EXPENSE') {
+                    void checkLargeTransaction(userId.toString(), {
+                        description: formData.description?.trim() ?? '',
+                        amount: amountNumber,
+                        type: 'EXPENSE',
+                    });
+                }
+
+                // Cập nhật lại tiến độ ngân sách khi có giao dịch định kỳ mới
+                recheckBudgetsProgress();
+            } catch (notifyErr) {
+                console.error('Notification error (recurring):', notifyErr);
+            }
 
             onSuccess();
             onClose();
@@ -199,7 +246,7 @@ export default function RecurringTransactionForm({
                             required
                         >
                             <option value="">Chọn ví</option>
-                            {wallets.map((wallet) => (
+                            {validWallets.map((wallet) => (
                                 <option key={wallet.id} value={wallet.id}>
                                     {wallet.name} - {wallet.balance.toLocaleString('vi-VN')} ₫
                                 </option>
@@ -207,25 +254,25 @@ export default function RecurringTransactionForm({
                         </select>
                     </div>
 
-                    {/* Category - chỉ hiển thị khi tạo mới */}
-                    {!editTransaction && (
-                        <div>
-                            <label className="block text-sm font-medium mb-2">Danh mục</label>
-                            <select
-                                value={formData.categoryId}
-                                onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                                className="w-full border rounded px-3 py-2"
-                                required
-                            >
-                                <option value="">Chọn danh mục</option>
-                                {filteredCategories.map((category) => (
-                                    <option key={category.id} value={category.id}>
-                                        {category.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    )}
+                    {/* Category */}
+                    <div>
+                        <label className="block text-sm font-medium mb-2">
+                            Danh mục ({filteredCategories.length} {formData.type === 'INCOME' ? 'thu nhập' : 'chi tiêu'})
+                        </label>
+                        <select
+                            value={formData.categoryId}
+                            onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                            className="w-full border rounded px-3 py-2"
+                            required
+                        >
+                            <option value="">Chọn danh mục</option>
+                            {filteredCategories.map((category) => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
                     {/* Amount */}
                     <div>
@@ -253,10 +300,10 @@ export default function RecurringTransactionForm({
                             className="w-full border rounded px-3 py-2"
                             required
                         >
-                            <option value="DAILY">Hằng ngày</option>
-                            <option value="WEEKLY">Hằng tuần</option>
-                            <option value="MONTHLY">Hằng tháng</option>
-                            <option value="YEARLY">Hằng năm</option>
+                            <option value="DAILY">Hàng ngày</option>
+                            <option value="WEEKLY">Hàng tuần</option>
+                            <option value="MONTHLY">Hàng tháng</option>
+                            <option value="YEARLY">Hàng năm</option>
                         </select>
                     </div>
 

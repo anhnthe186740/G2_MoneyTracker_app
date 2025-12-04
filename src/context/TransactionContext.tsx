@@ -1,7 +1,7 @@
-import { createContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import api from '../services/api';
 import type { Transaction } from '../types';
-import { checkExpensesWarning, checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
+import { checkInactivity, checkLowBalance, checkLargeTransaction } from '../services/notificationService';
 
 interface TransactionContextType {
     transactions: Transaction[];
@@ -30,10 +30,10 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             // Map snake_case to camelCase
             const mappedTransactions = response.data.map((t: any) => ({
                 id: t.id, // Keep original ID (can be string or number)
-                userId: t.user_id,
-                walletId: t.wallet_id,
-                categoryId: t.category_id,
-                amount: t.amount,
+                userId: Number(t.user_id),
+                walletId: t.wallet_id, // Keep as string or number
+                categoryId: t.category_id, // Keep as string or number
+                amount: Number(t.amount),
                 type: t.type,
                 description: t.description,
                 date: t.date,
@@ -41,6 +41,23 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             }));
 
             setTransactions(mappedTransactions);
+
+            // Kiểm tra inactivity sau khi load transactions
+            if (mappedTransactions.length > 0) {
+                // Tìm giao dịch mới nhất
+                const latestTransaction = mappedTransactions.reduce((latest, current) => {
+                    const latestDate = new Date(latest.date);
+                    const currentDate = new Date(current.date);
+                    return currentDate > latestDate ? current : latest;
+                });
+
+                // Kiểm tra inactivity (chỉ check nếu có giao dịch)
+                try {
+                    await checkInactivity(userId, latestTransaction.date);
+                } catch (notifyErr) {
+                    console.error('Error checking inactivity:', notifyErr);
+                }
+            }
         } catch (err) {
             console.error('Error loading transactions:', err);
             setError('Không thể tải danh sách giao dịch');
@@ -60,10 +77,10 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             // Map snake_case to camelCase
             return {
                 id: t.id, // Keep original ID
-                userId: t.user_id,
-                walletId: t.wallet_id,
-                categoryId: t.category_id,
-                amount: t.amount,
+                userId: Number(t.user_id),
+                walletId: t.wallet_id, // Keep as string or number
+                categoryId: t.category_id, // Keep as string or number
+                amount: Number(t.amount),
                 type: t.type,
                 description: t.description,
                 date: t.date,
@@ -93,18 +110,25 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
                 created_at: new Date().toISOString(),
             };
 
-            await api.post('/transactions', newTransaction);
+            // Create transaction first
+            const response = await api.post('/transactions', newTransaction);
+            console.log('Transaction created:', response.data);
 
-            // Update wallet balance
-            await updateWalletBalance(transaction.walletId, transaction.amount, transaction.type);
+            // Update wallet balance (catch error but don't throw)
+            try {
+                console.log('About to update wallet balance...');
+                await updateWalletBalance(transaction.walletId, transaction.amount, transaction.type);
+                console.log('Wallet balance updated');
+            } catch (balanceErr) {
+                console.error('Could not update wallet balance:', balanceErr);
+            }
 
-            // Kiểm tra và gửi thông báo tự động
-            checkExpensesWarning(transaction.userId?.toString() ?? "", transaction.amount ?? 0, 10000000);  
-            checkLowBalance(transaction.userId?.toString() ?? "", { name: 'Tiền mặt', balance: transaction.amount ?? 0 });
-            checkLargeTransaction(transaction.userId?.toString() ?? "", { description: transaction.description ?? "", amount: transaction.amount ?? 0 });
-
-            // Reload transactions
-            await getTransactions(transaction.userId);
+            // Reload transactions (catch error but don't throw)
+            try {
+                await getTransactions(transaction.userId as any);
+            } catch (reloadErr) {
+                console.warn('Could not reload transactions:', reloadErr);
+            }
         } catch (err) {
             console.error('Error creating transaction:', err);
             setError('Không thể tạo giao dịch');
@@ -123,12 +147,16 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             const oldTransaction = await getTransactionById(id);
             if (!oldTransaction) throw new Error('Transaction not found');
 
-            // Revert old balance
-            await updateWalletBalance(
-                oldTransaction.walletId,
-                oldTransaction.amount,
-                oldTransaction.type === 'INCOME' ? 'EXPENSE' : 'INCOME'
-            );
+            // Revert old balance (catch error but continue)
+            try {
+                await updateWalletBalance(
+                    oldTransaction.walletId,
+                    oldTransaction.amount,
+                    oldTransaction.type === 'INCOME' ? 'EXPENSE' : 'INCOME'
+                );
+            } catch (balanceErr) {
+                console.warn('Could not revert wallet balance:', balanceErr);
+            }
 
             // Map camelCase to snake_case for db.json
             const updateData: any = {};
@@ -142,18 +170,21 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
 
             await api.patch(`/transactions/${id}`, updateData);
 
-            // Apply new balance
+            // Apply new balance (catch error but continue)
             if (transaction.walletId && transaction.amount && transaction.type) {
-                await updateWalletBalance(transaction.walletId, transaction.amount, transaction.type);
+                try {
+                    await updateWalletBalance(transaction.walletId, transaction.amount, transaction.type);
+                } catch (balanceErr) {
+                    console.warn('Could not update wallet balance:', balanceErr);
+                }
             }
 
-            // Kiểm tra và gửi thông báo tự động
-            checkExpensesWarning(transaction.userId?.toString() ?? "", transaction.amount ?? 0, 10000000);  
-            checkLowBalance(transaction.userId?.toString() ?? "", { name: 'tiền mặt', balance: transaction.amount ?? 0 });
-            checkLargeTransaction(transaction.userId?.toString() ?? "", { description: transaction.description ?? "", amount: transaction.amount ?? 0 });
-
-            // Reload transactions
-            await getTransactions(oldTransaction.userId);
+            // Reload transactions (catch error but don't throw)
+            try {
+                await getTransactions(oldTransaction.userId as any);
+            } catch (reloadErr) {
+                console.warn('Could not reload transactions:', reloadErr);
+            }
         } catch (err) {
             console.error('Error updating transaction:', err);
             setError('Không thể cập nhật giao dịch');
@@ -168,21 +199,39 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             setLoading(true);
             setError(null);
 
-            // Get transaction to revert balance
-            const transaction = await getTransactionById(id);
+            // Try to find the transaction locally first to avoid an extra network call
+            let transaction: Transaction | null | undefined = transactions.find(t => String(t.id) === String(id));
+
+            // Fallback to fetching the transaction if it's not present locally
+            if (!transaction) {
+                transaction = await getTransactionById(id);
+            }
+
             if (!transaction) throw new Error('Transaction not found');
 
-            // Revert balance
-            await updateWalletBalance(
-                transaction.walletId,
-                transaction.amount,
-                transaction.type === 'INCOME' ? 'EXPENSE' : 'INCOME'
-            );
-
+            // Delete transaction on server
             await api.delete(`/transactions/${id}`);
 
-            // Reload transactions
-            await getTransactions(transaction.userId);
+            // Optimistically update local transactions state
+            setTransactions(prev => prev.filter(t => String(t.id) !== String(id)));
+
+            // Revert balance (catch error but continue)
+            try {
+                await updateWalletBalance(
+                    transaction.walletId,
+                    transaction.amount,
+                    transaction.type === 'INCOME' ? 'EXPENSE' : 'INCOME'
+                );
+            } catch (balanceErr) {
+                console.warn('Could not revert wallet balance:', balanceErr);
+            }
+
+            // Ensure server sync: reload transactions - don't fail user action if this errors
+            try {
+                await getTransactions(transaction.userId as any);
+            } catch (reloadErr) {
+                console.warn('Could not reload transactions:', reloadErr);
+            }
         } catch (err) {
             console.error('Error deleting transaction:', err);
             setError('Không thể xóa giao dịch');
@@ -190,18 +239,31 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
         } finally {
             setLoading(false);
         }
-    }, [getTransactionById, getTransactions]);
+    }, [getTransactionById, getTransactions, transactions]);
 
     // Helper function to update wallet balance
-    const updateWalletBalance = async (walletId: number, amount: number, type: 'INCOME' | 'EXPENSE') => {
-        const walletResponse = await api.get<any>(`/wallets/${walletId}`);
-        const wallet = walletResponse.data;
+    const updateWalletBalance = async (walletId: number | string, amount: number, type: 'INCOME' | 'EXPENSE') => {
+        try {
+            console.log('Updating wallet balance:', { walletId, amount, type });
 
-        const newBalance = type === 'INCOME'
-            ? wallet.balance + amount
-            : wallet.balance - amount;
+            const walletResponse = await api.get<any>(`/wallets/${walletId}`);
+            const wallet = walletResponse.data;
 
-        await api.patch(`/wallets/${walletId}`, { balance: newBalance });
+            console.log('Current wallet:', wallet);
+
+            const newBalance = type === 'INCOME'
+                ? Number(wallet.balance) + Number(amount)
+                : Number(wallet.balance) - Number(amount);
+
+            console.log('New balance:', newBalance);
+
+            await api.patch(`/wallets/${walletId}`, { balance: newBalance });
+
+            console.log('Wallet balance updated successfully');
+        } catch (err) {
+            console.error('Error updating wallet balance:', err);
+            throw err;
+        }
     };
 
     return (
