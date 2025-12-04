@@ -7,7 +7,6 @@ import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 import Register from './pages/Register';
 import SidebarLayout from './pages/SidebarLayout';
-
 import Transactions from './pages/Transactions';
 import Wallets from './pages/Wallets';
 import Budget from './pages/Budget';
@@ -51,8 +50,8 @@ function App() {
         <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <Register />} />
         {/* Fallback */}
         <Route path="*" element={<Navigate to={user ? '/dashboard' : '/'} replace />} />
-      </Routes >
-    </BrowserRouter >
+      </Routes>
+    </BrowserRouter>
   );
 }
 

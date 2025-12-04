@@ -9,6 +9,23 @@ import CategoryQuickCreateForm from '../components/CategoryQuickCreateForm';
 import api from '../services/api';
 import type { Wallet, Category, RecurringTransaction } from '../types';
 
+interface WalletResponse {
+  id: string;
+  user_id: number;
+  name: string;
+  type: string;
+  balance: number;
+  color: string;
+  created_at: string;
+}
+
+interface CategoryResponse {
+  id: string;
+  user_id: number;
+  name: string;
+  type: string;
+  color: string;
+  icon: string;
 type TabType = 'recurring' | 'categories';
 
 function CategoryManagementTab({
@@ -131,6 +148,11 @@ function CategoryManagementTab({
 export default function Recurring() {
   const [searchParams, setSearchParams] = useSearchParams();
   const authContext = useContext(AuthContext);
+  const [wallets, setWallets] = useState<Wallet[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [showRecurringForm, setShowRecurringForm] = useState(false);
+  const [editRecurringTransaction, setEditRecurringTransaction] = useState<RecurringTransaction | null>(null);
+  const [loading, setLoading] = useState(true);
   const recurringContext = useContext(RecurringTransactionContext);
 
   if (!authContext || !authContext.user) {
@@ -164,26 +186,26 @@ const [editRecurringTransaction, setEditRecurringTransaction] = useState<Recurri
       setLoading(true);
       console.log('=== RECURRING: Loading data ===');
       const [walletsRes, categoriesRes] = await Promise.all([
-        api.get<any[]>(`/wallets?user_id=${user.id}`),
-        api.get<any[]>(`/categories?user_id=${user.id}`)
+        api.get<WalletResponse[]>(`/wallets?user_id=${user.id}`),
+        api.get<CategoryResponse[]>(`/categories?user_id=${user.id}`)
       ]);
 
       // Map snake_case to camelCase
-      const mappedWallets = walletsRes.data.map((w: any) => ({
+      const mappedWallets = walletsRes.data.map((w: WalletResponse) => ({
         id: Number(w.id),
         userId: w.user_id,
         name: w.name,
-        type: w.type,
+        type: w.type as "BANK" | "E_WALLET" | "CASH",
         balance: w.balance,
         color: w.color,
         createdAt: w.created_at
       }));
 
-      const mappedCategories = categoriesRes.data.map((c: any) => ({
+      const mappedCategories = categoriesRes.data.map((c: CategoryResponse) => ({
         id: Number(c.id),
         userId: c.user_id,
         name: c.name,
-        type: c.type,
+        type: c.type as "INCOME" | "EXPENSE",
         color: c.color,
         icon: c.icon
       }));

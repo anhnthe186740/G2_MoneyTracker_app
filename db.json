@@ -12,47 +12,11 @@
     {
       "id": "2",
       "username": "AnhBN",
-      "email": "AnhBN@email.com",
-      "password": "123",
-      "fullName": "Bùi Ngọc Anh",
+      "email": "phananhtu@gmail.com",
+      "password": "12345",
+      "fullName": "Phan Anh Tu",
       "currency": "VND",
       "createdAt": "2024-02-10T14:20:00Z"
-    },
-    {
-      "id": "7699",
-      "username": "maphongba7791",
-      "email": "maphongba7791@gmail.com",
-      "password": "123",
-      "fullName": "q",
-      "currency": "VND",
-      "createdAt": "2025-11-21T08:06:31.221Z"
-    },
-    {
-      "id": "de96",
-      "username": "f",
-      "email": "f@gmail.com",
-      "password": "123",
-      "fullName": "1",
-      "currency": "VND",
-      "createdAt": "2025-11-21T08:07:48.010Z"
-    },
-    {
-      "id": "7bc0",
-      "username": "HuyMT",
-      "email": "HuyMT@email.com",
-      "password": "123",
-      "fullName": "HuyMT",
-      "currency": "VND",
-      "createdAt": "2025-11-25T16:28:13.247Z"
-    },
-    {
-      "id": "1805",
-      "username": "AnhBN2",
-      "email": "AnhBN2@email.com",
-      "password": "123",
-      "fullName": "AnhBN2",
-      "currency": "VND",
-      "createdAt": "2025-12-03T09:47:20.371Z"
     }
   ],
   "wallets": [

@@ -130,6 +130,25 @@ function CategoryManagementTab({
   );
 }
 
+interface WalletResponse {
+  id: string;
+  user_id: number;
+  name: string;
+  type: string;
+  balance: number;
+  color: string;
+  created_at: string;
+}
+
+interface CategoryResponse {
+  id: string;
+  user_id: number;
+  name: string;
+  type: string;
+  color: string;
+  icon: string;
+}
+
 export default function Transactions() {
   const [searchParams, setSearchParams] = useSearchParams();
   const authContext = useContext(AuthContext);
@@ -151,12 +170,18 @@ export default function Transactions() {
   // Get active tab from URL params or default to 'overview'
   const activeTab = (searchParams.get('tab') as TabType) || 'overview';
 
+  if (!authContext || !authContext.user) {
+    return <div>Vui lòng đăng nhập</div>;
+  }
+
+  const { user } = authContext;
+
   const loadData = async () => {
     try {
       setLoading(true);
       const [walletsRes, categoriesRes] = await Promise.all([
-        api.get<any[]>(`/wallets?user_id=${user.id}`),
-        api.get<any[]>(`/categories?user_id=${user.id}`)
+        api.get<WalletResponse[]>(`/wallets?user_id=${user.id}`),
+        api.get<CategoryResponse[]>(`/categories?user_id=${user.id}`)
       ]);
 
       // Map snake_case to camelCase
@@ -164,7 +189,7 @@ export default function Transactions() {
         id: w.id, // Keep original ID (string or number)
         userId: w.user_id,
         name: w.name,
-        type: w.type,
+        type: w.type as "BANK" | "E_WALLET" | "CASH",
         balance: w.balance,
         color: w.color,
         createdAt: w.created_at
@@ -174,7 +199,7 @@ export default function Transactions() {
         id: c.id, // Keep original ID (string or number)
         userId: c.user_id,
         name: c.name,
-        type: c.type,
+        type: c.type as "INCOME" | "EXPENSE",
         color: c.color,
         icon: c.icon
       }));
@@ -196,8 +221,11 @@ export default function Transactions() {
   };
 
   useEffect(() => {
-    loadData();
-  }, [user.id]);
+    if (user) {
+      loadData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   // Function to change tab
   const changeTab = (tab: TabType) => {
