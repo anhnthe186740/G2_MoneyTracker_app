@@ -2,6 +2,8 @@ import { useState, useContext, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { RecurringTransactionContext } from '../context/RecurringTransactionContext';
 import type { Category, Wallet, RecurringTransaction } from '../types';
+import { checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
+import { useBudgetContext } from '../context/BudgetContext';
 
 interface RecurringTransactionFormProps {
     userId: number;
@@ -26,6 +28,7 @@ export default function RecurringTransactionForm({
     }
 
     const { createRecurringTransaction, updateRecurringTransaction } = recurringTransactionContext;
+    const { recheckBudgetsProgress } = useBudgetContext();
     const [formData, setFormData] = useState({
         walletId: '',
         categoryId: '',
@@ -148,6 +151,36 @@ export default function RecurringTransactionForm({
                     nextDate: new Date(formData.nextDate).toISOString(),
                     isActive: formData.isActive,
                 });
+            }
+
+            // Kiểm tra và gửi thông báo tự động + cập nhật tiến độ ngân sách
+            try {
+                const selectedWallet = validWallets.find(w => String(w.id) === String(formData.walletId));
+                const amountNumber = Number(formData.amount);
+
+                if (selectedWallet) {
+                    const newBalance = formData.type === 'EXPENSE'
+                        ? selectedWallet.balance - amountNumber
+                        : selectedWallet.balance + amountNumber;
+
+                    void checkLowBalance(userId.toString(), {
+                        name: selectedWallet.name,
+                        balance: newBalance,
+                    });
+                }
+
+                if (formData.type === 'EXPENSE') {
+                    void checkLargeTransaction(userId.toString(), {
+                        description: formData.description?.trim() ?? '',
+                        amount: amountNumber,
+                        type: 'EXPENSE',
+                    });
+                }
+
+                // Cập nhật lại tiến độ ngân sách khi có giao dịch định kỳ mới
+                recheckBudgetsProgress();
+            } catch (notifyErr) {
+                console.error('Notification error (recurring):', notifyErr);
             }
 
             onSuccess();

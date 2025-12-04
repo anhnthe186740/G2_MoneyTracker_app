@@ -1,17 +1,17 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useMemo } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNotificationsContext } from '../context/NotificationContext';
 import type { Notification } from '../types';
 import { formatDateTime } from '../utils/format';
 import { Bell, Check, AlertCircle, Target, RefreshCw, TrendingUp } from 'lucide-react';
 import { toast } from 'sonner';
+import Pagination from '../components/common/Pagination';
 
 export default function Notifications() {
   const auth = useContext(AuthContext);
   if (!auth) {
     throw new Error('AuthContext must be used inside AuthProvider');
   }
-  const { user } = auth;
 
   const {
     notifications,
@@ -22,6 +22,8 @@ export default function Notifications() {
   } = useNotificationsContext();
 
   const [filter, setFilter] = useState<'all' | 'unread' | 'read'>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Số thông báo mỗi trang
 
   // Icon cho từng loại thông báo
   const getIcon = (type: Notification['type']) => {
@@ -57,11 +59,32 @@ export default function Notifications() {
   };
 
   // Lọc theo trạng thái
-  const filteredNotifications = notifications.filter(n => {
-    if (filter === 'unread') return !n.is_read;
-    if (filter === 'read') return n.is_read;
-    return true;
-  });
+  const filteredNotifications = useMemo(() => {
+    return notifications.filter(n => {
+      if (filter === 'unread') return !n.is_read;
+      if (filter === 'read') return n.is_read;
+      return true;
+    });
+  }, [notifications, filter]);
+
+  // Tính toán phân trang
+  const totalPages = Math.ceil(filteredNotifications.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedNotifications = filteredNotifications.slice(startIndex, endIndex);
+
+  // Reset về trang 1 khi filter thay đổi
+  const handleFilterChange = (newFilter: 'all' | 'unread' | 'read') => {
+    setFilter(newFilter);
+    setCurrentPage(1);
+  };
+
+  // Xử lý đổi trang
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll lên đầu trang khi đổi trang
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   if (loading) {
     return <div className="flex justify-center items-center h-64">Đang tải thông báo...</div>;
@@ -82,7 +105,7 @@ export default function Notifications() {
 
         <select
           value={filter}
-          onChange={(e) => setFilter(e.target.value as any)}
+          onChange={(e) => handleFilterChange(e.target.value as 'all' | 'unread' | 'read')}
           className="w-48 border border-gray-300 rounded-lg p-2 bg-white"
         >
           <option value="all">Tất cả</option>
@@ -100,6 +123,18 @@ export default function Notifications() {
         </button>
       </div>
 
+      {/* Pagination - Đặt ở trên */}
+      {filteredNotifications.length > 0 && totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          itemsPerPage={itemsPerPage}
+          totalItems={filteredNotifications.length}
+          showInfo={true}
+        />
+      )}
+
       {/* Notification list */}
       {filteredNotifications.length === 0 ? (
         <div className="bg-white p-12 text-center rounded-xl shadow-md border border-gray-200">
@@ -108,62 +143,62 @@ export default function Notifications() {
         </div>
       ) : (
         <div className="space-y-3">
-          {filteredNotifications.map((notification) => (
-            <div
-              key={notification.id}
-              className={`bg-white p-6 rounded-xl shadow-md border ${
-                !notification.is_read ? 'border-l-4 border-l-primary' : 'border-gray-200'
-              }`}
-            >
-              <div className="flex gap-4">
-                {/* Icon */}
-                <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${getBgColor(
-                    notification.type
-                  )}`}
-                >
-                  {getIcon(notification.type)}
-                </div>
+          {paginatedNotifications.map((notification) => (
+              <div
+                key={notification.id}
+                className={`bg-white p-6 rounded-xl shadow-md border ${
+                  !notification.is_read ? 'border-l-4 border-l-primary' : 'border-gray-200'
+                }`}
+              >
+                <div className="flex gap-4">
+                  {/* Icon */}
+                  <div
+                    className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${getBgColor(
+                      notification.type
+                    )}`}
+                  >
+                    {getIcon(notification.type)}
+                  </div>
 
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h3
-                        className={`text-lg font-semibold ${
-                          !notification.is_read ? 'text-gray-900' : 'text-gray-600'
-                        }`}
-                      >
-                        {notification.title}
-                      </h3>
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <h3
+                          className={`text-lg font-semibold ${
+                            !notification.is_read ? 'text-gray-900' : 'text-gray-600'
+                          }`}
+                        >
+                          {notification.title}
+                        </h3>
+
+                        {!notification.is_read && (
+                          <span className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded mt-1">
+                            Mới
+                          </span>
+                        )}
+                      </div>
 
                       {!notification.is_read && (
-                        <span className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded mt-1">
-                          Mới
-                        </span>
+                        <button
+                          onClick={() => handleMarkAsReadClick(notification.id)}
+                          className="text-gray-500 hover:text-gray-700 flex items-center"
+                        >
+                          <Check className="w-4 h-4 mr-1" />
+                          Đánh dấu đã đọc
+                        </button>
                       )}
                     </div>
 
-                    {!notification.is_read && (
-                      <button
-                        onClick={() => handleMarkAsReadClick(notification.id)}
-                        className="text-gray-500 hover:text-gray-700 flex items-center"
-                      >
-                        <Check className="w-4 h-4 mr-1" />
-                        Đánh dấu đã đọc
-                      </button>
-                    )}
+                    <p className="text-gray-600 mb-3">{notification.message}</p>
+
+                    <p className="text-sm text-gray-400">
+                      {formatDateTime(notification.created_at)}
+                    </p>
                   </div>
-
-                  <p className="text-gray-600 mb-3">{notification.message}</p>
-
-                  <p className="text-sm text-gray-400">
-                    {formatDateTime(notification.created_at)}
-                  </p>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
       )}
     </section>
   );

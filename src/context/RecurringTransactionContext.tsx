@@ -1,6 +1,7 @@
-import { createContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useState, useCallback, useEffect, type ReactNode } from 'react';
 import api from '../services/api';
 import type { RecurringTransaction } from '../types';
+import { sendRecurringTransactionReminder } from '../services/notificationService';
 
 interface RecurringTransactionContextType {
     recurringTransactions: RecurringTransaction[];
@@ -45,6 +46,22 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
             }));
 
             setRecurringTransactions(mapped);
+
+            // Kiểm tra và gửi thông báo nhắc nhở cho các giao dịch định kỳ sắp đến hạn
+            for (const rt of mapped) {
+                if (rt.isActive && rt.nextDate) {
+                    try {
+                        await sendRecurringTransactionReminder(rt.userId, {
+                            id: rt.id,
+                            description: rt.description,
+                            nextDate: rt.nextDate,
+                            amount: rt.amount,
+                        });
+                    } catch (notifyErr) {
+                        console.error(`Error sending reminder for recurring transaction ${rt.id}:`, notifyErr);
+                    }
+                }
+            }
         } catch (err) {
             console.error('Error loading recurring transactions:', err);
             setError('Không thể tải danh sách giao dịch định kỳ');
@@ -62,7 +79,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
             return {
                 id: rt.id, // Keep original ID
                 userId: rt.user_id,
-                walletId: rt.wallet_id,
+walletId: rt.wallet_id,
                 categoryId: rt.category_id,
                 amount: rt.amount,
                 type: rt.type,
@@ -133,7 +150,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
             if (recurringTransaction.userId !== undefined) updateData.user_id = recurringTransaction.userId;
             if (recurringTransaction.walletId !== undefined) updateData.wallet_id = recurringTransaction.walletId;
             if (recurringTransaction.categoryId !== undefined) updateData.category_id = recurringTransaction.categoryId;
-            if (recurringTransaction.amount !== undefined) updateData.amount = recurringTransaction.amount;
+if (recurringTransaction.amount !== undefined) updateData.amount = recurringTransaction.amount;
             if (recurringTransaction.type !== undefined) updateData.type = recurringTransaction.type;
             if (recurringTransaction.description !== undefined) updateData.description = recurringTransaction.description;
             if (recurringTransaction.frequency !== undefined) updateData.frequency = recurringTransaction.frequency;
@@ -194,7 +211,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
                 startDate: rt.start_date,
                 endDate: rt.end_date,
                 nextDate: rt.next_date,
-                isActive: rt.is_active,
+isActive: rt.is_active,
                 createdAt: rt.created_at
             }));
             const today = new Date();
@@ -250,10 +267,10 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
 
                     // Update wallet balance
                     console.log('Updating wallet balance...');
-                    await updateWalletBalance(rt.walletId, rt.amount, rt.type);
+                    await updateWalletBalance(rt.walletId, rt.amount, rt.type, rt.userId);
 
                     // Calculate next date based on frequency
-                    const newNextDate = calculateNextDate(nextDate, rt.frequency);
+const newNextDate = calculateNextDate(nextDate, rt.frequency);
                     console.log(`Updating next_date from ${nextDate.toDateString()} to ${newNextDate.toDateString()}`);
                     await api.patch(`/recurring_transactions/${rt.id}`, {
                         next_date: newNextDate.toISOString()
@@ -296,19 +313,34 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
     };
 
     // Helper function to update wallet balance
-    const updateWalletBalance = async (walletId: number | string, amount: number, type: 'INCOME' | 'EXPENSE') => {
-        console.log(`Updating wallet balance: walletId=${walletId}, amount=${amount}, type=${type}`);
+    const updateWalletBalance = async (walletId: number | string, amount: number, type: 'INCOME' | 'EXPENSE', userId?: number | string) => {
+        console.log(`Updating wallet balance: walletId=${walletId}, amount=${amount}, type=${type}, userId=${userId}`);
 
         try {
-            const walletResponse = await api.get<any>(`/wallets/${walletId}`);
-            const wallet = walletResponse.data;
-            console.log(`Current wallet balance: ${wallet.balance}`);
+            // If userId is provided, use it to filter wallets to avoid ID collision
+            let wallet;
+            if (userId) {
+                const walletsResponse = await api.get<any[]>(`/wallets?id=${walletId}&user_id=${userId}`);
+                if (walletsResponse.data && walletsResponse.data.length > 0) {
+                    wallet = walletsResponse.data[0];
+                    console.log(`Found wallet via query: id=${wallet.id}, user_id=${wallet.user_id}, balance=${wallet.balance}`);
+                } else {
+                    throw new Error(`Wallet not found: id=${walletId}, user_id=${userId}`);
+                }
+            } else {
+                const walletResponse = await api.get<any>(`/wallets/${walletId}`);
+                wallet = walletResponse.data;
+                console.log(`Found wallet via direct GET: id=${wallet.id}, balance=${wallet.balance}`);
+            }
+
+            const currentBalance = Number(wallet.balance);
+            const amountNum = Number(amount);
 
             const newBalance = type === 'INCOME'
-                ? wallet.balance + amount
-                : wallet.balance - amount;
+                ? currentBalance + amountNum
+                : currentBalance - amountNum;
 
-            console.log(`New wallet balance: ${newBalance}`);
+            console.log(`Balance update: ${currentBalance} ${type === 'INCOME' ? '+' : '-'} ${amountNum} = ${newBalance}`);
             await api.patch(`/wallets/${walletId}`, { balance: newBalance });
             console.log('Wallet balance updated successfully');
         } catch (error) {
@@ -331,7 +363,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
                 processRecurringTransactions,
             }}
         >
-            {children}
+{children}
         </RecurringTransactionContext.Provider>
     );
 };
