@@ -174,7 +174,6 @@ export default function Transactions() {
     return <div>Vui lòng đăng nhập</div>;
   }
 
-  const { user } = authContext;
 
   const loadData = async () => {
     try {

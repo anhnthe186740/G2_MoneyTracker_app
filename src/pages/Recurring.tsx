@@ -26,6 +26,8 @@ interface CategoryResponse {
   type: string;
   color: string;
   icon: string;
+}
+
 type TabType = 'recurring' | 'categories';
 
 function CategoryManagementTab({
@@ -166,12 +168,10 @@ export default function Recurring() {
   const { user } = authContext;
   const { processRecurringTransactions } = recurringContext;
 
-  const [wallets, setWallets] = useState<Wallet[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [showRecurringForm, setShowRecurringForm] = useState(false);
+
+
   const [showCategoryForm, setShowCategoryForm] = useState(false);
-const [editRecurringTransaction, setEditRecurringTransaction] = useState<RecurringTransaction | null>(null);
-  const [loading, setLoading] = useState(true);
+
 
   // Get active tab from URL params or default to 'recurring'
   const activeTab = (searchParams.get('tab') as TabType) || 'recurring';
