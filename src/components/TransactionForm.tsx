@@ -2,6 +2,8 @@ import { useState, useContext, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { TransactionContext } from '../context/TransactionContext';
 import type { Category, Wallet, Transaction } from '../types';
+import { checkExpensesWarning, checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
+import { useBudgetContext } from '../context/BudgetContext';
 
 interface TransactionFormProps {
     userId: number;
@@ -28,6 +30,7 @@ export default function TransactionForm({
     }
 
     const { createTransaction, updateTransaction } = transactionContext;
+    const { recheckBudgetsProgress } = useBudgetContext();
 
     // Filter out invalid wallets and categories
     const validWallets = wallets.filter(w => w.id !== null && w.id !== undefined && w.id !== 'NaN' && !Number.isNaN(w.id));
@@ -135,7 +138,7 @@ export default function TransactionForm({
             }
 
             if (editTransaction) {
-                // Update existing transaction
+                // Cập nhật giao dịch
                 await updateTransaction(editTransaction.id, {
                     walletId: formData.walletId as any,
                     categoryId: formData.categoryId as any,
@@ -145,7 +148,7 @@ export default function TransactionForm({
                     date: new Date(formData.date).toISOString(),
                 });
             } else {
-                // Create new transaction
+                // Tạo giao dịch mới
                 await createTransaction({
                     userId,
                     walletId: formData.walletId as any,
@@ -155,6 +158,37 @@ export default function TransactionForm({
                     description: formData.description,
                     date: new Date(formData.date).toISOString(),
                 });
+            }
+
+            // ===== GỬI THÔNG BÁO TỰ ĐỘNG & CẬP NHẬT NGÂN SÁCH SAU KHI LƯU GIAO DỊCH =====
+            try {
+                const selectedWallet = validWallets.find(w => String(w.id) === String(formData.walletId));
+
+                if (selectedWallet) {
+                    // Tính số dư giả định sau giao dịch để kiểm tra ví sắp cạn
+                    const newBalance = formData.type === 'EXPENSE'
+                        ? selectedWallet.balance - amount
+                        : selectedWallet.balance + amount;
+
+                    void checkLowBalance(userId.toString(), {
+                        name: selectedWallet.name,
+                        balance: newBalance,
+                    });
+                }
+
+                // Cảnh báo giao dịch chi tiêu lớn (chỉ cho EXPENSE)
+                if (formData.type === 'EXPENSE') {
+                    void checkLargeTransaction(userId.toString(), {
+                        description: formData.description?.trim() ?? '',
+                        amount,
+                        type: 'EXPENSE',
+                    });
+                }
+
+                // Cập nhật lại tiến độ các ngân sách ngay sau khi có giao dịch mới
+                recheckBudgetsProgress();
+            } catch (notifyErr) {
+                console.error('Notification error:', notifyErr);
             }
 
             console.log('=== TRANSACTION CREATED SUCCESSFULLY ===');

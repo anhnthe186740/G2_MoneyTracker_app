@@ -57,11 +57,27 @@
   ],
   "wallets": [
     {
-      "id": "1001",
+      "id": "1",
+      "user_id": 1,
+      "name": "Vietcombank",
+      "type": "BANK",
+
+
+      "balance": 7000000,
+
+      "color": "#3498db",
+      "created_at": "2024-01-15T09:00:00Z",
+      "note": ""
+    },
+    {
+      "id": "2",
       "user_id": 1,
       "name": "Ví Momo",
       "type": "E_WALLET",
-      "balance": 7500000,
+
+
+      "balance": 8000000,
+
       "color": "#8e44ad",
       "created_at": "2024-01-20T11:30:00Z"
     },
@@ -70,7 +86,7 @@
       "user_id": 2,
       "name": "Techcombank",
       "type": "BANK",
-      "balance": 100439874,
+      "balance": 88106541,
       "color": "#e74c3c",
       "created_at": "2024-02-10T15:00:00Z"
     },
@@ -88,7 +104,7 @@
       "user_id": 1,
       "name": "VietinBank",
       "type": "BANK",
-      "balance": 12000000,
+      "balance": 500000,
       "color": "#16a085",
       "created_at": "2024-03-01T14:00:00Z"
     },
@@ -97,7 +113,7 @@
       "user_id": "7bc0",
       "name": "TP bank",
       "type": "BANK",
-      "balance": 100000000,
+      "balance": 99000000,
       "color": "#3B82F6",
       "created_at": "2025-11-26T02:13:00.597Z"
     },
@@ -124,7 +140,7 @@
       "user_id": "2",
       "name": "Momo",
       "type": "E_WALLET",
-      "balance": 199900032,
+      "balance": 199900000,
       "color": "#3B82F6",
       "created_at": "2025-11-27T07:10:51.344Z"
     },
@@ -390,23 +406,23 @@
     {
       "id": "12",
       "user_id": 1,
-      "wallet_id": "1000",
-      "category_id": 1,
+      "wallet_id": "1",
+      "category_id": "1",
       "amount": 75000,
       "type": "EXPENSE",
       "description": "Ăn sáng Phở",
-      "date": "2024-03-20T07:30:00Z",
+      "date": "2025-06-18T00:00:00.000Z",
       "created_at": "2024-03-20T07:45:00Z"
     },
     {
       "id": "13",
       "user_id": 1,
-      "wallet_id": "1000",
-      "category_id": 3,
+      "wallet_id": "1",
+      "category_id": "3",
       "amount": 850000,
       "type": "EXPENSE",
       "description": "Mua giày thể thao Nike",
-      "date": "2024-03-21T16:45:00Z",
+      "date": "2025-12-01T00:00:00.000Z",
       "created_at": "2024-03-21T17:00:00Z"
     },
     {
@@ -633,50 +649,151 @@
       "recurring_transaction_id": "06ad"
     },
     {
-      "id": "8a39",
+      "id": "1a68",
       "user_id": "2",
       "wallet_id": "1002",
       "category_id": "8030",
-      "amount": 12345,
+      "amount": 12345678,
       "type": "EXPENSE",
-      "description": "đi ra linh lang",
-      "date": "2025-10-03T00:00:00.000Z",
-      "created_at": "2025-12-03T02:36:58.621Z"
+      "description": "Đi bar",
+      "date": "2025-12-01T17:00:00.000Z",
+      "created_at": "2025-12-02T09:10:57.930Z",
+      "recurring_transaction_id": "06ad"
     },
     {
-      "id": "acde",
-      "user_id": "7699",
-      "wallet_id": "1000",
-      "category_id": "7340",
-      "amount": 9877661,
+      "id": "4184",
+      "user_id": "7bc0",
+      "wallet_id": null,
+      "category_id": null,
+      "amount": 1000000,
       "type": "EXPENSE",
-      "description": "ăn phở",
+      "description": "tiền du lịch",
+      "date": "2025-12-02T17:00:00.000Z",
+      "created_at": "2025-12-03T08:51:31.692Z",
+      "recurring_transaction_id": "c5a0"
+    },
+    {
+      "id": "5bf5",
+      "user_id": "7bc0",
+      "wallet_id": null,
+      "category_id": null,
+      "amount": 1000000,
+      "type": "EXPENSE",
+      "description": "tiền du lịch",
+      "date": "2025-12-02T17:00:00.000Z",
+      "created_at": "2025-12-03T08:51:31.723Z",
+      "recurring_transaction_id": "c5a0"
+    },
+    {
+      "id": "17e7",
+      "user_id": "7bc0",
+      "wallet_id": null,
+      "category_id": null,
+      "amount": 999998,
+      "type": "EXPENSE",
+      "description": "tiền ăn hàng ngày",
+      "date": "2025-12-02T17:00:00.000Z",
+      "created_at": "2025-12-03T08:51:34.292Z",
+      "recurring_transaction_id": "d051"
+    },
+    {
+      "id": "f548",
+      "user_id": "1",
+      "wallet_id": "2",
+      "category_id": "2",
+      "amount": 500000,
+      "type": "INCOME",
+      "description": "",
       "date": "2025-12-03T00:00:00.000Z",
-      "created_at": "2025-12-03T16:40:10.189Z"
+      "created_at": "2025-12-03T09:16:57.532Z"
     },
     {
-      "id": "862f",
-      "user_id": "7699",
-      "wallet_id": "1000",
-      "category_id": "7340",
-      "amount": 99999999,
-      "type": "EXPENSE",
-      "description": "tiền ăn hàng ngày",
-      "date": "2025-12-02T17:00:00.000Z",
-      "created_at": "2025-12-03T16:40:15.271Z",
-      "recurring_transaction_id": "5556"
+      "id": "557d",
+      "user_id": "1",
+      "wallet_id": "2",
+      "category_id": "2",
+      "amount": 500000,
+      "type": "INCOME",
+      "description": "",
+      "date": "2025-02-04T00:00:00.000Z",
+      "created_at": "2025-12-04T02:33:06.354Z"
     },
     {
-      "id": "cedb",
-      "user_id": "7699",
-      "wallet_id": "1000",
-      "category_id": "7340",
-      "amount": 99999999,
+      "id": "ad03",
+      "user_id": "1",
+      "wallet_id": "2",
+      "category_id": "2",
+      "amount": 10000000,
+      "type": "INCOME",
+      "description": "",
+      "date": "2025-12-04T00:00:00.000Z",
+      "created_at": "2025-12-04T02:38:28.896Z"
+    },
+    {
+      "id": "2f9e",
+      "user_id": "1",
+      "wallet_id": "1",
+      "category_id": "2",
+      "amount": 8000000,
+      "type": "INCOME",
+      "description": "",
+      "date": "2025-08-20T00:00:00.000Z",
+      "created_at": "2025-12-04T02:38:55.791Z"
+    },
+    {
+      "id": "9751",
+      "user_id": "1",
+      "wallet_id": "5",
+      "category_id": "5",
+      "amount": 1000000,
       "type": "EXPENSE",
-      "description": "tiền ăn hàng ngày",
-      "date": "2025-12-02T17:00:00.000Z",
-      "created_at": "2025-12-03T16:40:15.277Z",
-      "recurring_transaction_id": "5556"
+      "description": "",
+      "date": "2025-12-04T00:00:00.000Z",
+      "created_at": "2025-12-04T02:57:30.808Z"
+    },
+    {
+      "id": "8352",
+      "user_id": "1",
+      "wallet_id": "5",
+      "category_id": "7",
+      "amount": 500000,
+      "type": "EXPENSE",
+      "description": "",
+      "date": "2025-12-04T00:00:00.000Z",
+      "created_at": "2025-12-04T06:50:26.124Z"
+    },
+    {
+      "id": "4797",
+      "user_id": "1",
+      "wallet_id": "5",
+      "category_id": "6",
+      "amount": 10000000,
+      "type": "EXPENSE",
+      "description": "",
+      "date": "2025-12-04T00:00:00.000Z",
+      "created_at": "2025-12-04T06:51:08.010Z"
+    },
+    {
+      "id": "66e6",
+      "user_id": "1",
+      "wallet_id": "1",
+      "category_id": "4",
+      "amount": 3000000,
+      "type": "EXPENSE",
+      "description": "",
+      "date": "2025-12-04T00:00:00.000Z",
+      "created_at": "2025-12-04T06:51:42.602Z"
+    },
+    {
+      "id": "c725",
+      "user_id": "7bc0",
+      "wallet_id": "8b56",
+      "category_id": "651f",
+      "amount": 1000000,
+      "type": "EXPENSE",
+      "description": "",
+      "date": "2025-12-04T00:00:00.000Z",
+      "created_at": "2025-12-04T06:55:48.023Z"
     }
   ],
   "recurring_transactions": [
@@ -840,6 +957,36 @@
       "target_amount": 12000000,
       "current_amount": 4500000,
       "deadline": "2024-07-10"
+    },
+    {
+      "name": "Mua Money",
+      "target_amount": 1000000,
+      "current_amount": 800000,
+      "deadline": "2025-12-13",
+      "id": "dd52"
+    },
+    {
+      "name": "Mua Money",
+      "target_amount": 1000000,
+      "current_amount": 500000,
+      "deadline": "2025-12-25",
+      "id": "5f7b"
+    },
+    {
+      "id": "0333",
+      "name": "Mua Money",
+      "target_amount": 1000000,
+      "current_amount": 500000,
+      "deadline": "2025-12-18",
+      "user_id": 1
+    },
+    {
+      "id": "960b",
+      "name": "mua",
+      "target_amount": 1000000,
+      "current_amount": 50000,
+      "deadline": "",
+      "user_id": "7bc0"
     }
   ],
   "notifications": [
@@ -885,7 +1032,7 @@
       "type": "INFO",
       "title": "Chào mừng đến với Money Tracker!",
       "message": "Bắt đầu hành trình quản lý tài chính thông minh ngay nào.",
-      "is_read": true,
+      "is_read": false,
       "created_at": "2024-03-21T11:20:00Z"
     },
     {
@@ -894,7 +1041,7 @@
       "type": "WARNING",
       "title": "Chi tiêu tháng 3",
       "message": "Bạn đã chi 1,300,000₫ trong tháng 3.",
-      "is_read": true,
+      "is_read": false,
       "created_at": "2024-03-22T09:30:00Z"
     },
     {
@@ -939,7 +1086,7 @@
       "type": "INFO",
       "title": "Cập nhật phiên bản mới",
       "message": "Money Tracker đã được cập nhật với nhiều tính năng mới.",
-      "is_read": true,
+      "is_read": false,
       "created_at": "2024-03-26T13:40:00Z"
     },
     {
@@ -950,6 +1097,96 @@
       "message": "Bạn cần thanh toán hóa đơn Internet trước ngày 30/03.",
       "is_read": true,
       "created_at": "2024-03-26T14:10:00Z"
+    },
+    {
+      "id": "c7e2",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Ví Vietcombank sắp cạn",
+      "message": "Số dư ví Vietcombank của bạn còn dưới 200.000₫. Hãy bổ sung thêm tiền!",
+      "is_read": false,
+      "created_at": "2025-12-03T15:18:56.706Z"
+    },
+    {
+      "id": "33d4",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục 1 đã vượt hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:42:16.173Z"
+    },
+    {
+      "id": "73da",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục 4 đã đạt 50% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:44:06.740Z"
+    },
+    {
+      "id": "a4f7",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục 1 đã vượt hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:48:37.299Z"
+    },
+    {
+      "id": "974e",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Ăn uống\" đã vượt 100% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:57:38.274Z"
+    },
+    {
+      "id": "657c",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Di chuyển\" đã đạt 50% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:57:38.275Z"
+    },
+    {
+      "id": "86f7",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Ăn uống\" đã vượt 100% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T15:57:38.284Z"
+    },
+    {
+      "id": "bff9",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Ăn uống\" đã vượt 100% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T16:06:47.055Z"
+    },
+    {
+      "id": "2d3f",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Giải trí\" đã đạt 80% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T16:06:47.058Z"
+    },
+    {
+      "id": "9af9",
+      "user_id": "1",
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Di chuyển\" đã đạt 50% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-03T16:06:47.056Z"
     }
   ],
   "app_settings": [
@@ -977,6 +1214,78 @@
       "id": "5",
       "key": "date_format",
       "value": "dd/MM/yyyy"
+    }
+  ],
+  "budgets": [
+    {
+      "id": "3e3f",
+      "user_id": "1",
+      "category_id": "1",
+      "limit_amount": 6000000,
+      "start_date": "2025-11-30",
+      "end_date": "2025-12-30",
+      "description": "Ngân sách ăn uống tháng 12",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "3d09",
+      "user_id": "1",
+      "category_id": 3,
+      "limit_amount": 6000000,
+      "start_date": "2025-12-03",
+      "end_date": "2025-12-30",
+      "description": "Ngân sách ăn uống tháng 12",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "cb7c",
+      "user_id": "1",
+      "category_id": 4,
+      "limit_amount": 1000000,
+      "start_date": "2025-12-03",
+      "end_date": "2025-12-18",
+      "description": "Test",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "d474",
+      "user_id": "1",
+      "category_id": 1,
+      "limit_amount": 5000000,
+      "start_date": "2026-01-01",
+      "end_date": "2026-01-06",
+      "description": "",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "1e30",
+      "user_id": "1",
+      "category_id": 5,
+      "limit_amount": 200000,
+      "start_date": "2025-11-30",
+      "end_date": "2025-12-30",
+      "description": "",
+      "status": "CANCELLED"
+    },
+    {
+      "id": "6edb",
+      "user_id": "1",
+      "category_id": 7,
+      "limit_amount": 500000,
+      "start_date": "2026-01-01",
+      "end_date": "2026-01-21",
+      "description": "",
+      "status": "CANCELLED"
+    },
+    {
+      "id": "3b18",
+      "user_id": "1",
+      "category_id": 6,
+      "limit_amount": 1000000,
+      "start_date": "2025-11-21",
+      "end_date": "2025-12-18",
+      "description": "Test Ngân SÁch",
+      "status": "ACTIVE"
     }
   ]
 }
