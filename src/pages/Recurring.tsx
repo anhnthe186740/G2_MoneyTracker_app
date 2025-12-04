@@ -11,7 +11,6 @@ import type { Wallet, Category, RecurringTransaction } from '../types';
 
 type TabType = 'recurring' | 'categories';
 
-// Category Management Tab Component
 function CategoryManagementTab({
   categories,
   onUpdate,
@@ -164,7 +163,6 @@ const [editRecurringTransaction, setEditRecurringTransaction] = useState<Recurri
     try {
       setLoading(true);
       console.log('=== RECURRING: Loading data ===');
-
       const [walletsRes, categoriesRes] = await Promise.all([
         api.get<any[]>(`/wallets?user_id=${user.id}`),
         api.get<any[]>(`/categories?user_id=${user.id}`)
@@ -172,7 +170,7 @@ const [editRecurringTransaction, setEditRecurringTransaction] = useState<Recurri
 
       // Map snake_case to camelCase
       const mappedWallets = walletsRes.data.map((w: any) => ({
-        id: w.id,
+        id: Number(w.id),
         userId: w.user_id,
         name: w.name,
         type: w.type,
@@ -182,7 +180,7 @@ const [editRecurringTransaction, setEditRecurringTransaction] = useState<Recurri
       }));
 
       const mappedCategories = categoriesRes.data.map((c: any) => ({
-        id: c.id,
+        id: Number(c.id),
         userId: c.user_id,
         name: c.name,
         type: c.type,
