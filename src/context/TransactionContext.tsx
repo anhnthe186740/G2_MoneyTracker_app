@@ -7,7 +7,7 @@ interface TransactionContextType {
     loading: boolean;
     error: string | null;
     getTransactions: (userId: number) => Promise<void>;
-    getTransactionById: (id: number | string) => Promise<Transaction | null>;
+    getTransactionById: (id: number | string) => Promise<Transaction | undefined>;
     createTransaction: (transaction: Omit<Transaction, 'id' | 'createdAt'>) => Promise<void>;
     updateTransaction: (id: number | string, transaction: Partial<Transaction>) => Promise<void>;
     deleteTransaction: (id: number | string) => Promise<void>;
@@ -48,10 +48,10 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
         }
     }, []);
 
-    const getTransactionById = useCallback(async (id: number | string): Promise<Transaction | null> => {
+    const getTransactionById = useCallback(async (id: number | string): Promise<Transaction | undefined> => {
         try {
             if (id === null || id === undefined) {
-                return null;
+                return undefined;
             }
             const response = await api.get<any>(`/transactions/${id}`);
             const t = response.data;
@@ -71,7 +71,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
         } catch (err) {
             console.error('Error loading transaction:', err);
             setError('Không thể tải thông tin giao dịch');
-            return null;
+            return undefined;
         }
     }, []);
 

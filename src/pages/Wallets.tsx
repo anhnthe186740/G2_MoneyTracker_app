@@ -12,7 +12,7 @@ import { AuthContext } from '../context/AuthContext';
 
 interface Wallet {
   id: number | string;
-  user_id: number;
+  user_id: number | string;
   name: string;
   type: 'BANK' | 'E_WALLET' | 'CASH' | 'CREDIT';
   balance: number;
@@ -136,13 +136,8 @@ export default function Wallets() {
           color: formData.color,
           note: formData.note,
           created_at: new Date().toISOString(),
-          user_id: 0 // Sẽ được gán lại bên dưới
+          user_id: user?.id ? String(user.id) : ''
         };
-        
-        if (user?.id) {
-          const numId = Number(user.id);
-          payload.user_id = !isNaN(numId) && String(numId) === String(user.id) ? numId : Number(user.id);
-        }
         
         const { data } = await api.post<Wallet>('/wallets', payload);
         setWallets(prev => [...prev, data]);
@@ -287,7 +282,7 @@ export default function Wallets() {
         }}
       >
         <DialogContent 
-          className="w-[1000px] p-5"
+          className="w-[480px] p-5"
           onClose={() => {
             setIsDialogOpen(false);
             resetForm();
