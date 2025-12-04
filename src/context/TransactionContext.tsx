@@ -8,7 +8,7 @@ interface TransactionContextType {
     loading: boolean;
     error: string | null;
     getTransactions: (userId: number) => Promise<void>;
-    getTransactionById: (id: number | string) => Promise<Transaction | null>;
+    getTransactionById: (id: number | string) => Promise<Transaction | undefined>;
     createTransaction: (transaction: Omit<Transaction, 'id' | 'createdAt'>) => Promise<void>;
     updateTransaction: (id: number | string, transaction: Partial<Transaction>) => Promise<void>;
     deleteTransaction: (id: number | string) => Promise<void>;
@@ -66,10 +66,10 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
         }
     }, []);
 
-    const getTransactionById = useCallback(async (id: number | string): Promise<Transaction | null> => {
+    const getTransactionById = useCallback(async (id: number | string): Promise<Transaction | undefined> => {
         try {
             if (id === null || id === undefined) {
-                return null;
+                return undefined;
             }
             const response = await api.get<any>(`/transactions/${id}`);
             const t = response.data;
@@ -89,7 +89,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
         } catch (err) {
             console.error('Error loading transaction:', err);
             setError('Không thể tải thông tin giao dịch');
-            return null;
+            return undefined;
         }
     }, []);
 
@@ -117,7 +117,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             // Update wallet balance (catch error but don't throw)
             try {
                 console.log('About to update wallet balance...');
-                await updateWalletBalance(transaction.walletId, transaction.amount, transaction.type);
+                await updateWalletBalance(transaction.walletId, transaction.amount, transaction.type, transaction.userId);
                 console.log('Wallet balance updated');
             } catch (balanceErr) {
                 console.error('Could not update wallet balance:', balanceErr);
@@ -152,7 +152,8 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
                 await updateWalletBalance(
                     oldTransaction.walletId,
                     oldTransaction.amount,
-                    oldTransaction.type === 'INCOME' ? 'EXPENSE' : 'INCOME'
+                    oldTransaction.type === 'INCOME' ? 'EXPENSE' : 'INCOME',
+                    oldTransaction.userId
                 );
             } catch (balanceErr) {
                 console.warn('Could not revert wallet balance:', balanceErr);
@@ -173,7 +174,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
             // Apply new balance (catch error but continue)
             if (transaction.walletId && transaction.amount && transaction.type) {
                 try {
-                    await updateWalletBalance(transaction.walletId, transaction.amount, transaction.type);
+                    await updateWalletBalance(transaction.walletId, transaction.amount, transaction.type, oldTransaction.userId);
                 } catch (balanceErr) {
                     console.warn('Could not update wallet balance:', balanceErr);
                 }
@@ -220,7 +221,8 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
                 await updateWalletBalance(
                     transaction.walletId,
                     transaction.amount,
-                    transaction.type === 'INCOME' ? 'EXPENSE' : 'INCOME'
+                    transaction.type === 'INCOME' ? 'EXPENSE' : 'INCOME',
+                    transaction.userId
                 );
             } catch (balanceErr) {
                 console.warn('Could not revert wallet balance:', balanceErr);
@@ -242,24 +244,61 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
     }, [getTransactionById, getTransactions, transactions]);
 
     // Helper function to update wallet balance
-    const updateWalletBalance = async (walletId: number | string, amount: number, type: 'INCOME' | 'EXPENSE') => {
+    const updateWalletBalance = async (walletId: number | string, amount: number, type: 'INCOME' | 'EXPENSE', userId?: number | string) => {
         try {
-            console.log('Updating wallet balance:', { walletId, amount, type });
+            console.log('Updating wallet balance:', { walletId, walletIdType: typeof walletId, amount, type, userId });
 
-            const walletResponse = await api.get<any>(`/wallets/${walletId}`);
-            const wallet = walletResponse.data;
+            // Ensure walletId is valid
+            if (!walletId || walletId === 'NaN' || walletId === 'undefined') {
+                throw new Error(`Invalid walletId: ${walletId}`);
+            }
 
-            console.log('Current wallet:', wallet);
+            // If userId is provided, use it to filter wallets to avoid ID collision
+            let wallet;
+            if (userId) {
+                const walletsResponse = await api.get<any[]>(`/wallets?id=${walletId}&user_id=${userId}`);
+                if (walletsResponse.data && walletsResponse.data.length > 0) {
+                    wallet = walletsResponse.data[0];
+                } else {
+                    throw new Error(`Wallet not found: id=${walletId}, user_id=${userId}`);
+                }
+            } else {
+                const walletResponse = await api.get<any>(`/wallets/${walletId}`);
+                wallet = walletResponse.data;
+            }
+
+            console.log('Current wallet:', {
+                id: wallet.id,
+                user_id: wallet.user_id,
+                name: wallet.name,
+                balance: wallet.balance,
+                walletIdType: typeof wallet.id,
+                userIdType: typeof wallet.user_id
+            });
+
+            const currentBalance = Number(wallet.balance);
+            const amountNum = Number(amount);
+
+            if (isNaN(currentBalance) || isNaN(amountNum)) {
+                throw new Error(`Invalid numbers: balance=${wallet.balance}, amount=${amount}`);
+            }
 
             const newBalance = type === 'INCOME'
-                ? Number(wallet.balance) + Number(amount)
-                : Number(wallet.balance) - Number(amount);
+                ? currentBalance + amountNum
+                : currentBalance - amountNum;
 
-            console.log('New balance:', newBalance);
+            console.log('Balance calculation:', { currentBalance, amountNum, type, newBalance });
 
-            await api.patch(`/wallets/${walletId}`, { balance: newBalance });
+            // CRITICAL: Use PUT with full wallet object to ensure correct update
+            // PATCH /wallets/{id} will update the first wallet with that ID
+            // Since we got the correct wallet via query, use PUT to update it completely
+            const updatedWallet = { ...wallet, balance: newBalance };
+            console.log('Attempting to PUT wallet:', wallet.id, 'user_id:', wallet.user_id, 'new balance:', newBalance);
 
-            console.log('Wallet balance updated successfully');
+            const putResponse = await api.put(`/wallets/${wallet.id}`, updatedWallet);
+            console.log('PUT response:', putResponse.data);
+
+            console.log('Wallet balance updated successfully to:', newBalance);
         } catch (err) {
             console.error('Error updating wallet balance:', err);
             throw err;

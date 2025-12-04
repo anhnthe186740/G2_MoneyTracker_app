@@ -1,11 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
-import { Plus, RefreshCw, Trash2, FolderOpen } from 'lucide-react';
+import { Plus, Trash2, FolderOpen, RefreshCw } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { RecurringTransactionContext } from '../context/RecurringTransactionContext';
 import RecurringTransactionList from '../components/RecurringTransactionList';
 import RecurringTransactionForm from '../components/RecurringTransactionForm';
-import WalletQuickCreateForm from '../components/WalletQuickCreateForm';
 import CategoryQuickCreateForm from '../components/CategoryQuickCreateForm';
 import api from '../services/api';
 import type { Wallet, Category, RecurringTransaction } from '../types';
@@ -149,7 +148,6 @@ export default function Recurring() {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [showRecurringForm, setShowRecurringForm] = useState(false);
-  const [showWalletForm, setShowWalletForm] = useState(false);
   const [showCategoryForm, setShowCategoryForm] = useState(false);
 const [editRecurringTransaction, setEditRecurringTransaction] = useState<RecurringTransaction | null>(null);
   const [loading, setLoading] = useState(true);
@@ -166,6 +164,7 @@ const [editRecurringTransaction, setEditRecurringTransaction] = useState<Recurri
     try {
       setLoading(true);
       console.log('=== RECURRING: Loading data ===');
+
       const [walletsRes, categoriesRes] = await Promise.all([
         api.get<any[]>(`/wallets?user_id=${user.id}`),
         api.get<any[]>(`/categories?user_id=${user.id}`)
@@ -173,7 +172,7 @@ const [editRecurringTransaction, setEditRecurringTransaction] = useState<Recurri
 
       // Map snake_case to camelCase
       const mappedWallets = walletsRes.data.map((w: any) => ({
-        id: w.id, // Keep original ID (string or number)
+        id: w.id,
         userId: w.user_id,
         name: w.name,
         type: w.type,
@@ -183,7 +182,7 @@ const [editRecurringTransaction, setEditRecurringTransaction] = useState<Recurri
       }));
 
       const mappedCategories = categoriesRes.data.map((c: any) => ({
-        id: c.id, // Keep original ID (string or number)
+        id: c.id,
         userId: c.user_id,
         name: c.name,
         type: c.type,
@@ -281,11 +280,6 @@ for (const rt of allRecurring) {
     }
   };
 
-  const handleWalletSuccess = () => {
-    setShowWalletForm(false);
-    loadData();
-  };
-
   const handleEditRecurringTransaction = (transaction: RecurringTransaction) => {
     setEditRecurringTransaction(transaction);
     setShowRecurringForm(true);
@@ -341,9 +335,9 @@ for (const rt of allRecurring) {
               <div className="ml-3">
                 <p className="text-sm text-yellow-700">
                   <strong>Chưa thể thêm thu/chi định kỳ!</strong>
-                  {wallets.length === 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một ví và một danh mục (cả Thu nhập và Chi tiêu). Vui lòng click nút "Thêm định kỳ" và sử dụng nút [+] bên cạnh Danh mục.'}
+                  {wallets.length === 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một ví và một danh mục (cả Thu nhập và Chi tiêu). Vui lòng chuyển sang tab "Quản lý danh mục".'}
                   {wallets.length === 0 && categories.length > 0 && ' Bạn cần tạo ít nhất một ví.'}
-                  {wallets.length > 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một danh mục (cả Thu nhập và Chi tiêu). Vui lòng click nút "Thêm định kỳ" và sử dụng nút [+] bên cạnh Danh mục.'}
+                  {wallets.length > 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một danh mục (cả Thu nhập và Chi tiêu). Vui lòng chuyển sang tab "Quản lý danh mục".'}
                 </p>
               </div>
             </div>
@@ -360,8 +354,8 @@ for (const rt of allRecurring) {
               key={tab.id}
               onClick={() => changeTab(tab.id)}
               className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === tab.id
-                  ? 'border-b-2 border-purple-600 text-purple-600'
-                  : 'text-muted-foreground hover:text-foreground'
+                ? 'border-b-2 border-purple-600 text-purple-600'
+                : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               <Icon size={20} />
@@ -400,14 +394,14 @@ for (const rt of allRecurring) {
                 title="Xóa các giao dịch định kỳ có danh mục đã bị xóa"
               >
                 <Trash2 size={18} />
-                Dọn dẹp
+                Xóa hết
               </button>
               <button
                 onClick={() => setShowRecurringForm(true)}
                 disabled={hasNoData}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${hasNoData
-                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                    : 'bg-purple-600 text-white hover:bg-purple-700'
+                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                  : 'bg-purple-600 text-white hover:bg-purple-700'
                   }`}
                 title={hasNoData ? 'Vui lòng tạo ví và danh mục trước' : 'Thêm thu/chi định kỳ'}
               >
@@ -452,14 +446,7 @@ for (const rt of allRecurring) {
         />
       )}
 
-      {/* Quick Create Forms */}
-      {showWalletForm && (
-        <WalletQuickCreateForm
-          userId={user.id}
-          onClose={() => setShowWalletForm(false)}
-          onSuccess={handleWalletSuccess}
-        />
-      )}
+      {/* Category Quick Create Form */}
       {showCategoryForm && (
         <CategoryQuickCreateForm
           userId={user.id}

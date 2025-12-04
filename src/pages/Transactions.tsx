@@ -331,8 +331,8 @@ export default function Transactions() {
               key={tab.id}
               onClick={() => changeTab(tab.id)}
               className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === tab.id
-                  ? 'border-b-2 border-blue-600 text-blue-600'
-                  : 'text-muted-foreground hover:text-foreground'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               <Icon size={20} />
@@ -347,9 +347,13 @@ export default function Transactions() {
         {activeTab === 'overview' && (
           <div className="space-y-6" key={`overview-${wallets.reduce((sum, w) => sum + w.balance, 0)}`}>
             <TransactionChart userId={user.id} key={`chart-${Date.now()}`} />
+          </div>
+        )}
 
+        {activeTab === 'transactions' && (
+          <div>
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               <div className="bg-card rounded-lg shadow p-6 border border-border">
                 <h3 className="text-lg font-semibold text-muted-foreground mb-2">Tổng số ví</h3>
                 <p className="text-3xl font-bold text-blue-600">{wallets.length}</p>
@@ -365,11 +369,7 @@ export default function Transactions() {
                 <p className="text-3xl font-bold text-purple-600">{categories.length}</p>
               </div>
             </div>
-          </div>
-        )}
 
-        {activeTab === 'transactions' && (
-          <div>
             <div className="flex justify-end gap-3 mb-6">
               <button
                 onClick={handleCleanupInvalidData}
@@ -377,14 +377,14 @@ export default function Transactions() {
                 title="Xóa các giao dịch có danh mục đã bị xóa"
               >
                 <Trash2 size={18} />
-                Dọn dẹp
+                Xóa hết
               </button>
               <button
                 onClick={() => setShowTransactionForm(true)}
                 disabled={hasNoData}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg ${hasNoData
-                    ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
                   }`}
                 title={hasNoData ? 'Vui lòng tạo ví và danh mục trước' : 'Thêm giao dịch mới'}
               >
