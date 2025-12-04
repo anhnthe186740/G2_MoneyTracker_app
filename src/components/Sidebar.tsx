@@ -25,7 +25,7 @@ export interface SidebarMenuItem {
 export const SIDEBAR_MENU: SidebarMenuItem[] = [
   { id: 'dashboard', icon: LayoutDashboard, label: 'Tổng quan', path: '/dashboard' },
   { id: 'transactions', icon: Receipt, label: 'Giao dịch', path: '/transactions' },
-  { id: 'accounts', icon: Wallet, label: 'Tài khoản', path: '/accounts' },
+  { id: 'wallets', icon: Wallet, label: 'Ví', path: '/wallets' },
   { id: 'budget', icon: PiggyBank, label: 'Ngân sách', path: '/budget' },
   { id: 'goals', icon: Target, label: 'Mục tiêu', path: '/goals' },
   { id: 'recurring', icon: RefreshCw, label: 'Định kỳ', path: '/recurring' },

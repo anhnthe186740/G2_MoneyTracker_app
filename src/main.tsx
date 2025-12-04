@@ -8,17 +8,23 @@ import { NotificationProvider } from './context/NotificationContext.tsx';
 import { Toaster } from 'sonner';
 import { TransactionProvider } from './context/TransactionContext.tsx';
 import { RecurringTransactionProvider } from './context/RecurringTransactionContext.tsx';
+import { BudgetProvider } from './context/BudgetContext.tsx';
+import { CategoryProvider } from './context/CategoryContext.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider>
       <NotificationProvider>
         <Toaster position="top-right" richColors />
-        <TransactionProvider>
-          <RecurringTransactionProvider>
-            <App />
-          </RecurringTransactionProvider>
-        </TransactionProvider>
+        <CategoryProvider>
+          <TransactionProvider>
+            <RecurringTransactionProvider>
+              <BudgetProvider>
+                <App />
+              </BudgetProvider>
+            </RecurringTransactionProvider>
+          </TransactionProvider>
+        </CategoryProvider>
       </NotificationProvider>
     </AuthProvider>
   </React.StrictMode>
