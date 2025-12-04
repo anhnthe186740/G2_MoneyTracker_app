@@ -9,6 +9,7 @@ type Goal = {
   wallet_id: number;
   name: string;
   target_amount: number;
+  current_amount?: number;
   deadline?: string;
   status: string;
 };
@@ -27,17 +28,23 @@ export default function Goals() {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  
-  const getWallet = (walletId: number) => wallets.find(w => Number(w.id) === Number(walletId));
+
+  const getWallet = (walletId: number) =>
+    wallets.find((w) => Number(w.id) === Number(walletId));
   const calcProgress = (goalId: string) => {
-    const goal = goals.find(g => g.id === goalId);
+    const goal = goals.find((g) => g.id === goalId);
     if (!goal) return { current: 0, percent: 0, completed: false };
-    const wallet = getWallet(goal.wallet_id);
-    const current = wallet?.balance || 0;
-    const percent = goal.target_amount === 0 ? 0 : Math.round((current / goal.target_amount) * 100);
+    const current =
+      goal.current_amount !== undefined
+        ? goal.current_amount
+        : getWallet(goal.wallet_id)?.balance || 0;
+    const percent =
+      goal.target_amount === 0
+        ? 0
+        : Math.round((current / goal.target_amount) * 100);
     return { current, percent, completed: percent >= 100 };
   };
-  const format = (v: number) => v.toLocaleString('vi-VN');
+  const format = (v: number) => v.toLocaleString("vi-VN");
 
   const [open, setOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -45,10 +52,11 @@ export default function Goals() {
   const [targetAmount, setTargetAmount] = useState<string>("");
   const [selectedWallet, setSelectedWallet] = useState<string>("");
   const [selectedStatus, setSelectedStatus] =
-    useState<string>("Hoàn thành");
+    useState<string>("Đang thực hiện");
   const [dueDate, setDueDate] = useState<string>("");
+  const [initialAmount, setInitialAmount] = useState<string>("");
+  const [sourceWallet, setSourceWallet] = useState<string>("");
 
-  // Add money modal
   const [addMoneyOpen, setAddMoneyOpen] = useState<boolean>(false);
   const [addMoneyGoalId, setAddMoneyGoalId] = useState<string>("");
   const [addMoneyAmount, setAddMoneyAmount] = useState<string>("");
@@ -58,8 +66,10 @@ export default function Goals() {
     setTitle("");
     setTargetAmount("");
     setSelectedWallet("");
-    setSelectedStatus("Hoàn thành");
+    setSelectedStatus("Đang thực hiện");
     setDueDate("");
+    setInitialAmount("");
+    setSourceWallet("");
     setError(null);
   };
 
@@ -100,7 +110,7 @@ export default function Goals() {
     setError(null);
     const name = title.trim();
     const target = Number(targetAmount);
-    const walletId = Number(selectedWallet);
+
     if (!name) {
       setError("Tên mục tiêu không được để trống");
       return;
@@ -109,24 +119,78 @@ export default function Goals() {
       setError("Số tiền mục tiêu phải lớn hơn 0");
       return;
     }
-    if (isNaN(walletId) || walletId <= 0) {
-      setError("Vui lòng chọn ví");
-      return;
+
+    const initAmount = Number(initialAmount) || 0;
+
+    if (!editingId && initAmount > 0) {
+      const srcWalletId = Number(sourceWallet);
+
+      if (isNaN(srcWalletId) || srcWalletId <= 0) {
+        setError("Vui lòng chọn ví nguồn để lấy tiền");
+        return;
+      }
+
+      const fromWallet = wallets.find((w) => Number(w.id) === srcWalletId);
+      if (!fromWallet) {
+        setError("Không tìm thấy ví nguồn");
+        return;
+      }
+
+      if (fromWallet.balance < initAmount) {
+        setError(
+          `Số dư ví "${fromWallet.name}" không đủ (còn ${format(
+            fromWallet.balance
+          )} đ)`
+        );
+        return;
+      }
     }
 
     try {
-      const payload: any = { name, target_amount: target, wallet_id: walletId, deadline: dueDate, status: selectedStatus };
+      const walletId = editingId
+        ? Number(selectedWallet)
+        : initAmount > 0
+        ? Number(sourceWallet)
+        : 0;
+      const payload: any = {
+        name,
+        target_amount: target,
+        wallet_id: walletId || null,
+        deadline: dueDate,
+        status: selectedStatus,
+      };
+      if (!editingId && initAmount > 0) {
+        payload.current_amount = initAmount;
+      }
       if (user?.id) {
         const numId = Number(user.id);
-        payload.user_id = !isNaN(numId) && String(numId) === user.id ? numId : user.id;
+        payload.user_id =
+          !isNaN(numId) && String(numId) === user.id ? numId : user.id;
       }
 
       if (editingId) {
         const { data } = await api.put<Goal>(`/goals/${editingId}`, payload);
-        setGoals(prev => prev.map(g => g.id === editingId ? { ...g, ...data } : g));
+        setGoals((prev) =>
+          prev.map((g) => (g.id === editingId ? { ...g, ...data } : g))
+        );
       } else {
         const { data } = await api.post<Goal>("/goals", payload);
-        setGoals(prev => [...prev, data]);
+        setGoals((prev) => [...prev, data]);
+
+        if (initAmount > 0 && walletId > 0) {
+          const wallet = wallets.find((w) => Number(w.id) === walletId);
+          if (wallet) {
+            await api.patch(`/wallets/${walletId}`, {
+              balance: wallet.balance - initAmount,
+            });
+
+            const { data: walletsData } = await api.get<Wallet[]>("/wallets");
+            const filteredWallets = walletsData.filter(
+              (w: Wallet) => String(w.user_id) === String(user.id)
+            );
+            setWallets(filteredWallets);
+          }
+        }
       }
       setOpen(false);
       resetForm();
@@ -181,7 +245,6 @@ export default function Goals() {
           ) : (
             <div className="grid gap-3">
               <div className="grid grid-cols-3 gap-4">
-                {/* Tổng mục tiêu */}
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
                   <div className="text-sm font-medium text-gray-600 mb-1">
                     Tổng mục tiêu
@@ -191,23 +254,27 @@ export default function Goals() {
                   </div>
                 </div>
 
-                {/* Đã hoàn thành */}
                 <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200 shadow-sm hover:shadow-md transition-shadow">
                   <div className="text-sm font-medium text-green-700 mb-1">
                     Đã hoàn thành
                   </div>
                   <div className="text-3xl font-bold text-green-600">
-                    {filtered.filter(g => calcProgress(g.id).completed).length}
+                    {
+                      filtered.filter((g) => calcProgress(g.id).completed)
+                        .length
+                    }
                   </div>
                 </div>
 
-                {/* Đang thực hiện */}
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200 shadow-sm hover:shadow-md transition-shadow">
                   <div className="text-sm font-medium text-blue-700 mb-1">
                     Đang thực hiện
                   </div>
                   <div className="text-3xl font-bold text-blue-600">
-                    {filtered.filter(g => !calcProgress(g.id).completed).length}
+                    {
+                      filtered.filter((g) => !calcProgress(g.id).completed)
+                        .length
+                    }
                   </div>
                 </div>
               </div>
@@ -216,7 +283,11 @@ export default function Goals() {
                 {filtered.map((g) => {
                   const { current, percent, completed } = calcProgress(g.id);
                   const wallet = getWallet(g.wallet_id);
-                  const daysLeft = g.deadline ? Math.ceil((new Date(g.deadline).getTime() - Date.now()) / 86400000) : null;
+                  const daysLeft = g.deadline
+                    ? Math.ceil(
+                        (new Date(g.deadline).getTime() - Date.now()) / 86400000
+                      )
+                    : null;
 
                   return (
                     <div
@@ -229,7 +300,9 @@ export default function Goals() {
                     >
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <div className="font-bold text-gray-800">{g.name}</div>
+                          <div className="font-bold text-gray-800">
+                            {g.name}
+                          </div>
                           <div className="text-[11px] text-gray-500 mt-1">
                             Ví: {wallet?.name || "N/A"}
                           </div>
@@ -265,9 +338,42 @@ export default function Goals() {
                           </button>
                           <button
                             onClick={async () => {
+                              if (
+                                !window.confirm(
+                                  `Bạn có chắc muốn xóa mục tiêu "${g.name}"?`
+                                )
+                              ) {
+                                return;
+                              }
+
                               try {
+                                if (
+                                  g.current_amount &&
+                                  g.current_amount > 0 &&
+                                  g.wallet_id
+                                ) {
+                                  const wallet = wallets.find(
+                                    (w) => Number(w.id) === Number(g.wallet_id)
+                                  );
+                                  if (wallet) {
+                                    await api.patch(`/wallets/${g.wallet_id}`, {
+                                      balance:
+                                        wallet.balance + g.current_amount,
+                                    });
+
+                                    const { data: walletsData } = await api.get<
+                                      Wallet[]
+                                    >("/wallets");
+                                    const filteredWallets = walletsData.filter(
+                                      (w: Wallet) =>
+                                        String(w.user_id) === String(user.id)
+                                    );
+                                    setWallets(filteredWallets);
+                                  }
+                                }
+
                                 await api.delete(`/goals/${g.id}`);
-                                setGoals(p => p.filter(x => x.id !== g.id));
+                                setGoals((p) => p.filter((x) => x.id !== g.id));
                               } catch {
                                 alert("Xóa mục tiêu thất bại");
                               }
@@ -286,11 +392,11 @@ export default function Goals() {
                       </div>
 
                       <div className="h-2.5 bg-gray-200 rounded-full overflow-hidden mb-2">
-                        <div 
+                        <div
                           className={`h-full ${
-                            completed ? 'bg-green-500' : 'bg-blue-500'
+                            completed ? "bg-green-500" : "bg-blue-500"
                           }`}
-                          style={{ width: `${Math.min(100, percent)}%` }} 
+                          style={{ width: `${Math.min(100, percent)}%` }}
                         />
                       </div>
                       <div className="text-center text-xs text-gray-500 mb-2">
@@ -299,7 +405,10 @@ export default function Goals() {
 
                       <div className="border-t border-gray-100 mt-3 pt-3 text-[13px] text-gray-600 flex justify-between items-center">
                         <div>
-                          Còn thiếu: <span className="font-semibold">{format(Math.max(0, g.target_amount - current))} đ</span>
+                          Còn thiếu:{" "}
+                          <span className="font-semibold">
+                            {format(Math.max(0, g.target_amount - current))} đ
+                          </span>
                         </div>
                         {!completed && (
                           <Button
@@ -379,30 +488,55 @@ export default function Goals() {
                   Số tiền mục tiêu (VNĐ)
                 </label>
                 <input
-                  type="number"
-                  value={targetAmount}
-                  onChange={(e) => setTargetAmount(e.target.value)}
+                  type="text"
+                  value={targetAmount ? Number(targetAmount).toLocaleString('vi-VN') : ''}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
+                    setTargetAmount(value);
+                  }}
+                  placeholder="Nhập số tiền mục tiêu"
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
-              <div>
-                <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
-                  Chọn ví tiết kiệm
-                </label>
-                <select
-                  value={selectedWallet}
-                  onChange={(e) => setSelectedWallet(e.target.value)}
-                  className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">-- Chọn ví --</option>
-                  {wallets.map((w) => (
-                    <option key={w.id} value={w.id}>
-                      {w.name} ({w.balance.toLocaleString("vi-VN")} đ)
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {!editingId && (
+                <>
+                  <div>
+                    <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
+                      Số tiền hiện tại (VNĐ)
+                    </label>
+                    <input
+                      type="text"
+                      value={initialAmount ? Number(initialAmount).toLocaleString('vi-VN') : ''}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '');
+                        setInitialAmount(value);
+                      }}
+                      placeholder="Nhập số tiền muốn nạp"
+                      className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
+                      Lấy từ ví
+                    </label>
+                    <select
+                      value={sourceWallet}
+                      onChange={(e) => setSourceWallet(e.target.value)}
+                      className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      disabled={!initialAmount || Number(initialAmount) <= 0}
+                    >
+                      <option value="">-- Chọn ví --</option>
+                      {wallets.map((w) => (
+                        <option key={w.id} value={w.id}>
+                          {w.name} ({w.balance.toLocaleString("vi-VN")} đ)
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
 
               <div>
                 <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
@@ -414,7 +548,6 @@ export default function Goals() {
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="Đang thực hiện">Đang thực hiện</option>
-                  <option value="Hoàn thành">Hoàn thành</option>
                   <option value="Tạm dừng">Tạm dừng</option>
                 </select>
               </div>
@@ -479,7 +612,13 @@ export default function Goals() {
             </div>
 
             <div className="text-[13px] text-gray-500 mb-3">
-              Chuyển tiền vào ví: <strong>{getWallet(goals.find(g => g.id === addMoneyGoalId)?.wallet_id || 0)?.name || 'N/A'}</strong> để tăng tiến độ
+              Chuyển tiền vào ví:{" "}
+              <strong>
+                {getWallet(
+                  goals.find((g) => g.id === addMoneyGoalId)?.wallet_id || 0
+                )?.name || "N/A"}
+              </strong>{" "}
+              để tăng tiến độ
             </div>
 
             <form
@@ -516,21 +655,36 @@ export default function Goals() {
                   return;
                 }
 
+                if (!goal) {
+                  alert("Không tìm thấy mục tiêu");
+                  return;
+                }
+
                 try {
-                  // Update wallets: subtract from source, add to target
                   await api.patch(`/wallets/${fromWalletId}`, {
                     balance: fromWallet.balance - amount,
                   });
-                  await api.patch(`/wallets/${toWallet.id}`, {
-                    balance: toWallet.balance + amount,
+
+                  const currentAmount = goal.current_amount || 0;
+                  await api.patch(`/goals/${addMoneyGoalId}`, {
+                    ...goal,
+                    current_amount: currentAmount + amount,
                   });
 
-                  // Reload wallets
-                  const { data } = await api.get<Wallet[]>("/wallets");
-                  const filteredWallets = data.filter(
+                  const [walletsData, goalsData] = await Promise.all([
+                    api.get<Wallet[]>("/wallets"),
+                    api.get<Goal[]>("/goals"),
+                  ]);
+
+                  const filteredWallets = walletsData.data.filter(
                     (w) => String(w.user_id) === String(user.id)
                   );
+                  const filteredGoals = goalsData.data.filter(
+                    (g) => String(g.user_id) === String(user.id)
+                  );
+
                   setWallets(filteredWallets);
+                  setGoals(filteredGoals);
 
                   setAddMoneyOpen(false);
                   setAddMoneyGoalId("");
@@ -546,9 +700,12 @@ export default function Goals() {
                   Số tiền cần thêm (VNĐ)
                 </label>
                 <input
-                  type="number"
-                  value={addMoneyAmount}
-                  onChange={(e) => setAddMoneyAmount(e.target.value)}
+                  type="text"
+                  value={addMoneyAmount ? Number(addMoneyAmount).toLocaleString('vi-VN') : ''}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
+                    setAddMoneyAmount(value);
+                  }}
                   placeholder="Nhập số tiền"
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />

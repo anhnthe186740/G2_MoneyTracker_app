@@ -45,6 +45,7 @@ export interface Goal {
   walletId: number;
   name: string;
   targetAmount: number;
+  currentAmount?: number;
   deadline: string;
   status: string;
 }
