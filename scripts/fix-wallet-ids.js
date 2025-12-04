@@ -23,12 +23,12 @@ let nextWalletId = 1000; // Start from 1000 to avoid conflicts
 // Generate new unique IDs for all wallets
 db.wallets = db.wallets.map(wallet => {
     const oldId = wallet.id;
-    
+
     // Check if this ID already exists in our map
     if (!walletIdMap[oldId]) {
         walletIdMap[oldId] = String(nextWalletId++);
     }
-    
+
     return {
         ...wallet,
         id: walletIdMap[oldId]
