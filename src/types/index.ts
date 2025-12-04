@@ -41,11 +41,12 @@ export interface Transaction {
 
 export interface Goal {
   id: number;
-  userId: number;
+  userId: number | string;
+  walletId: number;
   name: string;
   targetAmount: number;
-  currentAmount: number;
   deadline: string;
+  status: string;
 }
 
 export interface Notification {

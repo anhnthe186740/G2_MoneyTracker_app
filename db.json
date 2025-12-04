@@ -52,7 +52,7 @@
       "user_id": 1,
       "name": "Vietcombank",
       "type": "BANK",
-      "balance": 2000000,
+      "balance": 876544,
       "color": "#3498db",
       "created_at": "2024-01-15T09:00:00Z",
       "note": ""
@@ -128,6 +128,16 @@
       "balance": 199900032,
       "color": "#3B82F6",
       "created_at": "2025-11-27T07:10:51.344Z"
+    },
+    {
+      "id": "1",
+      "name": "MB",
+      "type": "BANK",
+      "balance": 20000000000,
+      "color": "#3498db",
+      "note": "",
+      "created_at": "2025-12-04T03:14:35.506Z",
+      "user_id": "7699"
     }
   ],
   "categories": [
@@ -279,6 +289,14 @@
       "id": "8030",
       "user_id": "2",
       "name": "Đi bay",
+      "type": "EXPENSE",
+      "color": "#EF4444",
+      "icon": "💸"
+    },
+    {
+      "id": "4fa2",
+      "user_id": "7699",
+      "name": "An uong",
       "type": "EXPENSE",
       "color": "#EF4444",
       "icon": "💸"
@@ -673,12 +691,31 @@
       "category_id": "1",
       "amount": 7000000,
       "type": "EXPENSE",
-      "description": "",
-      "date": "2025-12-03T00:00:00.000Z",
-      "created_at": "2025-12-03T09:17:27.491Z"
       "description": "đi ra linh lang",
       "date": "2025-10-03T00:00:00.000Z",
       "created_at": "2025-12-03T02:36:58.621Z"
+    },
+    {
+      "id": "56a4",
+      "user_id": "1",
+      "wallet_id": "1",
+      "category_id": "1",
+      "amount": 123456,
+      "type": "EXPENSE",
+      "description": "hh",
+      "date": "2025-12-03T00:00:00.000Z",
+      "created_at": "2025-12-04T03:06:53.085Z"
+    },
+    {
+      "id": "1595",
+      "user_id": "7699",
+      "wallet_id": "1",
+      "category_id": "4fa2",
+      "amount": 1000000,
+      "type": "EXPENSE",
+      "description": "An KFC",
+      "date": "2025-12-04T00:00:00.000Z",
+      "created_at": "2025-12-04T03:15:19.985Z"
     }
   ],
   "recurring_transactions": [
@@ -793,40 +830,45 @@
       "user_id": 1,
       "name": "Mua MacBook Pro M3",
       "target_amount": 45000000,
-      "current_amount": 25000000,
-      "deadline": "2024-08-30"
+      "wallet_id": 1,
+      "deadline": "2024-08-30",
+      "status": "In Progress"
     },
     {
       "id": "2",
       "user_id": 1,
       "name": "Du lịch Đà Lạt",
-      "target_amount": 8000000,
-      "current_amount": 3200000,
-      "deadline": "2024-05-30"
+      "target_amount": 9000000,
+      "wallet_id": 2,
+      "deadline": "2024-05-30",
+      "status": "In Progress"
     },
     {
       "id": "3",
       "user_id": 1,
       "name": "Học khoá React Master",
       "target_amount": 5000000,
-      "current_amount": 2000000,
-      "deadline": "2024-06-15"
+      "wallet_id": 5,
+      "deadline": "2024-06-15",
+      "status": "Completed"
     },
     {
       "id": "4",
       "user_id": 2,
       "name": "Mua iPhone 15 Pro",
-      "target_amount": 28000000,
-      "current_amount": 12500000,
-      "deadline": "2024-09-20"
+      "target_amount": 19000000,
+      "wallet_id": 3,
+      "deadline": "2024-09-20",
+      "status": "In Progress"
     },
     {
       "id": "5",
       "user_id": 2,
       "name": "Du lịch Phú Quốc",
       "target_amount": 12000000,
-      "current_amount": 4500000,
-      "deadline": "2024-07-10"
+      "wallet_id": 4,
+      "deadline": "2024-07-10",
+      "status": "In Progress"
     }
   ],
   "notifications": [
