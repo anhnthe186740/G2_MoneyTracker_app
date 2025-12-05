@@ -32,7 +32,8 @@ export default function Goals() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getWallet = (walletId: number) => wallets.find(w => Number(w.id) === Number(walletId));
+  const getWallet = (walletId: number) =>
+    wallets.find((w) => Number(w.id) === Number(walletId));
   const calcProgress = (goalId: string) => {
     const goal = goals.find((g) => g.id === goalId);
     if (!goal) return { current: 0, percent: 0, completed: false };
@@ -139,10 +140,12 @@ export default function Goals() {
       }
 
       if (fromWallet.balance < initAmount) {
-        setError(t("validation.insufficientBalance", { 
-          wallet: fromWallet.name, 
-          balance: format(fromWallet.balance) 
-        }));
+        setError(
+          t("validation.insufficientBalance", {
+            wallet: fromWallet.name,
+            balance: format(fromWallet.balance),
+          })
+        );
         return;
       }
     }
@@ -179,7 +182,7 @@ export default function Goals() {
           ...payload,
           id: `goal_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         };
-        
+
         let createdGoalId: string | null = null;
         try {
           const { data } = await api.post<Goal>("/goals", newGoal);
@@ -187,7 +190,9 @@ export default function Goals() {
           setGoals((prev) => [...prev, data]);
 
           if (initAmount > 0 && walletId) {
-            const wallet = wallets.find((w) => String(w.id) === String(walletId));
+            const wallet = wallets.find(
+              (w) => String(w.id) === String(walletId)
+            );
             if (wallet) {
               await api.patch(`/wallets/${wallet.id}`, {
                 balance: wallet.balance - initAmount,
@@ -226,9 +231,7 @@ export default function Goals() {
             <h2 className="m-0 font-bold text-[32px] leading-tight text-slate-900">
               {t("title")}
             </h2>
-            <div className="mt-2 text-sm text-gray-500">
-              {t("subtitle")}
-            </div>
+            <div className="mt-2 text-sm text-gray-500">{t("subtitle")}</div>
           </div>
           <Button
             className="bg-[#0b122a] hover:bg-[#1a2645] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
@@ -247,9 +250,7 @@ export default function Goals() {
           {loading ? (
             <div className="p-4 text-gray-500">{t("loading")}</div>
           ) : !Array.isArray(goals) ? (
-            <div className="p-4 text-red-700">
-              {t("invalidData")}
-            </div>
+            <div className="p-4 text-red-700">{t("invalidData")}</div>
           ) : filtered.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-gray-200 bg-white p-6">
               <div className="min-h-[120px] flex items-center justify-center">
@@ -308,10 +309,11 @@ export default function Goals() {
                   return (
                     <div
                       key={g.id}
-                      className={`rounded-xl p-4 ${completed
+                      className={`rounded-xl p-4 ${
+                        completed
                           ? "bg-green-50 border-2 border-green-400 shadow-sm"
                           : "bg-white border border-gray-200 shadow-sm"
-                        }`}
+                      }`}
                     >
                       <div className="flex justify-between items-start mb-2">
                         <div>
@@ -319,7 +321,8 @@ export default function Goals() {
                             {g.name}
                           </div>
                           <div className="text-[11px] text-gray-500 mt-1">
-                            {t("card.wallet")}: {wallet?.name || t("card.notAvailable")}
+                            {t("card.wallet")}:{" "}
+                            {wallet?.name || t("card.notAvailable")}
                           </div>
                           <div className="text-xs mt-1.5">
                             {completed ? (
@@ -329,10 +332,8 @@ export default function Goals() {
                             ) : (
                               <span className="text-gray-500">
                                 {daysLeft !== null
-
                                   ? t("card.daysLeft", { days: daysLeft })
                                   : t("card.progress", { percent })}
-
                               </span>
                             )}
                           </div>
@@ -356,7 +357,9 @@ export default function Goals() {
                           <button
                             onClick={async () => {
                               if (
-                                !window.confirm(t("confirm.delete", { name: g.name }))
+                                !window.confirm(
+                                  t("confirm.delete", { name: g.name })
+                                )
                               ) {
                                 return;
                               }
@@ -368,7 +371,7 @@ export default function Goals() {
                                   g.wallet_id
                                 ) {
                                   const wallet = wallets.find(
-                                    (w) => Number(w.id) === Number(g.wallet_id)
+                                    (w) => String(w.id) === String(g.wallet_id)
                                   );
                                   if (wallet) {
                                     await api.patch(`/wallets/${wallet.id}`, {
@@ -389,10 +392,8 @@ export default function Goals() {
 
                                 await api.delete(`/goals/${g.id}`);
                                 setGoals((p) => p.filter((x) => x.id !== g.id));
-
                               } catch {
                                 alert(t("toast.deleteError"));
-
                               }
                             }}
                             className="border-none bg-transparent hover:bg-gray-100 cursor-pointer p-1 rounded transition-colors text-red-600 text-sm"
@@ -404,26 +405,35 @@ export default function Goals() {
                       </div>
 
                       <div className="flex justify-between text-[13px] text-gray-500 mb-2">
-                        <div>{t("card.current")}: {format(current)} {t("currency")}</div>
-                        <div>{t("card.target")}: {format(g.target_amount)} {t("currency")}</div>
+                        <div>
+                          {t("card.current")}: {format(current)} {t("currency")}
+                        </div>
+                        <div>
+                          {t("card.target")}: {format(g.target_amount)}{" "}
+                          {t("currency")}
+                        </div>
                       </div>
 
                       <div className="h-2.5 bg-gray-200 rounded-full overflow-hidden mb-2">
                         <div
-                          className={`h-full ${completed ? 'bg-green-500' : 'bg-blue-500'
-                            }`}
+                          className={`h-full ${
+                            completed ? "bg-green-500" : "bg-blue-500"
+                          }`}
                           style={{ width: `${Math.min(100, percent)}%` }}
                         />
                       </div>
                       <div className="text-center text-xs text-gray-500 mb-2">
-                        {t("card.percentComplete", { percent: Math.min(100, percent) })}
+                        {t("card.percentComplete", {
+                          percent: Math.min(100, percent),
+                        })}
                       </div>
 
                       <div className="border-t border-gray-100 mt-3 pt-3 text-[13px] text-gray-600 flex justify-between items-center">
                         <div>
                           {t("card.remaining")}:{" "}
                           <span className="font-semibold">
-                            {format(Math.max(0, g.target_amount - current))} {t("currency")}
+                            {format(Math.max(0, g.target_amount - current))}{" "}
+                            {t("currency")}
                           </span>
                         </div>
                         {!completed && (
@@ -505,9 +515,11 @@ export default function Goals() {
                 </label>
                 <input
                   type="text"
-                  value={targetAmount ? Number(targetAmount).toLocaleString() : ''}
+                  value={
+                    targetAmount ? Number(targetAmount).toLocaleString() : ""
+                  }
                   onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, '');
+                    const value = e.target.value.replace(/\D/g, "");
                     setTargetAmount(value);
                   }}
                   placeholder={t("form.targetAmountPlaceholder")}
@@ -523,9 +535,13 @@ export default function Goals() {
                     </label>
                     <input
                       type="text"
-                      value={initialAmount ? Number(initialAmount).toLocaleString() : ''}
+                      value={
+                        initialAmount
+                          ? Number(initialAmount).toLocaleString()
+                          : ""
+                      }
                       onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, '');
+                        const value = e.target.value.replace(/\D/g, "");
                         setInitialAmount(value);
                       }}
                       placeholder={t("form.currentAmountPlaceholder")}
@@ -546,7 +562,8 @@ export default function Goals() {
                       <option value="">{t("form.selectWallet")}</option>
                       {wallets.map((w) => (
                         <option key={w.id} value={w.id}>
-                          {w.name} ({w.balance.toLocaleString()} {t("currency")})
+                          {w.name} ({w.balance.toLocaleString()} {t("currency")}
+                          )
                         </option>
                       ))}
                     </select>
@@ -648,9 +665,8 @@ export default function Goals() {
                   return;
                 }
 
-                if (isNaN(fromWalletId) || fromWalletId <= 0) {
+                if (!fromWalletId) {
                   alert(t("validation.selectWallet"));
-
                   return;
                 }
 
@@ -718,9 +734,13 @@ export default function Goals() {
                 </label>
                 <input
                   type="text"
-                  value={addMoneyAmount ? Number(addMoneyAmount).toLocaleString() : ''}
+                  value={
+                    addMoneyAmount
+                      ? Number(addMoneyAmount).toLocaleString()
+                      : ""
+                  }
                   onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, '');
+                    const value = e.target.value.replace(/\D/g, "");
                     setAddMoneyAmount(value);
                   }}
                   placeholder={t("form.amountPlaceholder")}
@@ -737,19 +757,12 @@ export default function Goals() {
                   onChange={(e) => setAddMoneyFromWallet(e.target.value)}
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-
                   <option value="">{t("form.selectSourceWallet")}</option>
-                  {wallets
-                    .filter((w) => {
-                      const goal = goals.find((g) => g.id === addMoneyGoalId);
-                      return Number(w.id) !== Number(goal?.wallet_id);
-                    })
-                    .map((w) => (
+                  {wallets.map((w) => (
                       <option key={w.id} value={w.id}>
                         {w.name} ({w.balance.toLocaleString()} {t("currency")})
                       </option>
                     ))}
-
                 </select>
               </div>
 
