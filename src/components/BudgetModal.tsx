@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent, type ChangeEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useBudgetContext } from '../context/BudgetContext';
 import { useAuth } from '../context/AuthContext';
 import type { Budget, Category } from '../types';
@@ -16,6 +17,7 @@ export default function BudgetModal({
     editingBudget,
     categories,
 }: BudgetModalProps) {
+    const { t } = useTranslation('budget');
     const { user } = useAuth();
     const { budgets, createBudget, updateBudget, loading, error } = useBudgetContext();
 
@@ -89,20 +91,20 @@ export default function BudgetModal({
         if (!user) return;
 
         if (!form.category_id || !form.limit_amount || !form.start_date || !form.end_date) {
-            setFormError('Vui lòng điền đầy đủ các trường bắt buộc.');
+            setFormError(t('modal.errors.requiredFields'));
             return;
         }
 
         const limit = Number(form.limit_amount);
         if (Number.isNaN(limit) || limit <= 0) {
-            setFormError('Hạn mức phải là số lớn hơn 0.');
+            setFormError(t('modal.errors.invalidLimit'));
             return;
         }
 
         const start = new Date(form.start_date);
         const end = new Date(form.end_date);
         if (start > end) {
-            setFormError('Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.');
+            setFormError(t('modal.errors.invalidDateRange'));
             return;
         }
 
@@ -140,7 +142,7 @@ export default function BudgetModal({
         });
 
         if (hasConflict) {
-            setFormError('Bạn đã có một ngân sách khác cho danh mục này trong khoảng thời gian trùng lặp. Vui lòng chỉnh lại ngày hoặc chọn danh mục khác.');
+            setFormError(t('modal.errors.conflict'));
             return;
         }
 
@@ -154,7 +156,7 @@ export default function BudgetModal({
             onClose();
         } catch (err) {
             console.error(err);
-            setFormError('Không thể lưu ngân sách. Vui lòng thử lại.');
+            setFormError(t('modal.errors.saveError'));
         } finally {
             setSubmitting(false);
         }
@@ -174,7 +176,7 @@ export default function BudgetModal({
                 {/* Header */}
                 <div className="flex items-center justify-between border-b p-4" style={{ backgroundColor: '#f8f9fa' }}>
                     <h2 className="text-lg font-bold" style={{ color: '#1f2937' }}>
-                        {editingBudget ? 'Chỉnh sửa ngân sách' : 'Thêm ngân sách mới'}
+                        {editingBudget ? t('modal.editTitle') : t('modal.addTitle')}
                     </h2>
                     <button
                         type="button"
@@ -201,7 +203,7 @@ export default function BudgetModal({
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-1">
                             <label htmlFor="category_id" className="text-sm font-medium" style={{ color: '#1f2937' }}>
-                                Danh mục chi tiêu <span style={{ color: '#dc2626' }}>*</span>
+                                {t('modal.categoryLabel')} <span style={{ color: '#dc2626' }}>*</span>
                             </label>
                             <select
                                 id="category_id"
@@ -215,7 +217,7 @@ export default function BudgetModal({
                                     color: '#1f2937'
                                 }}
                             >
-                                <option value="">-- Chọn danh mục --</option>
+                                <option value="">{t('modal.categoryPlaceholder')}</option>
                                 {categories.map((cat) => (
                                     <option key={cat.id} value={cat.id}>
                                         {cat.name}
@@ -226,7 +228,7 @@ export default function BudgetModal({
 
                         <div className="space-y-1">
                             <label htmlFor="limit_amount" className="text-sm font-medium" style={{ color: '#1f2937' }}>
-                                Hạn mức tối đa (VND) <span style={{ color: '#dc2626' }}>*</span>
+                                {t('modal.limitLabel')} <span style={{ color: '#dc2626' }}>*</span>
                             </label>
                             <input
                                 id="limit_amount"
@@ -241,14 +243,14 @@ export default function BudgetModal({
                                     borderColor: '#d1d5db',
                                     color: '#1f2937'
                                 }}
-                                placeholder="Ví dụ: 5000000"
+                                placeholder={t('modal.limitPlaceholder')}
                             />
                         </div>
 
                         <div className="grid gap-3 sm:grid-cols-2">
                             <div className="space-y-1">
                                 <label htmlFor="start_date" className="text-sm font-medium" style={{ color: '#1f2937' }}>
-                                    Bắt đầu từ ngày <span style={{ color: '#dc2626' }}>*</span>
+                                    {t('modal.startDateLabel')} <span style={{ color: '#dc2626' }}>*</span>
                                 </label>
                                 <input
                                     id="start_date"
@@ -266,7 +268,7 @@ export default function BudgetModal({
                             </div>
                             <div className="space-y-1">
                                 <label htmlFor="end_date" className="text-sm font-medium" style={{ color: '#1f2937' }}>
-                                    Kết thúc vào ngày <span style={{ color: '#dc2626' }}>*</span>
+                                    {t('modal.endDateLabel')} <span style={{ color: '#dc2626' }}>*</span>
                                 </label>
                                 <input
                                     id="end_date"
@@ -286,7 +288,7 @@ export default function BudgetModal({
 
                         <div className="space-y-1">
                             <label htmlFor="description" className="text-sm font-medium" style={{ color: '#1f2937' }}>
-                                Ghi chú (không bắt buộc)
+                                {t('modal.descriptionLabel')}
                             </label>
                             <textarea
                                 id="description"
@@ -300,12 +302,12 @@ export default function BudgetModal({
                                     borderColor: '#d1d5db',
                                     color: '#1f2937'
                                 }}
-                                placeholder="Ví dụ: Ngân sách ăn uống tháng 12..."
+                                placeholder={t('modal.descriptionPlaceholder')}
                             />
                         </div>
 
                         {formError && <p className="text-sm text-destructive">{formError}</p>}
-                        {error && <p className="text-sm text-destructive">Lỗi hệ thống: {error}</p>}
+                        {error && <p className="text-sm text-destructive">{t('modal.errors.systemError', { error })}</p>}
 
                         <div className="pt-2 flex justify-end gap-3">
                             <button
@@ -318,14 +320,14 @@ export default function BudgetModal({
                                     color: '#1f2937'
                                 }}
                             >
-                                Hủy bỏ
+                                {t('modal.cancel')}
                             </button>
                             <button
                                 type="submit"
                                 disabled={submitting || loading}
                                 className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70"
                             >
-                                {submitting ? 'Đang lưu...' : editingBudget ? 'Cập nhật' : 'Tạo mới'}
+                                {submitting ? t('modal.saving') : editingBudget ? t('modal.update') : t('modal.create')}
                             </button>
 
                         </div>

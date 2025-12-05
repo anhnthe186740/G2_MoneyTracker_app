@@ -1,0 +1,75 @@
+{
+  "title": "Budget",
+  "currency": "đ",
+  "summary": {
+    "totalBudgets": "Total Budgets",
+    "active": "Active",
+    "totalLimit": "Total Limit"
+  },
+  "filter": {
+    "all": "All",
+    "active": "Active",
+    "expired": "Expired",
+    "cancelled": "Cancelled"
+  },
+  "actions": {
+    "addBudget": "Add Budget",
+    "edit": "Edit",
+    "cancel": "Cancel Budget",
+    "delete": "Delete"
+  },
+  "currentBudgets": "Current Budgets",
+  "modal": {
+    "addTitle": "Add New Budget",
+    "editTitle": "Edit Budget",
+    "categoryLabel": "Expense Category",
+    "categoryPlaceholder": "-- Select category --",
+    "limitLabel": "Maximum Limit (VND)",
+    "limitPlaceholder": "E.g: 5000000",
+    "startDateLabel": "Start Date",
+    "endDateLabel": "End Date",
+    "descriptionLabel": "Note (optional)",
+    "descriptionPlaceholder": "E.g: December food budget...",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "update": "Update",
+    "create": "Create",
+    "errors": {
+      "requiredFields": "Please fill in all required fields.",
+      "invalidLimit": "Limit must be a number greater than 0.",
+      "invalidDateRange": "Start date must be less than or equal to end date.",
+      "conflict": "You already have another budget for this category in an overlapping time period. Please adjust the dates or choose a different category.",
+      "saveError": "Unable to save budget. Please try again.",
+      "systemError": "System error: {{error}}"
+    }
+  },
+  "status": {
+    "active": "Active",
+    "expired": "Expired",
+    "cancelled": "Cancelled",
+    "notStarted": "Not Started",
+    "overBudget": "Over Budget"
+  },
+  "labels": {
+    "category": "Category",
+    "categoryUnknown": "Unknown Category",
+    "categoryDeleted": "Category Deleted",
+    "limit": "Limit",
+    "spent": "Spent",
+    "remaining": "Remaining",
+    "period": "Period",
+    "daysLeft": "{{days}} days left",
+    "daysUntilStart": "starts in {{days}} days",
+    "daysOverdue": "{{days}} days overdue",
+    "noEndDate": "No end date"
+  },
+  "empty": {
+    "title": "No budgets yet",
+    "description": "Start creating budgets to manage your spending",
+    "noResults": "No budgets match the filter"
+  },
+  "confirm": {
+    "cancel": "Cancel budget for category \"{{category}}\"?",
+    "delete": "Permanently delete this budget? This action cannot be undone."
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "title": "Thu/Chi định kỳ",
+  "subtitle": "Quản lý các giao dịch tự động lặp lại theo chu kỳ",
+  "loading": "Đang tải...",
+  "currency": "₫",
+  "tabs": {
+    "recurring": "Quản lý định kỳ",
+    "categories": "Quản lý danh mục"
+  },
+  "warning": {
+    "title": "Chưa thể thêm thu/chi định kỳ!",
+    "noWalletNoCategory": "Bạn cần tạo ít nhất một ví và một danh mục (cả Thu nhập và Chi tiêu). Vui lòng chuyển sang tab \"Quản lý danh mục\".",
+    "noWallet": "Bạn cần tạo ít nhất một ví.",
+    "noCategory": "Bạn cần tạo ít nhất một danh mục (cả Thu nhập và Chi tiêu). Vui lòng chuyển sang tab \"Quản lý danh mục\"."
+  },
+  "summary": {
+    "total": "Tổng giao dịch định kỳ",
+    "active": "Đang hoạt động",
+    "monthlyExpense": "Chi tiêu hàng tháng",
+    "monthlyIncome": "Thu nhập hàng tháng",
+    "totalWallets": "Tổng số ví",
+    "totalBalance": "Tổng số dư",
+    "categories": "Danh mục"
+  },
+  "actions": {
+    "add": "Thêm giao dịch định kỳ",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa",
+    "pause": "Tạm dừng",
+    "resume": "Tiếp tục"
+  },
+  "form": {
+    "addTitle": "Thêm thu/chi định kỳ",
+    "editTitle": "Sửa thu/chi định kỳ",
+    "name": "Tên giao dịch",
+    "namePlaceholder": "VD: Tiền thuê nhà",
+    "amount": "Số tiền",
+    "amountPlaceholder": "0",
+    "type": "Loại giao dịch",
+    "category": "Danh mục",
+    "categorySelect": "Chọn danh mục",
+    "categoryLabel": "Danh mục ({{count}} {{type}})",
+    "categoryTypeIncome": "thu nhập",
+    "categoryTypeExpense": "chi tiêu",
+    "wallet": "Ví",
+    "walletSelect": "Chọn ví",
+    "frequency": "Tần suất",
+    "startDate": "Ngày bắt đầu",
+    "nextDate": "Ngày thực hiện tiếp theo",
+    "endDate": "Ngày kết thúc (tùy chọn)",
+    "description": "Mô tả",
+    "descriptionPlaceholder": "Nhập mô tả...",
+    "isActive": "Kích hoạt ngay",
+    "cancel": "Hủy",
+    "saving": "Đang lưu...",
+    "save": "Lưu",
+    "createError": "Có lỗi xảy ra khi tạo giao dịch định kỳ",
+    "updateError": "Có lỗi xảy ra khi cập nhật giao dịch định kỳ"
+  },
+  "frequency": {
+    "daily": "Hàng ngày",
+    "weekly": "Hàng tuần",
+    "monthly": "Hàng tháng",
+    "yearly": "Hàng năm"
+  },
+  "type": {
+    "income": "Thu nhập",
+    "expense": "Chi tiêu"
+  },
+  "status": {
+    "active": "Đang hoạt động",
+    "paused": "Tạm dừng",
+    "completed": "Hoàn thành"
+  },
+  "labels": {
+    "nextExecution": "Lần tiếp theo",
+    "lastExecution": "Lần cuối",
+    "totalExecuted": "Đã thực hiện"
+  },
+  "empty": {
+    "title": "Chưa có giao dịch định kỳ",
+    "description": "Tạo giao dịch định kỳ để tự động hóa các khoản chi/thu lặp lại"
+  },
+  "confirm": {
+    "delete": "Bạn có chắc chắn muốn xóa giao dịch định kỳ này?"
+  },
+  "toast": {
+    "addSuccess": "Thêm giao dịch định kỳ thành công!",
+    "updateSuccess": "Cập nhật thành công!",
+    "deleteSuccess": "Xóa thành công!",
+    "error": "Đã có lỗi xảy ra"
+  },
+  "validation": {
+    "insufficientBalance": "Số tiền chi tiêu ({{amount}} {{currency}}) vượt quá số dư trong ví ({{balance}} {{currency}})"
+  },
+  "toggle": {
+    "on": "Tắt",
+    "off": "Bật"
+  },
+  "categoryManagement": {
+    "title": "Quản lý Danh mục",
+    "createCategory": "Tạo Danh mục",
+    "expense": "Chi tiêu",
+    "income": "Thu nhập",
+    "noExpenseCategory": "Chưa có danh mục chi tiêu",
+    "noIncomeCategory": "Chưa có danh mục thu nhập",
+    "deleteCategory": "Xóa danh mục",
+    "confirmDelete": "Bạn có chắc chắn muốn xóa danh mục \"{{name}}\"?",
+    "deleteSuccess": "Xóa danh mục thành công",
+    "deleteError": "Không thể xóa danh mục"
+  },
+  "actions": {
+    "deleteAll": "Xóa hết",
+    "addRecurring": "Thêm định kỳ",
+    "deleteAllTooltip": "Xóa các giao dịch định kỳ có danh mục đã bị xóa",
+    "addRecurringTooltip": "Thêm thu/chi định kỳ",
+    "createWalletFirst": "Vui lòng tạo ví và danh mục trước"
+  }
+}

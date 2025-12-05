@@ -1,0 +1,69 @@
+{
+  "title": "Transaction Management",
+  "pleaseLogin": "Please login",
+  "loading": "Loading...",
+  "currency": "đ",
+  "tabs": {
+    "overview": "Overview",
+    "transactions": "Manage Transactions",
+    "categories": "Manage Categories"
+  },
+  "warning": {
+    "title": "Cannot add transaction!",
+    "noWalletNoCategory": "You need to create at least one wallet and one category (both Income and Expense). Please click \"Add Transaction\" button and use the [+] button next to Wallet/Category.",
+    "noWallet": "You need to create at least one wallet. Please click \"Add Transaction\" button and use the [+] button next to Wallet.",
+    "noCategory": "You need to create at least one category (both Income and Expense). Please click \"Add Transaction\" button and use the [+] button next to Category."
+  },
+  "summary": {
+    "totalWallets": "Total Wallets",
+    "totalBalance": "Total Balance",
+    "categories": "Categories"
+  },
+  "actions": {
+    "deleteAll": "Delete All",
+    "addTransaction": "Add Transaction",
+    "createWalletFirst": "Please create wallet and category first",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "categoryManagement": {
+    "title": "Category Management",
+    "createCategory": "Create Category",
+    "expense": "Expense",
+    "income": "Income",
+    "noExpenseCategory": "No expense categories",
+    "noIncomeCategory": "No income categories",
+    "deleteCategory": "Delete category",
+    "confirmDelete": "Are you sure you want to delete category \"{{name}}\"?",
+    "deleteSuccess": "Category deleted successfully",
+    "deleteError": "Cannot delete category"
+  },
+  "quickCreate": {
+    "title": "Quick Create Category",
+    "nameLabel": "Category Name *",
+    "namePlaceholder": "Food, Transportation, Salary...",
+    "nameRequired": "Please enter category name",
+    "typeLabel": "Type",
+    "createError": "An error occurred while creating category",
+    "cancel": "Cancel",
+    "creating": "Creating...",
+    "create": "Create Category"
+  },
+  "cleanup": {
+    "confirm": "Are you sure you want to delete all transactions with deleted categories?",
+    "success": "Deleted {{count}} invalid transactions",
+    "error": "An error occurred while cleaning up data"
+  },
+  "form": {
+    "insufficientBalance": "Insufficient wallet balance. Current balance: {{balance}} {{currency}}",
+    "invalidWallet": "Invalid wallet",
+    "invalidCategory": "Invalid category"
+  },
+  "chart": {
+    "title": "Income & Expense Chart - Last 6 Months",
+    "noData": "No transaction data",
+    "month": "{{month}}/{{year}}",
+    "income": "Income",
+    "expense": "Expense"
+  }
+}

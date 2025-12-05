@@ -1,0 +1,82 @@
+{
+  "title": "Mục tiêu tài chính",
+  "subtitle": "Theo dõi tiến độ tiết kiệm và đầu tư",
+  "loading": "Đang tải mục tiêu...",
+  "loadError": "Tải dữ liệu thất bại",
+  "invalidData": "Dữ liệu mục tiêu không hợp lệ",
+  "currency": "đ",
+  "summary": {
+    "totalGoals": "Tổng mục tiêu",
+    "completed": "Đã hoàn thành",
+    "inProgress": "Đang thực hiện"
+  },
+  "actions": {
+    "addGoal": "Thêm mục tiêu",
+    "addMoney": "Thêm tiền",
+    "update": "Cập nhật",
+    "add": "Thêm",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận"
+  },
+  "card": {
+    "wallet": "Ví",
+    "notAvailable": "N/A",
+    "completed": "✓ Hoàn thành",
+    "daysLeft": "Còn {{days}} ngày",
+    "progress": "Tiến độ: {{percent}}%",
+    "current": "Hiện tại",
+    "target": "Mục tiêu",
+    "percentComplete": "{{percent}}% hoàn thành",
+    "remaining": "Còn thiếu"
+  },
+  "empty": {
+    "title": "Chưa có mục tiêu nào. Hãy thêm mục tiêu đầu tiên!"
+  },
+  "dialog": {
+    "addTitle": "Thêm mục tiêu mới",
+    "editTitle": "Cập nhật mục tiêu",
+    "editDescription": "Chỉnh sửa mục tiêu",
+    "addDescription": "Tạo một mục tiêu mới",
+    "addMoneyTitle": "Thêm tiền vào mục tiêu",
+    "addMoneyDescription": "Chuyển tiền vào ví: <strong>{{wallet}}</strong> để tăng tiến độ"
+  },
+  "form": {
+    "name": "Tên mục tiêu",
+    "namePlaceholder": "VD: Mua nhà, Du lịch...",
+    "targetAmount": "Số tiền mục tiêu (VNĐ)",
+    "targetAmountPlaceholder": "Nhập số tiền mục tiêu",
+    "currentAmount": "Số tiền hiện tại (VNĐ)",
+    "currentAmountPlaceholder": "Nhập số tiền muốn nạp",
+    "sourceWallet": "Lấy từ ví",
+    "selectWallet": "-- Chọn ví --",
+    "selectSourceWallet": "-- Chọn ví nguồn --",
+    "status": "Trạng thái",
+    "deadline": "Hạn hoàn thành",
+    "amountToAdd": "Số tiền cần thêm (VNĐ)",
+    "amountPlaceholder": "Nhập số tiền"
+  },
+  "status": {
+    "inProgress": "Đang thực hiện",
+    "paused": "Tạm dừng"
+  },
+  "validation": {
+    "nameRequired": "Tên mục tiêu không được để trống",
+    "amountPositive": "Số tiền mục tiêu phải lớn hơn 0",
+    "selectSourceWallet": "Vui lòng chọn ví nguồn để lấy tiền",
+    "walletNotFound": "Không tìm thấy ví nguồn",
+    "insufficientBalance": "Số dư ví \"{{wallet}}\" không đủ (còn {{balance}} đ)",
+    "amountMustBePositive": "Số tiền phải lớn hơn 0",
+    "selectWallet": "Vui lòng chọn ví nguồn",
+    "walletNotFoundGeneral": "Không tìm thấy ví",
+    "goalNotFound": "Không tìm thấy mục tiêu",
+    "insufficientSourceBalance": "Số dư ví nguồn không đủ"
+  },
+  "confirm": {
+    "delete": "Bạn có chắc muốn xóa mục tiêu \"{{name}}\"?"
+  },
+  "toast": {
+    "saveError": "Lưu mục tiêu thất bại",
+    "deleteError": "Xóa mục tiêu thất bại",
+    "addMoneyError": "Thêm tiền thất bại"
+  }
+}

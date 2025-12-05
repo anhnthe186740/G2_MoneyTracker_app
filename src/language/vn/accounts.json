@@ -1,0 +1,53 @@
+{
+  "title": "Quản lý ví",
+  "currency": "₫",
+  "subtitle": "Theo dõi các ví tài chính của bạn",
+  "loading": "Đang tải dữ liệu...",
+  "totalBalance": "Tổng số dư",
+  "walletCount": "ví",
+  "actions": {
+    "addWallet": "Thêm ví",
+    "edit": "Chỉnh sửa",
+    "delete": "Xóa"
+  },
+  "dialog": {
+    "addTitle": "Thêm ví mới",
+    "editTitle": "Chỉnh sửa ví",
+    "addDescription": "Tạo ví mới",
+    "editDescription": "Cập nhật thông tin ví hiện tại của bạn"
+  },
+  "form": {
+    "name": "Tên ví",
+    "namePlaceholder": "VD: Ví tiền mặt",
+    "type": "Loại ví",
+    "selectType": "Chọn loại ví",
+    "balance": "Số dư ban đầu",
+    "color": "Màu sắc",
+    "note": "Ghi chú",
+    "notePlaceholder": "Ghi chú về ví này...",
+    "cancel": "Hủy",
+    "save": "Lưu"
+  },
+  "types": {
+    "CASH": "Tiền mặt",
+    "BANK": "Ngân hàng",
+    "E_WALLET": "Ví điện tử",
+    "CREDIT": "Thẻ tín dụng"
+  },
+  "empty": {
+    "title": "Chưa có ví nào",
+    "description": "Bắt đầu tạo ví để quản lý tài chính của bạn"
+  },
+  "confirm": {
+    "delete": "Bạn có chắc chắn muốn xóa ví này?"
+  },
+  "toast": {
+    "addSuccess": "Thêm ví thành công!",
+    "updateSuccess": "Cập nhật ví thành công!",
+    "deleteSuccess": "Xóa ví thành công!",
+    "loadError": "Không thể tải danh sách ví",
+    "saveError": "Không thể lưu ví",
+    "deleteError": "Không thể xóa ví",
+    "duplicateError": "Đã tồn tại ví cùng tên và cùng loại! Vui lòng chọn tên khác hoặc loại khác."
+  }
+}

@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Plus, Trash2, FolderOpen, RefreshCw } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
@@ -39,9 +40,11 @@ function CategoryManagementTab({
   onUpdate: () => void;
   onOpenCategoryForm: () => void;
 }) {
+  const { t } = useTranslation('recurring');
+  
   const handleDeleteCategory = async (categoryId: number | string, categoryName: string) => {
     const confirmDelete = window.confirm(
-      `Bạn có chắc chắn muốn xóa danh mục "${categoryName}"?`
+      t('categoryManagement.confirmDelete', { name: categoryName })
     );
 
     if (!confirmDelete) {
@@ -50,11 +53,11 @@ function CategoryManagementTab({
 
     try {
       await api.delete(`/categories/${categoryId}`);
-      alert('Xóa danh mục thành công');
+      alert(t('categoryManagement.deleteSuccess'));
       onUpdate();
     } catch (error) {
       console.error('Error deleting category:', error);
-      alert('Không thể xóa danh mục');
+      alert(t('categoryManagement.deleteError'));
     }
   };
 
@@ -64,13 +67,13 @@ function CategoryManagementTab({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Quản lý Danh mục</h2>
+        <h2 className="text-xl font-semibold">{t('categoryManagement.title')}</h2>
         <button
           onClick={onOpenCategoryForm}
           className="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 font-semibold text-white hover:bg-purple-700"
         >
           <Plus size={20} />
-          Tạo Danh mục
+          {t('categoryManagement.createCategory')}
         </button>
       </div>
 
@@ -78,10 +81,10 @@ function CategoryManagementTab({
         {/* Expense Categories */}
         <div className="rounded-2xl border border-border bg-card p-6">
           <h3 className="mb-4 text-xl font-semibold text-red-500">
-            Chi tiêu ({expenseCategories.length})
+            {t('categoryManagement.expense')} ({expenseCategories.length})
           </h3>
           {expenseCategories.length === 0 ? (
-            <p className="text-muted-foreground">Chưa có danh mục chi tiêu</p>
+            <p className="text-muted-foreground">{t('categoryManagement.noExpenseCategory')}</p>
           ) : (
             <div className="space-y-2">
               {expenseCategories.map((category) => (
@@ -112,10 +115,10 @@ function CategoryManagementTab({
         {/* Income Categories */}
         <div className="rounded-2xl border border-border bg-card p-6">
           <h3 className="mb-4 text-xl font-semibold text-green-500">
-            Thu nhập ({incomeCategories.length})
+            {t('categoryManagement.income')} ({incomeCategories.length})
           </h3>
           {incomeCategories.length === 0 ? (
-            <p className="text-muted-foreground">Chưa có danh mục thu nhập</p>
+            <p className="text-muted-foreground">{t('categoryManagement.noIncomeCategory')}</p>
           ) : (
             <div className="space-y-2">
               {incomeCategories.map((category) => (
@@ -148,6 +151,7 @@ function CategoryManagementTab({
 }
 
 export default function Recurring() {
+  const { t } = useTranslation('recurring');
   const [searchParams, setSearchParams] = useSearchParams();
   const authContext = useContext(AuthContext);
   const [wallets, setWallets] = useState<Wallet[]>([]);
@@ -158,7 +162,7 @@ export default function Recurring() {
   const recurringContext = useContext(RecurringTransactionContext);
 
   if (!authContext || !authContext.user) {
-    return <div>Vui lòng đăng nhập</div>;
+    return <div>{t('loading')}</div>;
   }
 
   if (!recurringContext) {
@@ -329,16 +333,16 @@ for (const rt of allRecurring) {
   const hasNoData = wallets.length === 0 || categories.length === 0;
 
   const tabs = [
-    { id: 'recurring' as TabType, label: 'Quản lý định kỳ', icon: RefreshCw },
-    { id: 'categories' as TabType, label: 'Quản lý danh mục', icon: FolderOpen },
+    { id: 'recurring' as TabType, label: t('tabs.recurring'), icon: RefreshCw },
+    { id: 'categories' as TabType, label: t('tabs.categories'), icon: FolderOpen },
   ];
 
   return (
     <section className="space-y-6">
       <header className="flex items-start justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold text-foreground">Thu/Chi định kỳ</h1>
-          <p className="text-muted-foreground">Quản lý các giao dịch tự động lặp lại theo chu kỳ</p>
+          <h1 className="text-3xl font-bold text-foreground">{t('title')}</h1>
+          <p className="text-muted-foreground">{t('subtitle')}</p>
         </div>
       </header>
 
@@ -354,10 +358,10 @@ for (const rt of allRecurring) {
               </div>
               <div className="ml-3">
                 <p className="text-sm text-yellow-700">
-                  <strong>Chưa thể thêm thu/chi định kỳ!</strong>
-                  {wallets.length === 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một ví và một danh mục (cả Thu nhập và Chi tiêu). Vui lòng chuyển sang tab "Quản lý danh mục".'}
-                  {wallets.length === 0 && categories.length > 0 && ' Bạn cần tạo ít nhất một ví.'}
-                  {wallets.length > 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một danh mục (cả Thu nhập và Chi tiêu). Vui lòng chuyển sang tab "Quản lý danh mục".'}
+                  <strong>{t('warning.title')}</strong>
+                  {wallets.length === 0 && categories.length === 0 && ` ${t('warning.noWalletNoCategory')}`}
+                  {wallets.length === 0 && categories.length > 0 && ` ${t('warning.noWallet')}`}
+                  {wallets.length > 0 && categories.length === 0 && ` ${t('warning.noCategory')}`}
                 </p>
               </div>
             </div>
@@ -392,17 +396,17 @@ for (const rt of allRecurring) {
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-card rounded-lg shadow p-6 border border-border">
-                <h3 className="text-lg font-semibold text-muted-foreground mb-2">Tổng số ví</h3>
+                <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.totalWallets')}</h3>
                 <p className="text-3xl font-bold text-blue-600">{wallets.length}</p>
               </div>
               <div className="bg-card rounded-lg shadow p-6 border border-border">
-                <h3 className="text-lg font-semibold text-muted-foreground mb-2">Tổng số dư</h3>
+                <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.totalBalance')}</h3>
                 <p className="text-3xl font-bold text-green-600">
-                  {wallets.reduce((sum, w) => sum + w.balance, 0).toLocaleString('vi-VN')} ₫
+                  {wallets.reduce((sum, w) => sum + w.balance, 0).toLocaleString()} {t('currency')}
                 </p>
               </div>
               <div className="bg-card rounded-lg shadow p-6 border border-border">
-                <h3 className="text-lg font-semibold text-muted-foreground mb-2">Danh mục</h3>
+                <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.categories')}</h3>
                 <p className="text-3xl font-bold text-purple-600">{categories.length}</p>
 </div>
             </div>
@@ -411,10 +415,10 @@ for (const rt of allRecurring) {
               <button
                 onClick={handleCleanupInvalidData}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700"
-                title="Xóa các giao dịch định kỳ có danh mục đã bị xóa"
+                title={t('actions.deleteAllTooltip')}
               >
                 <Trash2 size={18} />
-                Xóa hết
+                {t('actions.deleteAll')}
               </button>
               <button
                 onClick={() => setShowRecurringForm(true)}
@@ -423,10 +427,10 @@ for (const rt of allRecurring) {
                   ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
                   : 'bg-purple-600 text-white hover:bg-purple-700'
                   }`}
-                title={hasNoData ? 'Vui lòng tạo ví và danh mục trước' : 'Thêm thu/chi định kỳ'}
+                title={hasNoData ? t('actions.createWalletFirst') : t('actions.addRecurringTooltip')}
               >
                 <Plus size={20} />
-                Thêm định kỳ
+                {t('actions.addRecurring')}
               </button>
             </div>
 

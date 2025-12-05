@@ -1,0 +1,24 @@
+{
+  "title": "Đăng ký tài khoản mới",
+  "logoSymbol": "₫",
+  "fullName": "Họ và tên",
+  "fullNamePlaceholder": "Nguyễn Văn A",
+  "email": "Email",
+  "emailPlaceholder": "example@email.com",
+  "password": "Mật khẩu",
+  "passwordPlaceholder": "••••••",
+  "confirmPassword": "Xác nhận mật khẩu",
+  "confirmPasswordPlaceholder": "••••••",
+  "registerButton": "Đăng ký",
+  "registering": "Đang tạo tài khoản...",
+  "hasAccount": "Đã có tài khoản?",
+  "login": "Đăng nhập",
+  "backHome": "← Quay lại trang chủ",
+  "errors": {
+    "passwordMismatch": "Mật khẩu xác nhận không khớp",
+    "passwordTooShort": "Mật khẩu phải ít nhất 3 ký tự",
+    "emailExists": "Email này đã được sử dụng",
+    "general": "Đã có lỗi xảy ra, vui lòng thử lại"
+  }
+}
+

@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { User as UserIcon, Mail, Lock, Calendar, CheckCircle } from 'lucide-react';
+import { User as UserIcon, Mail, Lock, CheckCircle } from 'lucide-react';
 
 export default function Profile() {
+  const { t } = useTranslation('profile');
   const { user, setUser } = useContext(AuthContext)!;
-  const navigate = useNavigate();
 
   const [isEditingInfo, setIsEditingInfo] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -41,7 +41,7 @@ export default function Profile() {
   const formatDate = (dateString: string) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('vi-VN', {
+    return new Intl.DateTimeFormat(undefined, {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric'
@@ -64,17 +64,17 @@ export default function Profile() {
     setMessage({ text: '', type: '' });
 
     if (!formData.fullName.trim()) {
-      setMessage({ text: 'Họ và tên không được để trống!', type: 'error' });
+      setMessage({ text: t('validation.nameRequired'), type: 'error' });
       return;
     }
 
     if (!formData.email.trim()) {
-      setMessage({ text: 'Email không được để trống!', type: 'error' });
+      setMessage({ text: t('validation.emailRequired'), type: 'error' });
       return;
     }
 
     if (!formData.email.includes('@')) {
-      setMessage({ text: 'Email phải chứa ký tự @', type: 'error' });
+      setMessage({ text: t('validation.emailInvalid'), type: 'error' });
       return;
     }
 
@@ -96,11 +96,11 @@ export default function Profile() {
 
       setUser(fullUser);
 
-      setMessage({ text: 'Cập nhật thông tin thành công!', type: 'success' });
+      setMessage({ text: t('messages.updateSuccess'), type: 'success' });
       setIsEditingInfo(false);
     } catch (error) {
       console.error(error);
-      setMessage({ text: 'Lỗi khi cập nhật thông tin.', type: 'error' });
+      setMessage({ text: t('messages.updateError'), type: 'error' });
     } finally {
       setIsLoading(false);
     }
@@ -113,12 +113,12 @@ export default function Profile() {
     setMessage({ text: '', type: '' });
 
     if (passData.newPassword !== passData.confirmPassword) {
-      setMessage({ text: 'Mật khẩu xác nhận không khớp!', type: 'error' });
+      setMessage({ text: t('validation.passwordMismatch'), type: 'error' });
       return;
     }
 
     if (user.password && passData.currentPassword !== user.password) {
-      setMessage({ text: 'Mật khẩu hiện tại không đúng!', type: 'error' });
+      setMessage({ text: t('validation.passwordIncorrect'), type: 'error' });
       return;
     }
 
@@ -135,7 +135,7 @@ export default function Profile() {
       localStorage.setItem('user', JSON.stringify(fullUser));
       setUser(fullUser);
 
-      setMessage({ text: 'Đổi mật khẩu thành công!', type: 'success' });
+      setMessage({ text: t('messages.passwordSuccess'), type: 'success' });
 
       setPassData({
         currentPassword: '',
@@ -145,7 +145,7 @@ export default function Profile() {
       setIsChangingPassword(false);
     } catch (error) {
       console.error(error);
-      setMessage({ text: 'Lỗi server.', type: 'error' });
+      setMessage({ text: t('messages.serverError'), type: 'error' });
     } finally {
       setIsLoading(false);
     }
@@ -154,8 +154,8 @@ export default function Profile() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Thông tin cá nhân</h1>
-        <p className="text-muted-foreground mt-1">Quản lý thông tin tài khoản của bạn</p>
+        <h1 className="text-3xl font-bold text-foreground">{t('title')}</h1>
+        <p className="text-muted-foreground mt-1">{t('subtitle')}</p>
       </div>
 
       {message.text && (
@@ -184,11 +184,11 @@ export default function Profile() {
           </label>
 
           <div className="flex-1">
-            <h2 className="text-2xl font-bold text-foreground">{user?.fullName || 'Người dùng'}</h2>
+            <h2 className="text-2xl font-bold text-foreground">{user?.fullName || t('user')}</h2>
             <p className="text-muted-foreground">{user?.email}</p>
             <div className="mt-2 inline-flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
               <CheckCircle className="w-3 h-3" />
-              Thay đổi ảnh đại diện
+              {t('changeAvatar')}
             </div>
           </div>
         </div>
@@ -197,13 +197,13 @@ export default function Profile() {
       {/* Account Information Section */}
       <div className="bg-card border border-border rounded-2xl overflow-hidden">
         <div className="p-6 border-b border-border flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Thông tin tài khoản</h3>
+          <h3 className="text-lg font-semibold text-foreground">{t('accountInfo.title')}</h3>
           {!isEditingInfo && (
             <button
               onClick={() => setIsEditingInfo(true)}
               className="px-4 py-2 bg-foreground text-background rounded-lg hover:opacity-90 transition text-sm font-medium"
             >
-              Chỉnh sửa
+              {t('accountInfo.edit')}
             </button>
           )}
         </div>
@@ -214,7 +214,7 @@ export default function Profile() {
               <div className="flex items-start gap-3">
                 <UserIcon className="w-5 h-5 text-muted-foreground mt-3" />
                 <div className="flex-1">
-                  <label className="block text-sm text-muted-foreground mb-1">Họ và tên</label>
+                  <label className="block text-sm text-muted-foreground mb-1">{t('accountInfo.fullName')}</label>
                   <input
                     type="text"
                     value={formData.fullName}
@@ -227,7 +227,7 @@ export default function Profile() {
               <div className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-muted-foreground mt-3" />
                 <div className="flex-1">
-                  <label className="block text-sm text-muted-foreground mb-1">Email</label>
+                  <label className="block text-sm text-muted-foreground mb-1">{t('accountInfo.email')}</label>
                   <input
                     type="email"
                     value={formData.email}
@@ -240,7 +240,7 @@ export default function Profile() {
               <div className="flex items-start gap-3">
                 <Lock className="w-5 h-5 text-muted-foreground mt-3" />
                 <div className="flex-1">
-                  <label className="block text-sm text-muted-foreground mb-1">Mật khẩu</label>
+                  <label className="block text-sm text-muted-foreground mb-1">{t('accountInfo.password')}</label>
                   <div className="text-foreground">••••••••</div>
                 </div>
               </div>
@@ -251,7 +251,7 @@ export default function Profile() {
                   disabled={isLoading}
                   className="flex-1 bg-foreground text-background py-2 rounded-lg hover:opacity-90 transition font-medium"
                 >
-                  {isLoading ? 'Đang lưu...' : 'Lưu thay đổi'}
+                  {isLoading ? t('accountInfo.saving') : t('accountInfo.save')}
                 </button>
                 <button
                   type="button"
@@ -265,7 +265,7 @@ export default function Profile() {
                   }}
                   className="px-6 py-2 border border-border rounded-lg hover:bg-accent transition"
                 >
-                  Hủy
+                  {t('accountInfo.cancel')}
                 </button>
               </div>
             </form>
@@ -274,7 +274,7 @@ export default function Profile() {
               <div className="flex items-center gap-3">
                 <UserIcon className="w-5 h-5 text-muted-foreground" />
                 <div className="flex-1">
-                  <div className="text-sm text-muted-foreground">Họ và tên</div>
+                  <div className="text-sm text-muted-foreground">{t('accountInfo.fullName')}</div>
                   <div className="text-foreground font-medium">{user?.fullName}</div>
                 </div>
               </div>
@@ -282,7 +282,7 @@ export default function Profile() {
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-muted-foreground" />
                 <div className="flex-1">
-                  <div className="text-sm text-muted-foreground">Email</div>
+                  <div className="text-sm text-muted-foreground">{t('accountInfo.email')}</div>
                   <div className="text-foreground font-medium">{user?.email}</div>
                 </div>
               </div>
@@ -290,7 +290,7 @@ export default function Profile() {
               <div className="flex items-center gap-3">
                 <Lock className="w-5 h-5 text-muted-foreground" />
                 <div className="flex-1">
-                  <div className="text-sm text-muted-foreground">Mật khẩu</div>
+                  <div className="text-sm text-muted-foreground">{t('accountInfo.password')}</div>
                   <div className="text-foreground font-medium">••••••••</div>
                 </div>
               </div>
@@ -302,13 +302,13 @@ export default function Profile() {
       {/* Security Section */}
       <div className="bg-card border border-border rounded-2xl overflow-hidden">
         <div className="p-6 border-b border-border flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Bảo mật</h3>
+          <h3 className="text-lg font-semibold text-foreground">{t('security.title')}</h3>
           {!isChangingPassword && (
             <button
               onClick={() => setIsChangingPassword(true)}
               className="px-4 py-2 border border-border rounded-lg hover:bg-accent transition text-sm font-medium"
             >
-              Đổi mật khẩu
+              {t('security.changePassword')}
             </button>
           )}
         </div>
@@ -317,7 +317,7 @@ export default function Profile() {
           {isChangingPassword ? (
             <form onSubmit={handleChangePassword} className="space-y-4">
               <div>
-                <label className="block text-sm text-muted-foreground mb-1">Mật khẩu hiện tại</label>
+                <label className="block text-sm text-muted-foreground mb-1">{t('security.currentPassword')}</label>
                 <input
                   type="password"
                   required
@@ -328,7 +328,7 @@ export default function Profile() {
               </div>
 
               <div>
-                <label className="block text-sm text-muted-foreground mb-1">Mật khẩu mới</label>
+                <label className="block text-sm text-muted-foreground mb-1">{t('security.newPassword')}</label>
                 <input
                   type="password"
                   required
@@ -339,7 +339,7 @@ export default function Profile() {
               </div>
 
               <div>
-                <label className="block text-sm text-muted-foreground mb-1">Xác nhận mật khẩu mới</label>
+                <label className="block text-sm text-muted-foreground mb-1">{t('security.confirmPassword')}</label>
                 <input
                   type="password"
                   required
@@ -355,7 +355,7 @@ export default function Profile() {
                   disabled={isLoading}
                   className="flex-1 bg-foreground text-background py-2 rounded-lg hover:opacity-90 transition font-medium"
                 >
-                  {isLoading ? 'Đang xử lý...' : 'Đổi mật khẩu'}
+                  {isLoading ? t('security.processing') : t('security.changePassword')}
                 </button>
                 <button
                   type="button"
@@ -369,13 +369,13 @@ export default function Profile() {
                   }}
                   className="px-6 py-2 border border-border rounded-lg hover:bg-accent transition"
                 >
-                  Hủy
+                  {t('accountInfo.cancel')}
                 </button>
               </div>
             </form>
           ) : (
             <p className="text-sm text-muted-foreground">
-              Để bảo mật tài khoản, bạn nên thường xuyên đổi mật khẩu và sử dụng mật khẩu mạnh.
+              {t('security.description')}
             </p>
           )}
         </div>
@@ -384,26 +384,26 @@ export default function Profile() {
       {/* Account Details Section */}
       <div className="bg-card border border-border rounded-2xl overflow-hidden">
         <div className="p-6 border-b border-border">
-          <h3 className="text-lg font-semibold text-foreground">Thông tin tài khoản</h3>
+          <h3 className="text-lg font-semibold text-foreground">{t('details.title')}</h3>
         </div>
 
         <div className="p-6 space-y-4">
           <div className="flex items-center justify-between py-2">
-            <span className="text-muted-foreground">Ngày tạo tài khoản</span>
+            <span className="text-muted-foreground">{t('details.createdAt')}</span>
             <span className="text-foreground font-medium">{formatDate(user?.createdAt || '')}</span>
           </div>
 
           <div className="flex items-center justify-between py-2">
-            <span className="text-muted-foreground">Trạng thái đăng nhập</span>
+            <span className="text-muted-foreground">{t('details.loginStatus')}</span>
             <span className="inline-flex items-center gap-1 text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">
               <CheckCircle className="w-4 h-4" />
-              Đã đăng nhập
+              {t('details.loggedIn')}
             </span>
           </div>
 
           <div className="flex items-center justify-between py-2">
-            <span className="text-muted-foreground">Phương thức đăng nhập</span>
-            <span className="text-foreground font-medium">Email & Mật khẩu</span>
+            <span className="text-muted-foreground">{t('details.loginMethod')}</span>
+            <span className="text-foreground font-medium">{t('details.emailPassword')}</span>
           </div>
         </div>
       </div>

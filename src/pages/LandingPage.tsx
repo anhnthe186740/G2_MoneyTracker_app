@@ -1,5 +1,6 @@
 // src/pages/LandingPage.tsx
 import { ChevronRight, PieChart, TrendingUp, Target, BarChart3 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,6 +9,7 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ onNavigate }: LandingPageProps) {
+  const { t } = useTranslation('landingPage');
   const navigate = useNavigate();
 
   // Hàm xử lý navigation
@@ -31,23 +33,23 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
   const features = [
     {
       icon: <PieChart className="w-12 h-12 text-blue-600" />,
-      title: 'Quản lý chi tiêu, thu nhập',
-      description: 'Theo dõi mọi khoản thu chi một cách dễ dàng và trực quan'
+      title: t('features.tracking.title'),
+      description: t('features.tracking.description')
     },
     {
       icon: <Target className="w-12 h-12 text-green-600" />,
-      title: 'Mục tiêu tài chính',
-      description: 'Đặt và theo dõi các mục tiêu tiết kiệm của bạn'
+      title: t('features.goals.title'),
+      description: t('features.goals.description')
     },
     {
       icon: <BarChart3 className="w-12 h-12 text-purple-600" />,
-      title: 'Biểu đồ phân tích',
-      description: 'Phân tích chi tiêu theo thời gian với biểu đồ trực quan'
+      title: t('features.reports.title'),
+      description: t('features.reports.description')
     },
     {
       icon: <TrendingUp className="w-12 h-12 text-orange-600" />,
-      title: 'Báo cáo chi tiết',
-      description: 'Xuất báo cáo dễ dàng, hỗ trợ đa nền tảng'
+      title: t('features.budget.title'),
+      description: t('features.budget.description')
     }
   ];
 
@@ -67,10 +69,10 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               variant="outline" 
               onClick={() => handleNavigate('login', 'login')} 
             >
-              Đăng nhập
+              {t('nav.login')}
             </Button>
             <Button onClick={() => handleNavigate('login', 'register')}>
-              Đăng ký ngay
+              {t('nav.register')}
             </Button>
           </div>
         </div>
@@ -78,18 +80,18 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
       <section className="container mx-auto px-6 py-20 text-center">
         <h1 className="text-5xl text-blue-900 mb-6">
-          Quản lý chi tiêu thông minh
+          {t('hero.title')}
         </h1>
         
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Làm chủ tài chính của bạn - Theo dõi thu chi, lập ngân sách và đạt được mục tiêu tài chính dễ dàng
+          {t('hero.subtitle')}
         </p>
         <div className="flex justify-center">
         <Button 
           size="lg" 
           onClick={() => handleNavigate('login', 'register')} 
         >
-          Bắt đầu miễn phí
+          {t('hero.cta')}
           <ChevronRight className="ml-2 w-5 h-5" /> 
         </Button>
         </div>
@@ -97,7 +99,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
 
       <section className="container mx-auto px-6 py-16">
         <h2 className="text-3xl text-center text-gray-800 mb-12">
-          Tính năng nổi bật
+          {t('features.title')}
         </h2>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">

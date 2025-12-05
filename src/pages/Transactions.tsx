@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { Plus, TrendingUp, BarChart3, Trash2, FolderOpen } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
 import TransactionList from '../components/TransactionList';
 import TransactionForm from '../components/TransactionForm';
@@ -22,9 +23,11 @@ function CategoryManagementTab({
   onUpdate: () => void;
   onOpenCategoryForm: () => void;
 }) {
+  const { t } = useTranslation('transactions');
+
   const handleDeleteCategory = async (categoryId: number | string, categoryName: string) => {
     const confirmDelete = window.confirm(
-      `Bạn có chắc chắn muốn xóa danh mục "${categoryName}"?`
+      t('categoryManagement.confirmDelete', { name: categoryName })
     );
 
     if (!confirmDelete) {
@@ -33,11 +36,11 @@ function CategoryManagementTab({
 
     try {
       await api.delete(`/categories/${categoryId}`);
-      alert('Xóa danh mục thành công');
+      alert(t('categoryManagement.deleteSuccess'));
       onUpdate();
     } catch (error) {
       console.error('Error deleting category:', error);
-      alert('Không thể xóa danh mục');
+      alert(t('categoryManagement.deleteError'));
     }
   };
 
@@ -47,13 +50,13 @@ function CategoryManagementTab({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Quản lý Danh mục</h2>
+        <h2 className="text-xl font-semibold">{t('categoryManagement.title')}</h2>
         <button
           onClick={onOpenCategoryForm}
           className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700"
         >
           <Plus size={20} />
-          Tạo Danh mục
+          {t('categoryManagement.createCategory')}
         </button>
       </div>
 
@@ -61,10 +64,10 @@ function CategoryManagementTab({
         {/* Expense Categories */}
         <div className="rounded-2xl border border-border bg-card p-6">
           <h3 className="mb-4 text-xl font-semibold text-red-500">
-            Chi tiêu ({expenseCategories.length})
+            {t('categoryManagement.expense')} ({expenseCategories.length})
           </h3>
           {expenseCategories.length === 0 ? (
-            <p className="text-muted-foreground">Chưa có danh mục chi tiêu</p>
+            <p className="text-muted-foreground">{t('categoryManagement.noExpenseCategory')}</p>
           ) : (
             <div className="space-y-2">
               {expenseCategories.map((category) => (
@@ -82,7 +85,7 @@ function CategoryManagementTab({
                       handleDeleteCategory(category.id, category.name);
                     }}
                     className="rounded-lg p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20"
-                    title="Xóa danh mục"
+                    title={t('categoryManagement.deleteCategory')}
                   >
                     <Trash2 size={18} />
                   </button>
@@ -95,10 +98,10 @@ function CategoryManagementTab({
         {/* Income Categories */}
         <div className="rounded-2xl border border-border bg-card p-6">
           <h3 className="mb-4 text-xl font-semibold text-green-500">
-            Thu nhập ({incomeCategories.length})
+            {t('categoryManagement.income')} ({incomeCategories.length})
           </h3>
           {incomeCategories.length === 0 ? (
-            <p className="text-muted-foreground">Chưa có danh mục thu nhập</p>
+            <p className="text-muted-foreground">{t('categoryManagement.noIncomeCategory')}</p>
           ) : (
             <div className="space-y-2">
               {incomeCategories.map((category) => (
@@ -116,7 +119,7 @@ function CategoryManagementTab({
                       handleDeleteCategory(category.id, category.name);
                     }}
                     className="rounded-lg p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20"
-                    title="Xóa danh mục"
+                    title={t('categoryManagement.deleteCategory')}
                   >
                     <Trash2 size={18} />
                   </button>
@@ -150,11 +153,12 @@ interface CategoryResponse {
 }
 
 export default function Transactions() {
+  const { t } = useTranslation('transactions');
   const [searchParams, setSearchParams] = useSearchParams();
   const authContext = useContext(AuthContext);
 
   if (!authContext || !authContext.user) {
-    return <div>Vui lòng đăng nhập</div>;
+    return <div>{t('pleaseLogin')}</div>;
   }
 
   const { user } = authContext;
@@ -171,7 +175,7 @@ export default function Transactions() {
   const activeTab = (searchParams.get('tab') as TabType) || 'overview';
 
   if (!authContext || !authContext.user) {
-    return <div>Vui lòng đăng nhập</div>;
+    return <div>{t('pleaseLogin')}</div>;
   }
 
 
@@ -236,7 +240,7 @@ export default function Transactions() {
   };
 
   const handleCleanupInvalidData = async () => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa tất cả giao dịch có danh mục đã bị xóa?')) {
+    if (!window.confirm(t('cleanup.confirm'))) {
       return;
     }
 
@@ -250,19 +254,19 @@ export default function Transactions() {
 
       // Find and delete invalid transactions
       let deletedCount = 0;
-      for (const t of allTransactions) {
-        const categoryId = String(t.category_id);
+      for (const tx of allTransactions) {
+        const categoryId = String(tx.category_id);
         if (!validCategoryIds.includes(categoryId)) {
-          await api.delete(`/transactions/${t.id}`);
+          await api.delete(`/transactions/${tx.id}`);
           deletedCount++;
         }
       }
 
-      alert(`Đã xóa ${deletedCount} giao dịch không hợp lệ`);
+      alert(t('cleanup.success', { count: deletedCount }));
       await handleUpdate();
     } catch (error) {
       console.error('Error cleaning up data:', error);
-      alert('Có lỗi xảy ra khi dọn dẹp dữ liệu');
+      alert(t('cleanup.error'));
     } finally {
       setLoading(false);
     }
@@ -305,16 +309,16 @@ export default function Transactions() {
     return (
       <section className="space-y-6">
         <div className="flex items-center justify-center h-96">
-          <div className="text-xl">Đang tải...</div>
+          <div className="text-xl">{t('loading')}</div>
         </div>
       </section>
     );
   }
 
   const tabs = [
-    { id: 'overview' as TabType, label: 'Tổng quan', icon: BarChart3 },
-    { id: 'transactions' as TabType, label: 'Quản lý giao dịch', icon: TrendingUp },
-    { id: 'categories' as TabType, label: 'Quản lý danh mục', icon: FolderOpen },
+    { id: 'overview' as TabType, label: t('tabs.overview'), icon: BarChart3 },
+    { id: 'transactions' as TabType, label: t('tabs.transactions'), icon: TrendingUp },
+    { id: 'categories' as TabType, label: t('tabs.categories'), icon: FolderOpen },
   ];
 
   // Check if user has wallets and categories
@@ -324,7 +328,7 @@ export default function Transactions() {
     <section className="space-y-6">
       <header className="flex items-start justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold text-foreground">Quản lý giao dịch</h1>
+          <h1 className="text-3xl font-bold text-foreground">{t('title')}</h1>
         </div>
       </header>
 
@@ -339,10 +343,10 @@ export default function Transactions() {
             </div>
             <div className="ml-3">
               <p className="text-sm text-yellow-700">
-                <strong>Chưa thể thêm giao dịch!</strong>
-                {wallets.length === 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một ví và một danh mục (cả Thu nhập và Chi tiêu). Vui lòng click nút "Thêm giao dịch" và sử dụng nút [+] bên cạnh Ví/Danh mục.'}
-                {wallets.length === 0 && categories.length > 0 && ' Bạn cần tạo ít nhất một ví. Vui lòng click nút "Thêm giao dịch" và sử dụng nút [+] bên cạnh Ví.'}
-                {wallets.length > 0 && categories.length === 0 && ' Bạn cần tạo ít nhất một danh mục (cả Thu nhập và Chi tiêu). Vui lòng click nút "Thêm giao dịch" và sử dụng nút [+] bên cạnh Danh mục.'}
+                <strong>{t('warning.title')}</strong>
+                {wallets.length === 0 && categories.length === 0 && ` ${t('warning.noWalletNoCategory')}`}
+                {wallets.length === 0 && categories.length > 0 && ` ${t('warning.noWallet')}`}
+                {wallets.length > 0 && categories.length === 0 && ` ${t('warning.noCategory')}`}
               </p>
             </div>
           </div>
@@ -382,17 +386,17 @@ export default function Transactions() {
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               <div className="bg-card rounded-lg shadow p-6 border border-border">
-                <h3 className="text-lg font-semibold text-muted-foreground mb-2">Tổng số ví</h3>
+                <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.totalWallets')}</h3>
                 <p className="text-3xl font-bold text-blue-600">{wallets.length}</p>
               </div>
               <div className="bg-card rounded-lg shadow p-6 border border-border">
-                <h3 className="text-lg font-semibold text-muted-foreground mb-2">Tổng số dư</h3>
+                <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.totalBalance')}</h3>
                 <p className="text-3xl font-bold text-green-600">
-                  {wallets.reduce((sum, w) => sum + Number(w.balance), 0).toLocaleString('vi-VN')} ₫
+                  {wallets.reduce((sum, w) => sum + Number(w.balance), 0).toLocaleString()} {t('currency')}
                 </p>
               </div>
               <div className="bg-card rounded-lg shadow p-6 border border-border">
-                <h3 className="text-lg font-semibold text-muted-foreground mb-2">Danh mục</h3>
+                <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.categories')}</h3>
                 <p className="text-3xl font-bold text-purple-600">{categories.length}</p>
               </div>
             </div>
@@ -401,10 +405,10 @@ export default function Transactions() {
               <button
                 onClick={handleCleanupInvalidData}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700"
-                title="Xóa các giao dịch có danh mục đã bị xóa"
+                title={t('cleanup.confirm')}
               >
                 <Trash2 size={18} />
-                Xóa hết
+                {t('actions.deleteAll')}
               </button>
               <button
                 onClick={() => setShowTransactionForm(true)}
@@ -413,10 +417,10 @@ export default function Transactions() {
                   ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
                   : 'bg-blue-600 text-white hover:bg-blue-700'
                   }`}
-                title={hasNoData ? 'Vui lòng tạo ví và danh mục trước' : 'Thêm giao dịch mới'}
+                title={hasNoData ? t('actions.createWalletFirst') : t('actions.addTransaction')}
               >
                 <Plus size={20} />
-                Thêm giao dịch
+                {t('actions.addTransaction')}
               </button>
             </div>
 
@@ -471,4 +475,3 @@ export default function Transactions() {
     </section>
   );
 }
-

@@ -12,7 +12,6 @@ import Wallets from './pages/Wallets';
 import Budget from './pages/Budget';
 import Goals from './pages/Goals';
 import Recurring from './pages/Recurring';
-import Analytics from './pages/Analytics';
 import Notifications from './pages/Notifications';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
@@ -38,7 +37,6 @@ function App() {
           <Route path="/budget" element={<Budget />} />
           <Route path="/goals" element={<Goals />} />
           <Route path="/recurring" element={<Recurring />} />
-          <Route path="/analytics" element={<Analytics />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />

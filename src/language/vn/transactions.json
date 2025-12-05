@@ -1,0 +1,69 @@
+{
+  "title": "Quản lý giao dịch",
+  "pleaseLogin": "Vui lòng đăng nhập",
+  "loading": "Đang tải...",
+  "currency": "₫",
+  "tabs": {
+    "overview": "Tổng quan",
+    "transactions": "Quản lý giao dịch",
+    "categories": "Quản lý danh mục"
+  },
+  "warning": {
+    "title": "Chưa thể thêm giao dịch!",
+    "noWalletNoCategory": "Bạn cần tạo ít nhất một ví và một danh mục (cả Thu nhập và Chi tiêu). Vui lòng click nút \"Thêm giao dịch\" và sử dụng nút [+] bên cạnh Ví/Danh mục.",
+    "noWallet": "Bạn cần tạo ít nhất một ví. Vui lòng click nút \"Thêm giao dịch\" và sử dụng nút [+] bên cạnh Ví.",
+    "noCategory": "Bạn cần tạo ít nhất một danh mục (cả Thu nhập và Chi tiêu). Vui lòng click nút \"Thêm giao dịch\" và sử dụng nút [+] bên cạnh Danh mục."
+  },
+  "summary": {
+    "totalWallets": "Tổng số ví",
+    "totalBalance": "Tổng số dư",
+    "categories": "Danh mục"
+  },
+  "actions": {
+    "deleteAll": "Xóa hết",
+    "addTransaction": "Thêm giao dịch",
+    "createWalletFirst": "Vui lòng tạo ví và danh mục trước",
+    "edit": "Sửa",
+    "delete": "Xóa"
+  },
+  "categoryManagement": {
+    "title": "Quản lý Danh mục",
+    "createCategory": "Tạo Danh mục",
+    "expense": "Chi tiêu",
+    "income": "Thu nhập",
+    "noExpenseCategory": "Chưa có danh mục chi tiêu",
+    "noIncomeCategory": "Chưa có danh mục thu nhập",
+    "deleteCategory": "Xóa danh mục",
+    "confirmDelete": "Bạn có chắc chắn muốn xóa danh mục \"{{name}}\"?",
+    "deleteSuccess": "Xóa danh mục thành công",
+    "deleteError": "Không thể xóa danh mục"
+  },
+  "quickCreate": {
+    "title": "Tạo danh mục nhanh",
+    "nameLabel": "Tên danh mục *",
+    "namePlaceholder": "Ăn uống, Di chuyển, Lương...",
+    "nameRequired": "Vui lòng nhập tên danh mục",
+    "typeLabel": "Loại",
+    "createError": "Có lỗi xảy ra khi tạo danh mục",
+    "cancel": "Hủy",
+    "creating": "Đang tạo...",
+    "create": "Tạo danh mục"
+  },
+  "cleanup": {
+    "confirm": "Bạn có chắc chắn muốn xóa tất cả giao dịch có danh mục đã bị xóa?",
+    "success": "Đã xóa {{count}} giao dịch không hợp lệ",
+    "error": "Có lỗi xảy ra khi dọn dẹp dữ liệu"
+  },
+  "form": {
+    "insufficientBalance": "Số dư ví không đủ. Số dư hiện tại: {{balance}} {{currency}}",
+    "invalidWallet": "Ví không hợp lệ",
+    "invalidCategory": "Danh mục không hợp lệ"
+  },
+  "chart": {
+    "title": "Biểu đồ thu chi 6 tháng gần đây",
+    "noData": "Chưa có dữ liệu giao dịch",
+    "month": "Tháng {{month}}/{{year}}",
+    "income": "Thu nhập",
+    "expense": "Chi tiêu"
+  }
+}

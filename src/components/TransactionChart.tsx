@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useTranslation } from 'react-i18next';
 import { TransactionContext } from '../context/TransactionContext';
 
 interface TransactionChartProps {
@@ -7,6 +8,7 @@ interface TransactionChartProps {
 }
 
 export default function TransactionChart({ userId }: TransactionChartProps) {
+    const { t } = useTranslation('transactions');
     const transactionContext = useContext(TransactionContext);
     if (!transactionContext) {
         throw new Error('TransactionChart must be used within TransactionProvider');
@@ -47,14 +49,14 @@ export default function TransactionChart({ userId }: TransactionChartProps) {
             .map((monthKey) => {
                 const [year, month] = monthKey.split('-');
                 return {
-                    month: `Tháng ${month}/${year}`,
-                    'Thu nhập': monthlyData[monthKey].income,
-                    'Chi tiêu': monthlyData[monthKey].expense,
+                    month: t('chart.month', { month, year }),
+                    income: monthlyData[monthKey].income,
+                    expense: monthlyData[monthKey].expense,
                 };
             });
 
         setChartData(formattedData);
-    }, [transactions]);
+    }, [transactions, t]);
 
     const formatCurrency = (value: number) => {
         return `${(value / 1000000).toFixed(1)}M`;
@@ -62,11 +64,11 @@ export default function TransactionChart({ userId }: TransactionChartProps) {
 
     return (
         <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-6">Biểu đồ thu chi 6 tháng gần đây</h2>
+            <h2 className="text-2xl font-bold mb-6">{t('chart.title')}</h2>
 
             {chartData.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
-                    Chưa có dữ liệu giao dịch
+                    {t('chart.noData')}
                 </div>
             ) : (
                 <ResponsiveContainer width="100%" height={400}>
@@ -75,11 +77,11 @@ export default function TransactionChart({ userId }: TransactionChartProps) {
                         <XAxis dataKey="month" />
                         <YAxis tickFormatter={formatCurrency} />
                         <Tooltip
-                            formatter={(value: number) => `${value.toLocaleString('vi-VN')} ₫`}
+                            formatter={(value: number) => `${value.toLocaleString()} ${t('currency')}`}
                         />
                         <Legend />
-                        <Bar dataKey="Thu nhập" fill="#2ecc71" />
-                        <Bar dataKey="Chi tiêu" fill="#e74c3c" />
+                        <Bar dataKey="income" name={t('chart.income')} fill="#2ecc71" />
+                        <Bar dataKey="expense" name={t('chart.expense')} fill="#e74c3c" />
                     </BarChart>
                 </ResponsiveContainer>
             )}

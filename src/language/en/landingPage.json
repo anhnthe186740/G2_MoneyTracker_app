@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Features",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Sign Up"
+  },
+  "hero": {
+    "title": "Smart Personal Finance Management",
+    "subtitle": "Track expenses, create budgets, and achieve your financial goals with MoneyTracker",
+    "cta": "Get Started",
+    "ctaSecondary": "Learn More"
+  },
+  "features": {
+    "title": "Key Features",
+    "subtitle": "Everything you need to manage your finances effectively",
+    "tracking": {
+      "title": "Expense Tracking",
+      "description": "Record all income and expense transactions easily and intuitively"
+    },
+    "budget": {
+      "title": "Budget Planning",
+      "description": "Set spending limits by category and get notified when approaching limits"
+    },
+    "goals": {
+      "title": "Savings Goals",
+      "description": "Set goals and track your savings progress"
+    },
+    "reports": {
+      "title": "Detailed Reports",
+      "description": "Analyze spending trends with visual charts and reports"
+    },
+    "multiWallet": {
+      "title": "Multi-Wallet",
+      "description": "Manage multiple accounts: cash, bank, e-wallets"
+    },
+    "recurring": {
+      "title": "Recurring Transactions",
+      "description": "Automate monthly recurring income and expenses"
+    }
+  },
+  "stats": {
+    "users": "Users",
+    "transactions": "Transactions",
+    "saved": "Total Saved"
+  },
+  "cta": {
+    "title": "Ready to take control of your finances?",
+    "subtitle": "Join thousands of users who have improved their financial management with MoneyTracker",
+    "button": "Sign Up Free"
+  },
+  "footer": {
+    "copyright": "© {{year}} MoneyTracker. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  }
+}

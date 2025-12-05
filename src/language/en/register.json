@@ -1,0 +1,24 @@
+{
+  "title": "Register New Account",
+  "logoSymbol": "₫",
+  "fullName": "Full Name",
+  "fullNamePlaceholder": "John Doe",
+  "email": "Email",
+  "emailPlaceholder": "example@email.com",
+  "password": "Password",
+  "passwordPlaceholder": "••••••",
+  "confirmPassword": "Confirm Password",
+  "confirmPasswordPlaceholder": "••••••",
+  "registerButton": "Register",
+  "registering": "Creating account...",
+  "hasAccount": "Already have an account?",
+  "login": "Login",
+  "backHome": "← Back to Home",
+  "errors": {
+    "passwordMismatch": "Password confirmation does not match",
+    "passwordTooShort": "Password must be at least 3 characters",
+    "emailExists": "This email is already in use",
+    "general": "An error occurred, please try again"
+  }
+}
+

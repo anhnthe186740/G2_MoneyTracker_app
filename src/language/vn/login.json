@@ -1,0 +1,17 @@
+{
+  "title": "Đăng nhập tài khoản",
+  "logoSymbol": "₫",
+  "email": "Email",
+  "emailPlaceholder": "example@email.com",
+  "password": "Mật khẩu",
+  "passwordPlaceholder": "••••••",
+  "forgotPassword": "Quên mật khẩu?",
+  "loginButton": "Đăng nhập",
+  "loggingIn": "Đang đăng nhập...",
+  "or": "Hoặc",
+  "noAccount": "Chưa có tài khoản?",
+  "registerNow": "Đăng ký ngay",
+  "backHome": "← Quay lại trang chủ",
+  "error": "Email/username hoặc mật khẩu không đúng"
+}
+

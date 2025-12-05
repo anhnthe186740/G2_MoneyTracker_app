@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { RecurringTransactionContext } from '../context/RecurringTransactionContext';
 import type { Category, Wallet, RecurringTransaction } from '../types';
 import { checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
@@ -22,6 +23,7 @@ export default function RecurringTransactionForm({
     onSuccess,
     editTransaction
 }: RecurringTransactionFormProps) {
+    const { t } = useTranslation('recurring');
     const recurringTransactionContext = useContext(RecurringTransactionContext);
     if (!recurringTransactionContext) {
         throw new Error('RecurringTransactionForm must be used within RecurringTransactionProvider');
@@ -114,7 +116,7 @@ export default function RecurringTransactionForm({
             const amount = Number(formData.amount);
 
             if (selectedWallet && amount > selectedWallet.balance) {
-                setError(`Số tiền chi tiêu (${amount.toLocaleString('vi-VN')} ₫) vượt quá số dư trong ví (${selectedWallet.balance.toLocaleString('vi-VN')} ₫)`);
+                setError(t('validation.insufficientBalance', { amount: amount.toLocaleString(), balance: selectedWallet.balance.toLocaleString(), currency: t('currency') }));
                 return;
             }
         }
@@ -186,7 +188,7 @@ export default function RecurringTransactionForm({
             onSuccess();
             onClose();
         } catch (err) {
-            setError(editTransaction ? 'Có lỗi xảy ra khi cập nhật giao dịch định kỳ' : 'Có lỗi xảy ra khi tạo giao dịch định kỳ');
+            setError(editTransaction ? t('form.updateError') : t('form.createError'));
         } finally {
             setLoading(false);
         }
@@ -196,7 +198,7 @@ export default function RecurringTransactionForm({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">{editTransaction ? 'Sửa thu/chi định kỳ' : 'Thêm thu/chi định kỳ'}</h2>
+                    <h2 className="text-2xl font-bold">{editTransaction ? t('form.editTitle') : t('form.addTitle')}</h2>
                     <button
                         onClick={onClose}
                         className="text-gray-500 hover:text-gray-700"
@@ -214,7 +216,7 @@ export default function RecurringTransactionForm({
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Type */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Loại giao dịch</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.type')}</label>
                         <div className="flex gap-4">
                             <label className="flex items-center">
                                 <input
@@ -228,7 +230,7 @@ export default function RecurringTransactionForm({
                                     })}
                                     className="mr-2"
                                 />
-                                Chi tiêu
+                                {t('type.expense')}
                             </label>
                             <label className="flex items-center">
                                 <input
@@ -242,24 +244,24 @@ export default function RecurringTransactionForm({
                                     })}
                                     className="mr-2"
                                 />
-                                Thu nhập
+                                {t('type.income')}
                             </label>
                         </div>
                     </div>
 
                     {/* Wallet */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Ví</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.wallet')}</label>
                         <select
                             value={formData.walletId}
                             onChange={(e) => setFormData({ ...formData, walletId: e.target.value })}
                             className="w-full border rounded px-3 py-2"
                             required
                         >
-                            <option value="">Chọn ví</option>
+                            <option value="">{t('form.walletSelect')}</option>
                             {validWallets.map((wallet) => (
                                 <option key={wallet.id} value={wallet.id}>
-                                    {wallet.name} - {wallet.balance.toLocaleString('vi-VN')} ₫
+                                    {wallet.name} - {wallet.balance.toLocaleString()} {t('currency')}
                                 </option>
                             ))}
                         </select>
@@ -268,7 +270,10 @@ export default function RecurringTransactionForm({
                     {/* Category */}
                     <div>
                         <label className="block text-sm font-medium mb-2">
-                            Danh mục ({filteredCategories.length} {formData.type === 'INCOME' ? 'thu nhập' : 'chi tiêu'})
+                            {t('form.categoryLabel', { 
+                                count: filteredCategories.length, 
+                                type: formData.type === 'INCOME' ? t('form.categoryTypeIncome') : t('form.categoryTypeExpense')
+                            })}
                         </label>
                         <select
                             value={formData.categoryId}
@@ -276,7 +281,7 @@ export default function RecurringTransactionForm({
                             className="w-full border rounded px-3 py-2"
                             required
                         >
-                            <option value="">Chọn danh mục</option>
+                            <option value="">{t('form.categorySelect')}</option>
                             {filteredCategories.map((category) => (
                                 <option key={category.id} value={category.id}>
                                     {category.name}
@@ -287,13 +292,13 @@ export default function RecurringTransactionForm({
 
                     {/* Amount */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Số tiền</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.amount')}</label>
                         <input
                             type="number"
                             value={formData.amount}
                             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                             className="w-full border rounded px-3 py-2"
-                            placeholder="0"
+                            placeholder={t('form.amountPlaceholder')}
                             min="0"
                             required
                         />
@@ -301,7 +306,7 @@ export default function RecurringTransactionForm({
 
                     {/* Frequency */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Tần suất</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.frequency')}</label>
                         <select
                             value={formData.frequency}
                             onChange={(e) => setFormData({
@@ -311,16 +316,16 @@ export default function RecurringTransactionForm({
                             className="w-full border rounded px-3 py-2"
                             required
                         >
-                            <option value="DAILY">Hàng ngày</option>
-                            <option value="WEEKLY">Hàng tuần</option>
-                            <option value="MONTHLY">Hàng tháng</option>
-                            <option value="YEARLY">Hàng năm</option>
+                            <option value="DAILY">{t('frequency.daily')}</option>
+                            <option value="WEEKLY">{t('frequency.weekly')}</option>
+                            <option value="MONTHLY">{t('frequency.monthly')}</option>
+                            <option value="YEARLY">{t('frequency.yearly')}</option>
                         </select>
                     </div>
 
                     {/* Start Date */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Ngày bắt đầu</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.startDate')}</label>
                         <input
                             type="date"
                             value={formData.startDate}
@@ -332,7 +337,7 @@ export default function RecurringTransactionForm({
 
                     {/* Next Date */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Ngày thực hiện tiếp theo</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.nextDate')}</label>
                         <input
                             type="date"
                             value={formData.nextDate}
@@ -344,7 +349,7 @@ export default function RecurringTransactionForm({
 
                     {/* End Date (Optional) */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Ngày kết thúc (tùy chọn)</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.endDate')}</label>
                         <input
                             type="date"
                             value={formData.endDate}
@@ -355,13 +360,13 @@ export default function RecurringTransactionForm({
 
                     {/* Description */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Mô tả</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.description')}</label>
                         <textarea
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                             className="w-full border rounded px-3 py-2"
                             rows={3}
-                            placeholder="Nhập mô tả..."
+                            placeholder={t('form.descriptionPlaceholder')}
                         />
                     </div>
 
@@ -375,7 +380,7 @@ export default function RecurringTransactionForm({
                             className="mr-2"
                         />
                         <label htmlFor="isActive" className="text-sm font-medium">
-                            Kích hoạt ngay
+                            {t('form.isActive')}
                         </label>
                     </div>
 
@@ -387,14 +392,14 @@ export default function RecurringTransactionForm({
                             className="flex-1 px-4 py-2 border rounded hover:bg-gray-50"
                             disabled={loading}
                         >
-                            Hủy
+                            {t('form.cancel')}
                         </button>
                         <button
                             type="submit"
                             className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
                             disabled={loading}
                         >
-                            {loading ? 'Đang lưu...' : 'Lưu'}
+                            {loading ? t('form.saving') : t('form.save')}
                         </button>
                     </div>
                 </form>

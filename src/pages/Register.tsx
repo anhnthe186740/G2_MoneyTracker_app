@@ -1,11 +1,13 @@
 // src/pages/Register.tsx
 import { useState, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import api from '../services/api';
 
 export default function Register() {
+  const { t } = useTranslation('register');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,29 +23,29 @@ export default function Register() {
     setError('');
 
     if (password !== confirmPassword) {
-      setError('Mật khẩu xác nhận không khớp');
+      setError(t('errors.passwordMismatch'));
       return;
     }
 
     if (password.length < 3) {
-      setError('Mật khẩu phải ít nhất 3 ký tự');
+      setError(t('errors.passwordTooShort'));
       return;
     }
 
     setLoading(true);
 
     try {
-      // Kiểm tra email đã tồn tại chưa
+      // Check if email already exists
       const checkRes = await api.get(`/users?email=${email}`);
       if (checkRes.data.length > 0) {
-        setError('Email này đã được sử dụng');
+        setError(t('errors.emailExists'));
         setLoading(false);
         return;
       }
 
-      // Tạo user mới (json-server tự sinh id)
+      // Create new user
       const newUser = {
-        username: email.split('@')[0], // tự sinh username từ email
+        username: email.split('@')[0],
         email,
         password,
         fullName,
@@ -51,15 +53,15 @@ export default function Register() {
         createdAt: new Date().toISOString()
       };
 
-      const res = await api.post('/users', newUser);
+      await api.post('/users', newUser);
 
-      // Đăng nhập luôn sau khi đăng ký thành công
+      // Login after successful registration
       const success = await login(email, password);
       if (success) {
         navigate('/dashboard');
       }
     } catch (err) {
-      setError('Đã có lỗi xảy ra, vui lòng thử lại');
+      setError(t('errors.general'));
     }
     setLoading(false);
   };
@@ -70,26 +72,26 @@ export default function Register() {
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <div className="bg-indigo-600 rounded-2xl p-4 shadow-lg">
-            <span className="text-white text-4xl font-bold">₫</span>
+            <span className="text-white text-4xl font-bold">{t('logoSymbol')}</span>
           </div>
         </div>
 
         <div className="bg-white rounded-3xl shadow-2xl p-8">
           <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">
-            Đăng ký tài khoản mới
+            {t('title')}
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Họ và tên */}
+            {/* Full Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Họ và tên
+                {t('fullName')}
               </label>
               <input
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Nguyễn Văn A"
+                placeholder={t('fullNamePlaceholder')}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
                 required
               />
@@ -98,52 +100,52 @@ export default function Register() {
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email
+                {t('email')}
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="example@email.com"
+                placeholder={t('emailPlaceholder')}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
                 required
               />
             </div>
 
-            {/* Mật khẩu */}
+            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Mật khẩu
+                {t('password')}
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••"
+                placeholder={t('passwordPlaceholder')}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
                 required
               />
             </div>
 
-            {/* Xác nhận mật khẩu */}
+            {/* Confirm Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Xác nhận mật khẩu
+                {t('confirmPassword')}
               </label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="••••••"
+                placeholder={t('confirmPasswordPlaceholder')}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
                 required
               />
             </div>
 
-            {/* Lỗi */}
+            {/* Error */}
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-            {/* Nút Đăng ký */}
+            {/* Register Button */}
             <button
               type="submit"
               disabled={loading}
@@ -152,26 +154,26 @@ export default function Register() {
               {loading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  Đang tạo tài khoản...
+                  {t('registering')}
                 </>
               ) : (
-                'Đăng ký'
+                t('registerButton')
               )}
             </button>
           </form>
 
-          {/* Đã có tài khoản */}
+          {/* Already have account */}
           <p className="text-center mt-8 text-gray-600">
-            Đã có tài khoản?{' '}
+            {t('hasAccount')}{' '}
             <Link to="/login" className="text-indigo-600 font-semibold hover:underline">
-              Đăng nhập
+              {t('login')}
             </Link>
           </p>
 
-          {/* Quay lại trang chủ */}
+          {/* Back home */}
           <div className="text-center mt-6">
             <Link to="/" className="text-gray-500 text-sm hover:text-gray-700">
-              ← Quay lại trang chủ
+              {t('backHome')}
             </Link>
           </div>
         </div>

@@ -1,0 +1,21 @@
+{
+  "title": "Thông báo",
+  "subtitle": "Bạn có {{count}} thông báo chưa đọc",
+  "loading": "Đang tải thông báo...",
+  "filter": {
+    "label": "Lọc thông báo:",
+    "all": "Tất cả",
+    "unread": "Chưa đọc ({{count}})",
+    "read": "Đã đọc ({{count}})"
+  },
+  "actions": {
+    "markAllRead": "Đánh dấu tất cả đã đọc",
+    "markRead": "Đánh dấu đã đọc"
+  },
+  "empty": "Không có thông báo nào",
+  "new": "Mới",
+  "toast": {
+    "markedRead": "Đã đánh dấu là đã đọc",
+    "markedAllRead": "Đã đánh dấu tất cả là đã đọc"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "title": "Wallet Management",
+  "currency": "đ",
+  "subtitle": "Track your financial wallets",
+  "loading": "Loading data...",
+  "totalBalance": "Total Balance",
+  "walletCount": "wallets",
+  "actions": {
+    "addWallet": "Add Wallet",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "dialog": {
+    "addTitle": "Add New Wallet",
+    "editTitle": "Edit Wallet",
+    "addDescription": "Create a new wallet",
+    "editDescription": "Update your current wallet information"
+  },
+  "form": {
+    "name": "Wallet Name",
+    "namePlaceholder": "E.g: Cash Wallet",
+    "type": "Wallet Type",
+    "selectType": "Select wallet type",
+    "balance": "Initial Balance",
+    "color": "Color",
+    "note": "Note",
+    "notePlaceholder": "Notes about this wallet...",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "types": {
+    "CASH": "Cash",
+    "BANK": "Bank",
+    "E_WALLET": "E-Wallet",
+    "CREDIT": "Credit Card"
+  },
+  "empty": {
+    "title": "No wallets yet",
+    "description": "Start creating wallets to manage your finances"
+  },
+  "confirm": {
+    "delete": "Are you sure you want to delete this wallet?"
+  },
+  "toast": {
+    "addSuccess": "Wallet added successfully!",
+    "updateSuccess": "Wallet updated successfully!",
+    "deleteSuccess": "Wallet deleted successfully!",
+    "loadError": "Cannot load wallet list",
+    "saveError": "Cannot save wallet",
+    "deleteError": "Cannot delete wallet",
+    "duplicateError": "A wallet with the same name and type already exists! Please choose a different name or type."
+  }
+}

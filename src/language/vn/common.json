@@ -1,0 +1,32 @@
+{
+  "appName": "MoneyTracker",
+  "common": {
+    "save": "Lưu thay đổi",
+    "reset": "Đặt lại",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "add": "Thêm",
+    "search": "Tìm kiếm",
+    "filter": "Lọc",
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "previous": "Trước",
+    "submit": "Gửi",
+    "close": "Đóng"
+  },
+  "currency": {
+    "VND": "VNĐ (Việt Nam Đồng)",
+    "USD": "USD (US Dollar)",
+    "EUR": "EUR (Euro)"
+  },
+  "language": {
+    "vi": "Tiếng Việt",
+    "en": "English"
+  }
+}
+

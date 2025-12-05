@@ -1,0 +1,17 @@
+{
+  "menu": {
+    "dashboard": "Tổng quan",
+    "transactions": "Giao dịch",
+    "wallets": "Ví",
+    "budget": "Ngân sách",
+    "goals": "Mục tiêu",
+    "recurring": "Định kỳ",
+    "notifications": "Thông báo",
+    "profile": "Hồ sơ",
+    "settings": "Cài đặt",
+    "export": "Xuất báo cáo"
+  },
+  "logout": "Đăng xuất",
+  "logoutConfirm": "Bạn có chắc chắn muốn đăng xuất không?",
+  "user": "Người dùng"
+}

@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { TransactionContext } from '../context/TransactionContext';
 import type { Category, Wallet, Transaction } from '../types';
 import { checkExpensesWarning, checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
@@ -24,6 +25,7 @@ export default function TransactionForm({
     editTransaction,
     onOpenWalletForm
 }: TransactionFormProps) {
+    const { t } = useTranslation('transactions');
     const transactionContext = useContext(TransactionContext);
     if (!transactionContext) {
         throw new Error('TransactionForm must be used within TransactionProvider');
@@ -105,7 +107,7 @@ export default function TransactionForm({
         if (formData.type === 'EXPENSE') {
             const selectedWallet = validWallets.find(w => String(w.id) === String(formData.walletId));
             if (selectedWallet && amount > selectedWallet.balance) {
-                setError(`Số dư ví không đủ. Số dư hiện tại: ${selectedWallet.balance.toLocaleString('vi-VN')} ₫`);
+                setError(t('form.insufficientBalance', { balance: selectedWallet.balance.toLocaleString(), currency: t('currency') }));
                 return;
             }
         }
@@ -125,14 +127,14 @@ export default function TransactionForm({
             // Validate IDs are not empty or "NaN"
             if (!formData.walletId || formData.walletId === 'NaN' || formData.walletId === 'undefined') {
                 console.error('Invalid walletId:', formData.walletId);
-                setError('Ví không hợp lệ');
+                setError(t('form.invalidWallet'));
                 setLoading(false);
                 return;
             }
             if (!formData.categoryId || formData.categoryId === 'NaN' || formData.categoryId === 'undefined') {
                 console.error('Invalid categoryId:', formData.categoryId);
                 console.error('Available categories:', filteredCategories);
-                setError('Danh mục không hợp lệ');
+                setError(t('form.invalidCategory'));
                 setLoading(false);
                 return;
             }
@@ -278,7 +280,7 @@ export default function TransactionForm({
                             <option value="">Chọn ví</option>
                             {validWallets.map((wallet) => (
                                 <option key={wallet.id} value={wallet.id}>
-                                    {wallet.name} - {wallet.balance.toLocaleString('vi-VN')} ₫
+                                    {wallet.name} - {wallet.balance.toLocaleString()} {t('currency')}
                                 </option>
                             ))}
                         </select>
