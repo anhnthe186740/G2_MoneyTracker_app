@@ -43,7 +43,7 @@
       "user_id": 1,
       "name": "Vietcombank",
       "type": "BANK",
-      "balance": 42500000,
+      "balance": 40500000,
       "color": "#3498db",
       "created_at": "2024-01-15T09:00:00Z"
     },
@@ -339,6 +339,17 @@
       "description": "Ăn trưa văn phòng",
       "date": "2024-03-22T00:00:00.000Z",
       "created_at": "2024-03-22T12:45:00Z"
+    },
+    {
+      "id": "d1b4",
+      "user_id": "1",
+      "wallet_id": "1",
+      "category_id": "1",
+      "amount": 2000000,
+      "type": "EXPENSE",
+      "description": "",
+      "date": "2025-12-05T00:00:00.000Z",
+      "created_at": "2025-12-05T05:41:55.000Z"
     }
   ],
   "recurring_transactions": [
@@ -588,6 +599,78 @@
       "id": "5",
       "key": "date_format",
       "value": "dd/MM/yyyy"
+    }
+  ],
+  "budgets": [
+    {
+      "id": "3e3f",
+      "user_id": "1",
+      "category_id": "1",
+      "limit_amount": 6000000,
+      "start_date": "2025-11-30",
+      "end_date": "2025-12-30",
+      "description": "Ngân sách ăn uống tháng 12",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "3d09",
+      "user_id": "1",
+      "category_id": 3,
+      "limit_amount": 6000000,
+      "start_date": "2025-12-03",
+      "end_date": "2025-12-30",
+      "description": "Ngân sách ăn uống tháng 12",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "cb7c",
+      "user_id": "1",
+      "category_id": 4,
+      "limit_amount": 1000000,
+      "start_date": "2025-12-03",
+      "end_date": "2025-12-18",
+      "description": "Test",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "d474",
+      "user_id": "1",
+      "category_id": 1,
+      "limit_amount": 5000000,
+      "start_date": "2026-01-01",
+      "end_date": "2026-01-06",
+      "description": "",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "1e30",
+      "user_id": "1",
+      "category_id": 5,
+      "limit_amount": 200000,
+      "start_date": "2025-11-30",
+      "end_date": "2025-12-30",
+      "description": "",
+      "status": "CANCELLED"
+    },
+    {
+      "id": "6edb",
+      "user_id": "1",
+      "category_id": 7,
+      "limit_amount": 500000,
+      "start_date": "2026-01-01",
+      "end_date": "2026-01-21",
+      "description": "",
+      "status": "CANCELLED"
+    },
+    {
+      "id": "3b18",
+      "user_id": "1",
+      "category_id": 6,
+      "limit_amount": 1000000,
+      "start_date": "2025-11-21",
+      "end_date": "2025-12-18",
+      "description": "Test Ngân SÁch",
+      "status": "ACTIVE"
     }
   ]
 }
