@@ -7,14 +7,17 @@
   "walletCount": "wallets",
   "actions": {
     "addWallet": "Add Wallet",
+    "addMoney": "Add Money",
     "edit": "Edit",
     "delete": "Delete"
   },
   "dialog": {
     "addTitle": "Add New Wallet",
     "editTitle": "Edit Wallet",
+    "addMoneyTitle": "Add Money to Wallet",
     "addDescription": "Create a new wallet",
-    "editDescription": "Update your current wallet information"
+    "editDescription": "Update your current wallet information",
+    "addMoneyDescription": "Enter the amount you want to add to the wallet"
   },
   "form": {
     "name": "Wallet Name",
@@ -22,11 +25,16 @@
     "type": "Wallet Type",
     "selectType": "Select wallet type",
     "balance": "Initial Balance",
+    "amount": "Amount",
+    "amountPlaceholder": "Enter amount to add",
+    "currentBalance": "Current Balance",
+    "newBalance": "New Balance",
     "color": "Color",
     "note": "Note",
     "notePlaceholder": "Notes about this wallet...",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "add": "Add Money"
   },
   "types": {
     "CASH": "Cash",
@@ -44,9 +52,11 @@
   "toast": {
     "addSuccess": "Wallet added successfully!",
     "updateSuccess": "Wallet updated successfully!",
+    "addMoneySuccess": "Money added successfully!",
     "deleteSuccess": "Wallet deleted successfully!",
     "loadError": "Cannot load wallet list",
     "saveError": "Cannot save wallet",
+    "addMoneyError": "Cannot add money",
     "deleteError": "Cannot delete wallet",
     "duplicateError": "A wallet with the same name and type already exists! Please choose a different name or type."
   }
