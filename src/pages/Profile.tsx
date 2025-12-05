@@ -1,16 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { User as UserIcon, Mail, Lock, Calendar, CheckCircle } from 'lucide-react';
+import { User as UserIcon, Mail, Lock, CheckCircle } from 'lucide-react';
 
 export default function Profile() {
   const { user, setUser } = useContext(AuthContext)!;
-  const navigate = useNavigate();
 
   const [isEditingInfo, setIsEditingInfo] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' });
+  const [passwordMessage, setPasswordMessage] = useState({ text: '', type: '' });
   const [isLoading, setIsLoading] = useState(false);
 
   const [preview, setPreview] = useState<string>("");
@@ -52,9 +51,14 @@ export default function Profile() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-    setFormData({ ...formData, avatar: url });
+    // Convert image to base64 for persistence in JSON database
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result as string;
+      setPreview(base64String);
+      setFormData({ ...formData, avatar: base64String });
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleUpdateInfo = async (e: React.FormEvent) => {
@@ -84,7 +88,7 @@ export default function Profile() {
       const payload = {
         fullName: formData.fullName,
         email: formData.email,
-        avatar: preview || user.avatar
+        avatar: formData.avatar || user.avatar || ''
       };
 
       await api.patch(`/users/${user.id}`, payload);
@@ -110,15 +114,33 @@ export default function Profile() {
     e.preventDefault();
     if (!user) return;
 
-    setMessage({ text: '', type: '' });
+    setPasswordMessage({ text: '', type: '' });
 
-    if (passData.newPassword !== passData.confirmPassword) {
-      setMessage({ text: 'Mật khẩu xác nhận không khớp!', type: 'error' });
+
+    if (!passData.currentPassword.trim()) {
+      setPasswordMessage({ text: 'Vui lòng nhập mật khẩu hiện tại!', type: 'error' });
       return;
     }
 
+    if (!passData.newPassword.trim()) {
+      setPasswordMessage({ text: 'Vui lòng nhập mật khẩu mới!', type: 'error' });
+      return;
+    }
+
+    if (!passData.confirmPassword.trim()) {
+      setPasswordMessage({ text: 'Vui lòng xác nhận mật khẩu mới!', type: 'error' });
+      return;
+    }
+
+    // Validation: Kiểm tra mật khẩu hiện tại
     if (user.password && passData.currentPassword !== user.password) {
-      setMessage({ text: 'Mật khẩu hiện tại không đúng!', type: 'error' });
+      setPasswordMessage({ text: 'Mật khẩu hiện tại không đúng', type: 'error' });
+      return;
+    }
+
+    // Validation: Kiểm tra mật khẩu mới khớp nhau
+    if (passData.newPassword !== passData.confirmPassword) {
+      setPasswordMessage({ text: 'Mật khẩu mới không khớp', type: 'error' });
       return;
     }
 
@@ -135,7 +157,7 @@ export default function Profile() {
       localStorage.setItem('user', JSON.stringify(fullUser));
       setUser(fullUser);
 
-      setMessage({ text: 'Đổi mật khẩu thành công!', type: 'success' });
+      setPasswordMessage({ text: 'Đổi mật khẩu thành công!', type: 'success' });
 
       setPassData({
         currentPassword: '',
@@ -145,7 +167,7 @@ export default function Profile() {
       setIsChangingPassword(false);
     } catch (error) {
       console.error(error);
-      setMessage({ text: 'Lỗi server.', type: 'error' });
+      setPasswordMessage({ text: 'Lỗi server.', type: 'error' });
     } finally {
       setIsLoading(false);
     }
@@ -314,6 +336,12 @@ export default function Profile() {
         </div>
 
         <div className="p-6">
+          {passwordMessage.text && isChangingPassword && (
+            <div className={`mb-4 p-4 rounded-lg text-sm ${passwordMessage.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
+              {passwordMessage.text}
+            </div>
+          )}
+
           {isChangingPassword ? (
             <form onSubmit={handleChangePassword} className="space-y-4">
               <div>
@@ -361,6 +389,7 @@ export default function Profile() {
                   type="button"
                   onClick={() => {
                     setIsChangingPassword(false);
+                    setPasswordMessage({ text: '', type: '' });
                     setPassData({
                       currentPassword: '',
                       newPassword: '',
