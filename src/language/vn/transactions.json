@@ -55,9 +55,34 @@
     "error": "Có lỗi xảy ra khi dọn dẹp dữ liệu"
   },
   "form": {
+    "addTitle": "Thêm giao dịch",
+    "editTitle": "Sửa giao dịch",
+    "typeLabel": "Loại giao dịch",
+    "walletLabel": "Ví",
+    "walletSelect": "Chọn ví",
+    "categoryLabel": "Danh mục ({{count}} {{type}})",
+    "categoryTypeIncome": "thu nhập",
+    "categoryTypeExpense": "chi tiêu",
+    "categorySelect": "Chọn danh mục",
+    "amountLabel": "Số tiền",
+    "amountPlaceholder": "0",
+    "dateLabel": "Ngày",
+    "descriptionLabel": "Mô tả",
+    "descriptionPlaceholder": "Nhập mô tả...",
+    "cancel": "Hủy",
+    "saving": "Đang lưu...",
+    "save": "Lưu",
+    "selectWallet": "Vui lòng chọn ví",
+    "selectCategory": "Vui lòng chọn danh mục",
+    "validAmount": "Vui lòng nhập số tiền hợp lệ",
+    "createError": "Có lỗi xảy ra khi tạo giao dịch",
+    "updateError": "Có lỗi xảy ra khi cập nhật giao dịch",
     "insufficientBalance": "Số dư ví không đủ. Số dư hiện tại: {{balance}} {{currency}}",
     "invalidWallet": "Ví không hợp lệ",
-    "invalidCategory": "Danh mục không hợp lệ"
+    "invalidCategory": "Danh mục không hợp lệ",
+    "cannotCreate": "⚠️ Chưa thể tạo giao dịch",
+    "createWalletFirst": "• Vui lòng tạo ví trước",
+    "createCategoryFirst": "• Vui lòng tạo danh mục {{type}} trước"
   },
   "chart": {
     "title": "Biểu đồ thu chi 6 tháng gần đây",
@@ -65,5 +90,31 @@
     "month": "Tháng {{month}}/{{year}}",
     "income": "Thu nhập",
     "expense": "Chi tiêu"
+  },
+  "table": {
+    "title": "Danh sách giao dịch",
+    "headers": {
+      "date": "Ngày",
+      "category": "Danh mục",
+      "wallet": "Ví",
+      "description": "Mô tả",
+      "amount": "Số tiền",
+      "actions": "Thao tác"
+    },
+    "filters": {
+      "all": "Tất cả",
+      "income": "Thu nhập",
+      "expense": "Chi tiêu"
+    },
+    "sort": {
+      "newest": "Mới nhất",
+      "oldest": "Cũ nhất"
+    },
+    "empty": "Không có giao dịch nào",
+    "categoryDeleted": "[Danh mục bị xóa]",
+    "categoryDeletedWithId": "[Danh mục #{{id}} đã xóa]",
+    "unknown": "Unknown",
+    "confirmDelete": "Bạn có chắc muốn xóa giao dịch này?",
+    "deleteError": "Có lỗi xảy ra khi xóa giao dịch"
   }
 }

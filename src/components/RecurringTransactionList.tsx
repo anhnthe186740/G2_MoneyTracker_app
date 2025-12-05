@@ -57,26 +57,26 @@ export default function RecurringTransactionList({
     };
 
     const handleDelete = async (id: number | string) => {
-        if (confirm('Bạn có chắc muốn xóa giao dịch định kỳ này?')) {
+        if (confirm(t('table.confirmDelete'))) {
             try {
                 await deleteRecurringTransactionContext(id);
                 onUpdate();
             } catch (error) {
                 console.error('Error deleting recurring transaction:', error);
-                alert('Có lỗi xảy ra khi xóa giao dịch định kỳ');
+                alert(t('table.deleteError'));
             }
         }
     };
 
     const getWalletName = (walletId: number | string) => {
-        return wallets.find(w => String(w.id) === String(walletId))?.name || 'Unknown';
+        return wallets.find(w => String(w.id) === String(walletId))?.name || t('table.unknown');
     };
 
     const getCategoryName = (categoryId: number | string) => {
         // Handle NaN case
         if (Number.isNaN(categoryId) || categoryId === 'NaN' || !categoryId) {
             console.warn('[RecurringTransactionList] Invalid categoryId:', categoryId);
-            return '[Danh m\u1ee5c b\u1ecb x\u00f3a]';
+            return t('table.categoryDeleted');
         }
 
         const category = categories.find(c => {
@@ -94,7 +94,7 @@ export default function RecurringTransactionList({
             );
         }
 
-        return category?.name || `[Danh mục #${categoryId} đã xóa]`;
+        return category?.name || t('table.categoryDeletedWithId', { id: categoryId });
     };
 
     const getCategoryColor = (categoryId: number | string) => {
@@ -112,32 +112,32 @@ export default function RecurringTransactionList({
     };
 
     if (loading) {
-        return <div className="text-center py-8">Đang tải...</div>;
+        return <div className="text-center py-8">{t('loading')}</div>;
     }
 
     return (
         <div className="bg-white rounded-lg shadow p-6">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">Thu/Chi định kỳ</h2>
+                <h2 className="text-2xl font-bold">{t('table.title')}</h2>
             </div>
 
             {recurringTransactions.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
-                    Không có giao dịch định kỳ nào
+                    {t('empty.noTransactions')}
                 </div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
                             <tr className="border-b">
-                                <th className="text-left py-3 px-4">Danh mục</th>
-                                <th className="text-left py-3 px-4">Ví</th>
-                                <th className="text-left py-3 px-4">Mô tả</th>
-                                <th className="text-left py-3 px-4">Tần suất</th>
-                                <th className="text-left py-3 px-4">Ngày tiếp theo</th>
-                                <th className="text-right py-3 px-4">Số tiền</th>
-                                <th className="text-center py-3 px-4">Trạng thái</th>
-                                <th className="text-center py-3 px-4">Thao tác</th>
+                                <th className="text-left py-3 px-4">{t('table.headers.category')}</th>
+                                <th className="text-left py-3 px-4">{t('table.headers.wallet')}</th>
+                                <th className="text-left py-3 px-4">{t('table.headers.description')}</th>
+                                <th className="text-left py-3 px-4">{t('table.headers.frequency')}</th>
+                                <th className="text-left py-3 px-4">{t('table.headers.nextDate')}</th>
+                                <th className="text-right py-3 px-4">{t('table.headers.amount')}</th>
+                                <th className="text-center py-3 px-4">{t('table.headers.status')}</th>
+                                <th className="text-center py-3 px-4">{t('table.headers.actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -151,7 +151,7 @@ export default function RecurringTransactionList({
                                             className="inline-block px-3 py-1 rounded-full text-white text-sm"
                                             style={{ backgroundColor: getCategoryColor(rt.categoryId) }}
                                         >
-                                            {getCategoryName(rt.categoryId).includes('xóa') && '⚠️ '}
+                                            {(getCategoryName(rt.categoryId).includes('xóa') || getCategoryName(rt.categoryId).includes('Deleted')) && '⚠️ '}
                                             {getCategoryName(rt.categoryId)}
                                         </span>
                                     </td>
@@ -181,14 +181,14 @@ export default function RecurringTransactionList({
                                             <button
                                                 onClick={() => onEdit(rt)}
                                                 className="text-blue-600 hover:text-blue-800"
-                                                title="Sửa"
+                                                title={t('actions.edit')}
                                             >
                                                 <Edit size={18} />
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(rt.id)}
                                                 className="text-red-600 hover:text-red-800"
-                                                title="Xóa"
+                                                title={t('actions.delete')}
                                             >
                                                 <Trash2 size={18} />
                                             </button>

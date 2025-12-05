@@ -55,9 +55,34 @@
     "error": "An error occurred while cleaning up data"
   },
   "form": {
+    "addTitle": "Add Transaction",
+    "editTitle": "Edit Transaction",
+    "typeLabel": "Transaction Type",
+    "walletLabel": "Wallet",
+    "walletSelect": "Select wallet",
+    "categoryLabel": "Category ({{count}} {{type}})",
+    "categoryTypeIncome": "income",
+    "categoryTypeExpense": "expense",
+    "categorySelect": "Select category",
+    "amountLabel": "Amount",
+    "amountPlaceholder": "0",
+    "dateLabel": "Date",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Enter description...",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "save": "Save",
+    "selectWallet": "Please select a wallet",
+    "selectCategory": "Please select a category",
+    "validAmount": "Please enter a valid amount",
+    "createError": "An error occurred while creating transaction",
+    "updateError": "An error occurred while updating transaction",
     "insufficientBalance": "Insufficient wallet balance. Current balance: {{balance}} {{currency}}",
     "invalidWallet": "Invalid wallet",
-    "invalidCategory": "Invalid category"
+    "invalidCategory": "Invalid category",
+    "cannotCreate": "⚠️ Cannot create transaction",
+    "createWalletFirst": "• Please create a wallet first",
+    "createCategoryFirst": "• Please create a {{type}} category first"
   },
   "chart": {
     "title": "Income & Expense Chart - Last 6 Months",
@@ -65,5 +90,31 @@
     "month": "{{month}}/{{year}}",
     "income": "Income",
     "expense": "Expense"
+  },
+  "table": {
+    "title": "Transaction List",
+    "headers": {
+      "date": "Date",
+      "category": "Category",
+      "wallet": "Wallet",
+      "description": "Description",
+      "amount": "Amount",
+      "actions": "Actions"
+    },
+    "filters": {
+      "all": "All",
+      "income": "Income",
+      "expense": "Expense"
+    },
+    "sort": {
+      "newest": "Newest",
+      "oldest": "Oldest"
+    },
+    "empty": "No transactions",
+    "categoryDeleted": "[Category Deleted]",
+    "categoryDeletedWithId": "[Category #{{id}} Deleted]",
+    "unknown": "Unknown",
+    "confirmDelete": "Are you sure you want to delete this transaction?",
+    "deleteError": "An error occurred while deleting transaction"
   }
 }
