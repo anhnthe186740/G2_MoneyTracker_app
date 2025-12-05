@@ -79,7 +79,26 @@
   },
   "empty": {
     "title": "Chưa có giao dịch định kỳ",
-    "description": "Tạo giao dịch định kỳ để tự động hóa các khoản chi/thu lặp lại"
+    "description": "Tạo giao dịch định kỳ để tự động hóa các khoản chi/thu lặp lại",
+    "noTransactions": "Không có giao dịch định kỳ nào"
+  },
+  "table": {
+    "title": "Thu/Chi định kỳ",
+    "headers": {
+      "category": "Danh mục",
+      "wallet": "Ví",
+      "description": "Mô tả",
+      "frequency": "Tần suất",
+      "nextDate": "Ngày tiếp theo",
+      "amount": "Số tiền",
+      "status": "Trạng thái",
+      "actions": "Thao tác"
+    },
+    "categoryDeleted": "[Danh mục bị xóa]",
+    "categoryDeletedWithId": "[Danh mục #{{id}} đã xóa]",
+    "unknown": "Unknown",
+    "confirmDelete": "Bạn có chắc muốn xóa giao dịch định kỳ này?",
+    "deleteError": "Có lỗi xảy ra khi xóa giao dịch định kỳ"
   },
   "confirm": {
     "delete": "Bạn có chắc chắn muốn xóa giao dịch định kỳ này?"

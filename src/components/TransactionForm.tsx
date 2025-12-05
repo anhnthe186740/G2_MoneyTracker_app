@@ -88,17 +88,17 @@ export default function TransactionForm({
         setError('');
 
         if (!formData.walletId || formData.walletId === '') {
-            setError('Vui lòng chọn ví');
+            setError(t('form.selectWallet'));
             return;
         }
 
         if (!formData.categoryId || formData.categoryId === '') {
-            setError('Vui lòng chọn danh mục');
+            setError(t('form.selectCategory'));
             return;
         }
 
         if (!formData.amount || formData.amount === '' || Number(formData.amount) <= 0) {
-            setError('Vui lòng nhập số tiền hợp lệ');
+            setError(t('form.validAmount'));
             return;
         }
 
@@ -199,7 +199,7 @@ export default function TransactionForm({
             onClose();
         } catch (err) {
             console.error('Transaction error:', err);
-            setError(editTransaction ? 'Có lỗi xảy ra khi cập nhật giao dịch' : 'Có lỗi xảy ra khi tạo giao dịch');
+            setError(editTransaction ? t('form.updateError') : t('form.createError'));
         } finally {
             setLoading(false);
         }
@@ -209,7 +209,7 @@ export default function TransactionForm({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">{editTransaction ? 'Sửa giao dịch' : 'Thêm giao dịch'}</h2>
+                    <h2 className="text-2xl font-bold">{editTransaction ? t('form.editTitle') : t('form.addTitle')}</h2>
                     <button
                         onClick={onClose}
                         className="text-gray-500 hover:text-gray-700"
@@ -226,16 +226,16 @@ export default function TransactionForm({
 
                 {(hasNoWallets || hasNoCategories) && (
                     <div className="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded">
-                        <p className="font-semibold mb-2">⚠️ Chưa thể tạo giao dịch</p>
-                        {hasNoWallets && <p>• Vui lòng tạo ví trước</p>}
-                        {hasNoCategories && <p>• Vui lòng tạo danh mục {formData.type === 'INCOME' ? 'thu nhập' : 'chi tiêu'} trước</p>}
+                        <p className="font-semibold mb-2">{t('form.cannotCreate')}</p>
+                        {hasNoWallets && <p>{t('form.createWalletFirst')}</p>}
+                        {hasNoCategories && <p>{t('form.createCategoryFirst', { type: formData.type === 'INCOME' ? t('form.categoryTypeIncome') : t('form.categoryTypeExpense') })}</p>}
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Type */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Loại giao dịch</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.typeLabel')}</label>
                         <div className="flex gap-4">
                             <label className="flex items-center">
                                 <input
@@ -249,7 +249,7 @@ export default function TransactionForm({
                                     })}
                                     className="mr-2"
                                 />
-                                Chi tiêu
+                                {t('chart.expense')}
                             </label>
                             <label className="flex items-center">
                                 <input
@@ -263,21 +263,21 @@ export default function TransactionForm({
                                     })}
                                     className="mr-2"
                                 />
-                                Thu nhập
+                                {t('chart.income')}
                             </label>
                         </div>
                     </div>
 
                     {/* Wallet */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Ví</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.walletLabel')}</label>
                         <select
                             value={formData.walletId}
                             onChange={(e) => setFormData({ ...formData, walletId: e.target.value })}
                             className="w-full border rounded px-3 py-2"
                             required
                         >
-                            <option value="">Chọn ví</option>
+                            <option value="">{t('form.walletSelect')}</option>
                             {validWallets.map((wallet) => (
                                 <option key={wallet.id} value={wallet.id}>
                                     {wallet.name} - {wallet.balance.toLocaleString()} {t('currency')}
@@ -289,7 +289,10 @@ export default function TransactionForm({
                     {/* Category */}
                     <div>
                         <label className="block text-sm font-medium mb-2">
-                            Danh mục ({filteredCategories.length} {formData.type === 'EXPENSE' ? 'chi tiêu' : 'thu nhập'})
+                            {t('form.categoryLabel', { 
+                                count: filteredCategories.length, 
+                                type: formData.type === 'EXPENSE' ? t('form.categoryTypeExpense') : t('form.categoryTypeIncome')
+                            })}
                         </label>
                         <select
                             value={formData.categoryId}
@@ -298,7 +301,7 @@ export default function TransactionForm({
                             required
                             size={filteredCategories.length > 8 ? 8 : undefined}
                         >
-                            <option value="">Chọn danh mục</option>
+                            <option value="">{t('form.categorySelect')}</option>
                             {filteredCategories.map((category) => (
                                 <option key={category.id} value={category.id}>
                                     {category.name}
@@ -309,13 +312,13 @@ export default function TransactionForm({
 
                     {/* Amount */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Số tiền</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.amountLabel')}</label>
                         <input
                             type="number"
                             value={formData.amount}
                             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                             className="w-full border rounded px-3 py-2"
-                            placeholder="0"
+                            placeholder={t('form.amountPlaceholder')}
                             min="0"
                             required
                         />
@@ -323,7 +326,7 @@ export default function TransactionForm({
 
                     {/* Date */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Ngày</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.dateLabel')}</label>
                         <input
                             type="date"
                             value={formData.date}
@@ -335,13 +338,13 @@ export default function TransactionForm({
 
                     {/* Description */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">Mô tả</label>
+                        <label className="block text-sm font-medium mb-2">{t('form.descriptionLabel')}</label>
                         <textarea
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                             className="w-full border rounded px-3 py-2"
                             rows={3}
-                            placeholder="Nhập mô tả..."
+                            placeholder={t('form.descriptionPlaceholder')}
                         />
                     </div>
 
@@ -353,14 +356,14 @@ export default function TransactionForm({
                             className="flex-1 px-4 py-2 border rounded hover:bg-gray-50"
                             disabled={loading}
                         >
-                            Hủy
+                            {t('form.cancel')}
                         </button>
                         <button
                             type="submit"
                             className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
                             disabled={loading || hasNoWallets || hasNoCategories}
                         >
-                            {loading ? 'Đang lưu...' : 'Lưu'}
+                            {loading ? t('form.saving') : t('form.save')}
                         </button>
                     </div>
                 </form>

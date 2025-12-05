@@ -49,26 +49,26 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
     }, [transactions, filterType, sortOrder]);
 
     const handleDelete = async (id: number | string) => {
-        if (confirm('Bạn có chắc muốn xóa giao dịch này?')) {
+        if (confirm(t('table.confirmDelete'))) {
             try {
                 await deleteTransaction(id);
                 onUpdate();
             } catch (error) {
                 console.error('Error deleting transaction:', error);
-                alert('Có lỗi xảy ra khi xóa giao dịch');
+                alert(t('table.deleteError'));
             }
         }
     };
 
     const getWalletName = (walletId: number | string) => {
-        return wallets.find(w => String(w.id) === String(walletId))?.name || 'Unknown';
+        return wallets.find(w => String(w.id) === String(walletId))?.name || t('table.unknown');
     };
 
     const getCategoryName = (categoryId: number | string) => {
         // Handle NaN case
         if (Number.isNaN(categoryId) || categoryId === 'NaN' || !categoryId) {
             console.warn('[getCategoryName] Invalid categoryId:', categoryId);
-            return '[Danh m\u1ee5c b\u1ecb x\u00f3a]';
+            return t('table.categoryDeleted');
         }
 
         const category = categories.find(c => {
@@ -95,7 +95,7 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
             });
         }
 
-        return category?.name || `[Danh m\u1ee5c #${categoryId} \u0111\u00e3 x\u00f3a]`;
+        return category?.name || t('table.categoryDeletedWithId', { id: categoryId });
     };
 
     const getCategoryColor = (categoryId: number | string) => {
@@ -113,13 +113,13 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
     };
 
     if (loading) {
-        return <div className="text-center py-8">Đang tải...</div>;
+        return <div className="text-center py-8">{t('loading')}</div>;
     }
 
     return (
         <div className="bg-white rounded-lg shadow p-6">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">Danh sách giao dịch</h2>
+                <h2 className="text-2xl font-bold">{t('table.title')}</h2>
 
                 <div className="flex gap-4">
                     {/* Filter */}
@@ -130,9 +130,9 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
                             onChange={(e) => setFilterType(e.target.value as 'ALL' | 'INCOME' | 'EXPENSE')}
                             className="border rounded px-3 py-2"
                         >
-                            <option value="ALL">Tất cả</option>
-                            <option value="INCOME">Thu nhập</option>
-                            <option value="EXPENSE">Chi tiêu</option>
+                            <option value="ALL">{t('table.filters.all')}</option>
+                            <option value="INCOME">{t('table.filters.income')}</option>
+                            <option value="EXPENSE">{t('table.filters.expense')}</option>
                         </select>
                     </div>
 
@@ -142,24 +142,24 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
                         className="flex items-center gap-2 border rounded px-3 py-2 hover:bg-gray-50"
                     >
                         <ArrowUpDown size={20} />
-                        {sortOrder === 'asc' ? 'Cũ nhất' : 'Mới nhất'}
+                        {sortOrder === 'asc' ? t('table.sort.oldest') : t('table.sort.newest')}
                     </button>
                 </div>
             </div>
 
             {filteredTransactions.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">Không có giao dịch nào</div>
+                <div className="text-center py-8 text-gray-500">{t('table.empty')}</div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
                             <tr className="border-b">
-                                <th className="text-left py-3 px-4">Ngày</th>
-                                <th className="text-left py-3 px-4">Danh mục</th>
-                                <th className="text-left py-3 px-4">Ví</th>
-                                <th className="text-left py-3 px-4">Mô tả</th>
-                                <th className="text-right py-3 px-4">Số tiền</th>
-                                <th className="text-center py-3 px-4">Thao tác</th>
+                                <th className="text-left py-3 px-4">{t('table.headers.date')}</th>
+                                <th className="text-left py-3 px-4">{t('table.headers.category')}</th>
+                                <th className="text-left py-3 px-4">{t('table.headers.wallet')}</th>
+                                <th className="text-left py-3 px-4">{t('table.headers.description')}</th>
+                                <th className="text-right py-3 px-4">{t('table.headers.amount')}</th>
+                                <th className="text-center py-3 px-4">{t('table.headers.actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
