@@ -429,7 +429,9 @@
       "name": "Mua MacBook Pro M3",
       "target_amount": 45000000,
       "current_amount": 25000000,
-      "deadline": "2024-08-30"
+      "deadline": "2024-08-30",
+      "status": "In Progress",
+      "wallet_id": 1
     },
     {
       "id": "2",
@@ -437,7 +439,9 @@
       "name": "Du lịch Đà Lạt",
       "target_amount": 8000000,
       "current_amount": 3200000,
-      "deadline": "2024-05-30"
+      "deadline": "2024-05-30",
+      "status": "In Progress",
+      "wallet_id": 1
     },
     {
       "id": "3",
@@ -445,7 +449,9 @@
       "name": "Học khoá React Master",
       "target_amount": 5000000,
       "current_amount": 2000000,
-      "deadline": "2024-06-15"
+      "deadline": "2024-06-15",
+      "status": "In Progress",
+      "wallet_id": 2
     },
     {
       "id": "4",
@@ -453,7 +459,9 @@
       "name": "Mua iPhone 15 Pro",
       "target_amount": 28000000,
       "current_amount": 12500000,
-      "deadline": "2024-09-20"
+      "deadline": "2024-09-20",
+      "status": "In Progress",
+      "wallet_id": 3
     },
     {
       "id": "5",
@@ -461,7 +469,9 @@
       "name": "Du lịch Phú Quốc",
       "target_amount": 12000000,
       "current_amount": 4500000,
-      "deadline": "2024-07-10"
+      "deadline": "2024-07-10",
+      "status": "In Progress",
+      "wallet_id": 3
     }
   ],
   "notifications": [
