@@ -6,7 +6,7 @@ import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/Select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../components/ui/Dialog';
-import { Plus, Edit2, Trash2, Wallet, Eye, EyeOff } from 'lucide-react';
+import { Plus, Trash2, Wallet, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
@@ -30,6 +30,8 @@ export default function Wallets() {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAddMoneyDialogOpen, setIsAddMoneyDialogOpen] = useState(false);
+  const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
   const [editingWallet, setEditingWallet] = useState<Wallet | null>(null);
   
   // Tải trạng thái hiển thị số dư từ localStorage
@@ -50,6 +52,7 @@ export default function Wallets() {
     color: '#3498db',
     note: ''
   });
+  const [addMoneyAmount, setAddMoneyAmount] = useState('');
 
   const getAccountTypeLabel = (type: string) => {
     const typeKey = `types.${type}` as const;
@@ -154,16 +157,40 @@ export default function Wallets() {
     }
   };
 
-  const handleEdit = (wallet: Wallet) => {
-    setEditingWallet(wallet);
-    setFormData({
-      name: wallet.name,
-      type: wallet.type,
-      balance: String(wallet.balance),
-      color: wallet.color || '#3498db',
-      note: wallet.note || ''
-    });
-    setIsDialogOpen(true);
+  const handleAddMoney = (wallet: Wallet) => {
+    setSelectedWallet(wallet);
+    setAddMoneyAmount('');
+    setIsAddMoneyDialogOpen(true);
+  };
+
+  const handleAddMoneySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!selectedWallet) return;
+    
+    const amount = parseFloat(addMoneyAmount);
+    if (isNaN(amount) || amount <= 0) {
+      toast.error(t('toast.addMoneyError'));
+      return;
+    }
+    
+    try {
+      const newBalance = (selectedWallet.balance || 0) + amount;
+      const payload = {
+        ...selectedWallet,
+        balance: newBalance
+      };
+      
+      const { data } = await api.put<Wallet>(`/wallets/${selectedWallet.id}`, payload);
+      setWallets(prev => prev.map(w => w.id === selectedWallet.id ? data : w));
+      toast.success(t('toast.addMoneySuccess'));
+      setIsAddMoneyDialogOpen(false);
+      setAddMoneyAmount('');
+      setSelectedWallet(null);
+    } catch (error) {
+      console.error('Lỗi khi nạp tiền:', error);
+      toast.error(t('toast.addMoneyError'));
+    }
   };
 
   const handleDelete = async (id: number | string) => {
@@ -363,6 +390,87 @@ export default function Wallets() {
         </DialogContent>
       </Dialog>
 
+      {/* Add Money Dialog */}
+      <Dialog 
+        open={isAddMoneyDialogOpen} 
+        onOpenChange={(open) => {
+          setIsAddMoneyDialogOpen(open);
+          if (!open) {
+            setAddMoneyAmount('');
+            setSelectedWallet(null);
+          }
+        }}
+      >
+        <DialogContent 
+          className="w-[480px] p-5"
+          onClose={() => {
+            setIsAddMoneyDialogOpen(false);
+            setAddMoneyAmount('');
+            setSelectedWallet(null);
+          }}
+        >
+          <DialogHeader>
+            <DialogTitle>
+              {t('dialog.addMoneyTitle')}
+            </DialogTitle>
+            <DialogDescription>
+              {t('dialog.addMoneyDescription')}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedWallet && (
+            <form onSubmit={handleAddMoneySubmit} style={{ display: 'grid', gap: '12px' }}>
+              <div>
+                <Label>{t('form.currentBalance')}</Label>
+                <p className="text-lg font-semibold text-foreground mt-1">
+                  {formatCurrency(selectedWallet.balance || 0)}
+                </p>
+              </div>
+              
+              <div>
+                <Label htmlFor="amount">{t('form.amount')}</Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  placeholder={t('form.amountPlaceholder')}
+                  value={addMoneyAmount}
+                  onChange={(e) => setAddMoneyAmount(e.target.value)}
+                  required
+                  min="0.01"
+                  step="0.01"
+                />
+              </div>
+              
+              {addMoneyAmount && !isNaN(parseFloat(addMoneyAmount)) && parseFloat(addMoneyAmount) > 0 && (
+                <div>
+                  <Label>{t('form.newBalance')}</Label>
+                  <p className="text-lg font-semibold text-green-600 mt-1">
+                    {formatCurrency((selectedWallet.balance || 0) + parseFloat(addMoneyAmount))}
+                  </p>
+                </div>
+              )}
+              
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '12px' }}>
+                <Button type="submit" style={{ flex: 1, background: '#2563eb', color: '#fff', padding: '10px 24px' }}>
+                  {t('form.add')}
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  style={{ minWidth: 60, padding: '10px 16px' }}
+                  onClick={() => {
+                    setIsAddMoneyDialogOpen(false);
+                    setAddMoneyAmount('');
+                    setSelectedWallet(null);
+                  }}
+                >
+                  {t('form.cancel')}
+                </Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Total Balance */}
       <Card className="p-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
         <p className="text-lg opacity-90 mb-2">
@@ -402,8 +510,8 @@ export default function Wallets() {
                   {getWalletIcon()}
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="ghost" size="sm" onClick={() => handleEdit(wallet)}>
-                    <Edit2 className="w-4 h-4" />
+                  <Button variant="ghost" size="sm" onClick={() => handleAddMoney(wallet)} title={t('actions.addMoney')}>
+                    <Plus className="w-4 h-4 text-green-600" />
                   </Button>
                   <Button variant="ghost" size="sm" onClick={() => handleDelete(wallet.id)}>
                     <Trash2 className="w-4 h-4 text-red-600" />
