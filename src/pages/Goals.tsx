@@ -149,10 +149,10 @@ export default function Goals() {
 
     try {
       const walletId = editingId
-        ? Number(selectedWallet)
+        ? selectedWallet
         : initAmount > 0
-        ? Number(sourceWallet)
-        : 0;
+        ? sourceWallet
+        : null;
       const payload: any = {
         name,
         target_amount: target,
@@ -175,22 +175,37 @@ export default function Goals() {
           prev.map((g) => (g.id === editingId ? { ...g, ...data } : g))
         );
       } else {
-        const { data } = await api.post<Goal>("/goals", payload);
-        setGoals((prev) => [...prev, data]);
+        const newGoal = {
+          ...payload,
+          id: `goal_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        };
+        
+        let createdGoalId: string | null = null;
+        try {
+          const { data } = await api.post<Goal>("/goals", newGoal);
+          createdGoalId = data.id;
+          setGoals((prev) => [...prev, data]);
 
-        if (initAmount > 0 && walletId > 0) {
-          const wallet = wallets.find((w) => Number(w.id) === walletId);
-          if (wallet) {
-            await api.patch(`/wallets/${walletId}`, {
-              balance: wallet.balance - initAmount,
-            });
+          if (initAmount > 0 && walletId) {
+            const wallet = wallets.find((w) => String(w.id) === String(walletId));
+            if (wallet) {
+              await api.patch(`/wallets/${wallet.id}`, {
+                balance: wallet.balance - initAmount,
+              });
 
-            const { data: walletsData } = await api.get<Wallet[]>("/wallets");
-            const filteredWallets = walletsData.filter(
-              (w: Wallet) => String(w.user_id) === String(user.id)
-            );
-            setWallets(filteredWallets);
+              const { data: walletsData } = await api.get<Wallet[]>("/wallets");
+              const filteredWallets = walletsData.filter(
+                (w: Wallet) => String(w.user_id) === String(user.id)
+              );
+              setWallets(filteredWallets);
+            }
           }
+        } catch (walletErr) {
+          if (createdGoalId) {
+            await api.delete(`/goals/${createdGoalId}`);
+            setGoals((prev) => prev.filter((g) => g.id !== createdGoalId));
+          }
+          throw walletErr;
         }
       }
       setOpen(false);
@@ -314,8 +329,15 @@ export default function Goals() {
                             ) : (
                               <span className="text-gray-500">
                                 {daysLeft !== null
+<<<<<<< HEAD
                                   ? t("card.daysLeft", { days: daysLeft })
                                   : t("card.progress", { percent })}
+=======
+                                  ? daysLeft < 0
+                                    ? `Đã quá hạn`
+                                    : `Còn ${daysLeft} ngày`
+                                  : `Tiến độ: ${percent}%`}
+>>>>>>> d91560b9ac8526790bdbc65909184a444db93d66
                               </span>
                             )}
                           </div>
@@ -354,7 +376,7 @@ export default function Goals() {
                                     (w) => Number(w.id) === Number(g.wallet_id)
                                   );
                                   if (wallet) {
-                                    await api.patch(`/wallets/${g.wallet_id}`, {
+                                    await api.patch(`/wallets/${wallet.id}`, {
                                       balance:
                                         wallet.balance + g.current_amount,
                                     });
@@ -372,8 +394,14 @@ export default function Goals() {
 
                                 await api.delete(`/goals/${g.id}`);
                                 setGoals((p) => p.filter((x) => x.id !== g.id));
+<<<<<<< HEAD
                               } catch {
                                 alert(t("toast.deleteError"));
+=======
+                              } catch (error) {
+                                console.error("Lỗi xóa mục tiêu:", error);
+                                alert("Xóa mục tiêu thất bại: " + (error instanceof Error ? error.message : "Lỗi không xác định"));
+>>>>>>> d91560b9ac8526790bdbc65909184a444db93d66
                               }
                             }}
                             className="border-none bg-transparent hover:bg-gray-100 cursor-pointer p-1 rounded transition-colors text-red-600 text-sm"
@@ -622,23 +650,28 @@ export default function Goals() {
               onSubmit={async (e) => {
                 e.preventDefault();
                 const amount = Number(addMoneyAmount);
-                const fromWalletId = Number(addMoneyFromWallet);
+                const fromWalletId = addMoneyFromWallet;
 
                 if (isNaN(amount) || amount <= 0) {
                   alert(t("validation.amountMustBePositive"));
                   return;
                 }
+<<<<<<< HEAD
                 if (isNaN(fromWalletId) || fromWalletId <= 0) {
                   alert(t("validation.selectWallet"));
+=======
+                if (!fromWalletId) {
+                  alert("Vui lòng chọn ví nguồn");
+>>>>>>> d91560b9ac8526790bdbc65909184a444db93d66
                   return;
                 }
 
                 const goal = goals.find((g) => g.id === addMoneyGoalId);
                 const fromWallet = wallets.find(
-                  (w) => Number(w.id) === fromWalletId
+                  (w) => String(w.id) === String(fromWalletId)
                 );
                 const toWallet = wallets.find(
-                  (w) => Number(w.id) === Number(goal?.wallet_id)
+                  (w) => String(w.id) === String(goal?.wallet_id)
                 );
 
                 if (!fromWallet || !toWallet) {
@@ -657,7 +690,7 @@ export default function Goals() {
                 }
 
                 try {
-                  await api.patch(`/wallets/${fromWalletId}`, {
+                  await api.patch(`/wallets/${fromWallet.id}`, {
                     balance: fromWallet.balance - amount,
                   });
 
@@ -716,6 +749,7 @@ export default function Goals() {
                   onChange={(e) => setAddMoneyFromWallet(e.target.value)}
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
+<<<<<<< HEAD
                   <option value="">{t("form.selectSourceWallet")}</option>
                   {wallets
                     .filter((w) => {
@@ -727,6 +761,14 @@ export default function Goals() {
                         {w.name} ({w.balance.toLocaleString()} {t("currency")})
                       </option>
                     ))}
+=======
+                  <option value="">-- Chọn ví nguồn --</option>
+                  {wallets.map((w) => (
+                    <option key={w.id} value={w.id}>
+                      {w.name} ({w.balance.toLocaleString("vi-VN")} đ)
+                    </option>
+                  ))}
+>>>>>>> d91560b9ac8526790bdbc65909184a444db93d66
                 </select>
               </div>
 
