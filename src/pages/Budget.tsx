@@ -384,11 +384,11 @@ export default function BudgetPage() {
             <table className="w-full text-sm">
               <thead className="border-b bg-muted/60 text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
-                  <th className="px-4 py-3 text-left w-[25%]">Danh mục</th>
-                  <th className="px-4 py-3 text-left w-[30%]">Hạn mức & Sử dụng</th>
-                  <th className="px-4 py-3 text-left w-[20%]">Thời gian</th>
-                  <th className="px-4 py-3 text-left w-[15%]">Trạng thái</th>
-                  <th className="px-4 py-3 text-right w-[10%]">Hành động</th>
+                  <th className="px-4 py-3 text-left w-[25%]">{t('labels.category')}</th>
+                  <th className="px-4 py-3 text-left w-[30%]">{t('labels.limitAndUsage')}</th>
+                  <th className="px-4 py-3 text-left w-[20%]">{t('labels.period')}</th>
+                  <th className="px-4 py-3 text-left w-[15%]">{t('labels.status')}</th>
+                  <th className="px-4 py-3 text-right w-[10%]">{t('labels.action')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -421,7 +421,7 @@ export default function BudgetPage() {
                       ? `${formatCurrency(
                           progressInfo.totalSpent
                         )} / ${formatCurrency(b.limit_amount)} (${displayPercent})`
-                      : 'Chưa có giao dịch trong khoảng thời gian ngân sách';
+                      : t('labels.noTransactionsInPeriod');
 
                   const statusClass =
                     st === 'ACTIVE'
@@ -439,39 +439,39 @@ export default function BudgetPage() {
                       // Xử lý như đang hoạt động
                       const daysLeft = calcDaysLeft(b.end_date);
                       if (daysLeft === null) {
-                        daysLabel = 'Không giới hạn';
+                        daysLabel = t('labels.unlimited');
                         daysLabelClass = 'bg-blue-50 text-blue-700';
                       } else if (daysLeft > 0) {
-                        daysLabel = `${daysLeft} ngày còn lại`;
+                        daysLabel = t('labels.daysLeft', { days: daysLeft });
                         daysLabelClass = 'bg-blue-50 text-blue-700';
                       } else if (daysLeft === 0) {
-                        daysLabel = 'Hôm nay là ngày cuối';
+                        daysLabel = t('labels.lastDay');
                         daysLabelClass = 'bg-amber-50 text-amber-700';
                       } else {
-                        daysLabel = 'Đã quá ngày kết thúc';
+                        daysLabel = t('labels.overdue');
                         daysLabelClass = 'bg-red-50 text-red-700';
                       }
                     } else {
-                      daysLabel = `Bắt đầu sau ${timeStatus.daysUntilStart} ngày`;
+                      daysLabel = t('labels.daysUntilStart', { days: timeStatus.daysUntilStart });
                       daysLabelClass = 'bg-gray-50 text-gray-700';
                     }
                   } else if (timeStatus.status === 'EXPIRED') {
-                    daysLabel = `Đã quá hạn ${timeStatus.daysOverdue} ngày`;
+                    daysLabel = t('labels.daysOverdue', { days: timeStatus.daysOverdue });
                     daysLabelClass = 'bg-red-50 text-red-700';
                   } else {
                     // timeStatus.status === 'ACTIVE'
                     const daysLeft = 'daysLeft' in timeStatus ? (timeStatus.daysLeft ?? null) : null;
                     if (daysLeft === null) {
-                      daysLabel = 'Không giới hạn';
+                      daysLabel = t('labels.unlimited');
                       daysLabelClass = 'bg-blue-50 text-blue-700';
                     } else if (daysLeft !== undefined && daysLeft > 0) {
-                      daysLabel = `${daysLeft} ngày còn lại`;
+                      daysLabel = t('labels.daysLeft', { days: daysLeft });
                       daysLabelClass = 'bg-blue-50 text-blue-700';
                     } else if (daysLeft !== undefined && daysLeft === 0) {
-                      daysLabel = 'Hôm nay là ngày cuối';
+                      daysLabel = t('labels.lastDay');
                       daysLabelClass = 'bg-amber-50 text-amber-700';
                     } else {
-                      daysLabel = 'Đã quá ngày kết thúc';
+                      daysLabel = t('labels.overdue');
                       daysLabelClass = 'bg-red-50 text-red-700';
                     }
                   }
@@ -517,7 +517,7 @@ export default function BudgetPage() {
                             </p>
                           ) : (
                             <p className="text-xs text-muted-foreground italic">
-                              Chưa có giao dịch
+                              {t('labels.noTransactions')}
                             </p>
                           )}
                           {b.description && (
@@ -530,11 +530,11 @@ export default function BudgetPage() {
                       <td className="px-4 py-3 align-middle">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-2 text-sm text-foreground">
-                            <span className="text-muted-foreground text-xs w-4">Từ:</span>
+                            <span className="text-muted-foreground text-xs min-w-[3rem]">{t('labels.from')}</span>
                             <span className="font-medium">{formatDate(b.start_date)}</span>
                           </div>
                           <div className="flex items-center gap-2 text-sm text-foreground">
-                            <span className="text-muted-foreground text-xs w-4">Đến:</span>
+                            <span className="text-muted-foreground text-xs min-w-[3rem]">{t('labels.to')}</span>
                             <span className="font-medium">{formatDate(b.end_date)}</span>
                           </div>
                           <div className="mt-1 flex items-center gap-1.5 text-xs">
@@ -577,7 +577,7 @@ export default function BudgetPage() {
                                 type="button"
                                 onClick={() => handleEditBudget(b)}
                                 className="group inline-flex h-8 w-8 items-center justify-center rounded-lg border border-muted bg-background text-muted-foreground transition-all hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
-                                title="Chỉnh sửa"
+                                title={t('actions.edit')}
                               >
                                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -587,7 +587,7 @@ export default function BudgetPage() {
                                 type="button"
                                 onClick={() => void handleCancelBudget(b)}
                                 className="group inline-flex h-8 w-8 items-center justify-center rounded-lg border border-muted bg-background text-muted-foreground transition-all hover:border-amber-200 hover:bg-amber-50 hover:text-amber-600"
-                                title="Hủy"
+                                title={t('actions.cancel')}
                               >
                                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
@@ -600,7 +600,7 @@ export default function BudgetPage() {
                               type="button"
                               onClick={() => void handleDeleteBudget(b)}
                               className="group inline-flex h-8 w-8 items-center justify-center rounded-lg border border-muted bg-background text-muted-foreground transition-all hover:border-red-200 hover:bg-red-50 hover:text-red-600"
-                              title="Xóa"
+                              title={t('actions.delete')}
                             >
                               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -612,7 +612,7 @@ export default function BudgetPage() {
                               type="button"
                               onClick={() => handleEditBudget(b)}
                               className="group inline-flex h-8 w-8 items-center justify-center rounded-lg border border-muted bg-background text-muted-foreground transition-all hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
-                              title="Gia hạn"
+                              title={t('actions.extend')}
                             >
                               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

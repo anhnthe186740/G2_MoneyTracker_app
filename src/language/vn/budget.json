@@ -15,8 +15,10 @@
   "actions": {
     "addBudget": "Thêm ngân sách",
     "edit": "Chỉnh sửa",
-    "cancel": "Hủy ngân sách",
-    "delete": "Xóa"
+    "cancel": "Hủy",
+    "cancelBudget": "Hủy ngân sách",
+    "delete": "Xóa",
+    "extend": "Gia hạn"
   },
   "currentBudgets": "Các ngân sách hiện tại",
   "modal": {
@@ -55,13 +57,23 @@
     "categoryUnknown": "Danh mục không xác định",
     "categoryDeleted": "Danh mục đã bị xóa",
     "limit": "Hạn mức",
+    "limitAndUsage": "Hạn mức & Sử dụng",
     "spent": "Đã chi",
     "remaining": "Còn lại",
     "period": "Thời gian",
-    "daysLeft": "còn {{days}} ngày",
-    "daysUntilStart": "bắt đầu sau {{days}} ngày",
-    "daysOverdue": "quá hạn {{days}} ngày",
-    "noEndDate": "Không có ngày kết thúc"
+    "status": "Trạng thái",
+    "action": "Hành động",
+    "from": "Từ:",
+    "to": "Đến:",
+    "daysLeft": "{{days}} ngày còn lại",
+    "daysUntilStart": "Bắt đầu sau {{days}} ngày",
+    "daysOverdue": "Đã quá hạn {{days}} ngày",
+    "noEndDate": "Không có ngày kết thúc",
+    "unlimited": "Không giới hạn",
+    "lastDay": "Hôm nay là ngày cuối",
+    "overdue": "Đã quá ngày kết thúc",
+    "noTransactions": "Chưa có giao dịch",
+    "noTransactionsInPeriod": "Chưa có giao dịch trong khoảng thời gian ngân sách"
   },
   "empty": {
     "title": "Chưa có ngân sách nào",
