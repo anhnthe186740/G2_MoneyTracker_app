@@ -1,5 +1,47 @@
 {
   "title": "Export Reports",
-  "comingSoon": "Features coming soon."
+  "subtitle": "Export your financial data",
+  "loading": "Loading...",
+  "exportOptions": {
+    "title": "Export Options",
+    "format": "Format",
+    "dateRange": "Date Range",
+    "dataType": "Data Type"
+  },
+  "formats": {
+    "pdf": "PDF",
+    "excel": "Excel",
+    "csv": "CSV"
+  },
+  "dateRanges": {
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "last3Months": "Last 3 Months",
+    "last6Months": "Last 6 Months",
+    "thisYear": "This Year",
+    "custom": "Custom"
+  },
+  "dataTypes": {
+    "all": "All",
+    "transactions": "Transactions",
+    "budgets": "Budgets",
+    "goals": "Goals",
+    "summary": "Summary"
+  },
+  "actions": {
+    "export": "Export Report",
+    "preview": "Preview",
+    "download": "Download"
+  },
+  "labels": {
+    "startDate": "From",
+    "endDate": "To",
+    "includeCharts": "Include Charts",
+    "includeSummary": "Include Summary"
+  },
+  "toast": {
+    "exportSuccess": "Report exported successfully!",
+    "exportError": "Cannot export report",
+    "downloading": "Downloading..."
+  }
 }
-

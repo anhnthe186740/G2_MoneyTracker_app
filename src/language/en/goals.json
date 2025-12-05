@@ -1,5 +1,82 @@
 {
-  "title": "Goals",
-  "comingSoon": "Features coming soon."
+  "title": "Financial Goals",
+  "subtitle": "Track your savings and investment progress",
+  "loading": "Loading goals...",
+  "loadError": "Failed to load data",
+  "invalidData": "Invalid goal data",
+  "currency": "đ",
+  "summary": {
+    "totalGoals": "Total Goals",
+    "completed": "Completed",
+    "inProgress": "In Progress"
+  },
+  "actions": {
+    "addGoal": "Add Goal",
+    "addMoney": "Add Money",
+    "update": "Update",
+    "add": "Add",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "card": {
+    "wallet": "Wallet",
+    "notAvailable": "N/A",
+    "completed": "✓ Completed",
+    "daysLeft": "{{days}} days left",
+    "progress": "Progress: {{percent}}%",
+    "current": "Current",
+    "target": "Target",
+    "percentComplete": "{{percent}}% complete",
+    "remaining": "Remaining"
+  },
+  "empty": {
+    "title": "No goals yet. Add your first goal!"
+  },
+  "dialog": {
+    "addTitle": "Add New Goal",
+    "editTitle": "Update Goal",
+    "editDescription": "Edit goal",
+    "addDescription": "Create a new goal",
+    "addMoneyTitle": "Add Money to Goal",
+    "addMoneyDescription": "Transfer money to wallet: <strong>{{wallet}}</strong> to increase progress"
+  },
+  "form": {
+    "name": "Goal Name",
+    "namePlaceholder": "E.g: Buy a house, Travel...",
+    "targetAmount": "Target Amount (VND)",
+    "targetAmountPlaceholder": "Enter target amount",
+    "currentAmount": "Current Amount (VND)",
+    "currentAmountPlaceholder": "Enter amount to deposit",
+    "sourceWallet": "From Wallet",
+    "selectWallet": "-- Select wallet --",
+    "selectSourceWallet": "-- Select source wallet --",
+    "status": "Status",
+    "deadline": "Deadline",
+    "amountToAdd": "Amount to Add (VND)",
+    "amountPlaceholder": "Enter amount"
+  },
+  "status": {
+    "inProgress": "In Progress",
+    "paused": "Paused"
+  },
+  "validation": {
+    "nameRequired": "Goal name is required",
+    "amountPositive": "Target amount must be greater than 0",
+    "selectSourceWallet": "Please select a source wallet",
+    "walletNotFound": "Source wallet not found",
+    "insufficientBalance": "Insufficient balance in wallet \"{{wallet}}\" ({{balance}} đ remaining)",
+    "amountMustBePositive": "Amount must be greater than 0",
+    "selectWallet": "Please select a source wallet",
+    "walletNotFoundGeneral": "Wallet not found",
+    "goalNotFound": "Goal not found",
+    "insufficientSourceBalance": "Insufficient source wallet balance"
+  },
+  "confirm": {
+    "delete": "Are you sure you want to delete goal \"{{name}}\"?"
+  },
+  "toast": {
+    "saveError": "Failed to save goal",
+    "deleteError": "Failed to delete goal",
+    "addMoneyError": "Failed to add money"
+  }
 }
-

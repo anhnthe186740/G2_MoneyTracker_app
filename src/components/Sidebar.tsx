@@ -6,7 +6,6 @@ import {
   PiggyBank,
   Target,
   RefreshCw,
-  BarChart3,
   Bell,
   User,
   Settings,
@@ -14,25 +13,27 @@ import {
   LogOut,
   PieChart,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useNotificationsContext } from '../context/NotificationContext';
+
 export interface SidebarMenuItem {
   id: string;
-  label: string;
+  labelKey: string;
   path: string;
   icon: LucideIcon;
 }
 
 export const SIDEBAR_MENU: SidebarMenuItem[] = [
-  { id: 'dashboard', icon: LayoutDashboard, label: 'Tổng quan', path: '/dashboard' },
-  { id: 'transactions', icon: Receipt, label: 'Giao dịch', path: '/transactions' },
-  { id: 'wallets', icon: Wallet, label: 'Ví', path: '/wallets' },
-  { id: 'budget', icon: PiggyBank, label: 'Ngân sách', path: '/budget' },
-  { id: 'goals', icon: Target, label: 'Mục tiêu', path: '/goals' },
-  { id: 'recurring', icon: RefreshCw, label: 'Định kỳ', path: '/recurring' },
-  { id: 'notifications', icon: Bell, label: 'Thông báo', path: '/notifications' },
-  { id: 'profile', icon: User, label: 'Hồ sơ', path: '/profile' },
-  { id: 'settings', icon: Settings, label: 'Cài đặt', path: '/settings' },
-  { id: 'export', icon: FileText, label: 'Xuất báo cáo', path: '/export' },
+  { id: 'dashboard', icon: LayoutDashboard, labelKey: 'menu.dashboard', path: '/dashboard' },
+  { id: 'transactions', icon: Receipt, labelKey: 'menu.transactions', path: '/transactions' },
+  { id: 'wallets', icon: Wallet, labelKey: 'menu.wallets', path: '/wallets' },
+  { id: 'budget', icon: PiggyBank, labelKey: 'menu.budget', path: '/budget' },
+  { id: 'goals', icon: Target, labelKey: 'menu.goals', path: '/goals' },
+  { id: 'recurring', icon: RefreshCw, labelKey: 'menu.recurring', path: '/recurring' },
+  { id: 'notifications', icon: Bell, labelKey: 'menu.notifications', path: '/notifications' },
+  { id: 'profile', icon: User, labelKey: 'menu.profile', path: '/profile' },
+  { id: 'settings', icon: Settings, labelKey: 'menu.settings', path: '/settings' },
+  { id: 'export', icon: FileText, labelKey: 'menu.export', path: '/export' },
 ];
 
 interface SidebarProps {
@@ -43,9 +44,11 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ currentScreen, onNavigate, onLogout, userName }: SidebarProps) {
+  const { t } = useTranslation('sidebar');
   const { unreadCount } = useNotificationsContext();
+  
   const handleLogoutClick = () => {
-    if (window.confirm('Bạn có chắc chắn muốn đăng xuất không?')) {
+    if (window.confirm(t('logoutConfirm'))) {
       onLogout();
     }
   };
@@ -67,7 +70,7 @@ export default function Sidebar({ currentScreen, onNavigate, onLogout, userName 
             <User className="w-5 h-5 text-blue-600 dark:text-blue-800" />
           </div>
           <div>
-            <p className="text-foreground">{userName}</p>
+            <p className="text-foreground">{userName || t('user')}</p>
           </div>
         </div>
       </div>
@@ -89,7 +92,7 @@ export default function Sidebar({ currentScreen, onNavigate, onLogout, userName 
               >
                 <div className="flex items-center gap-3">
                   <Icon className="w-5 h-5" />
-                  <span>{item.label}</span>
+                  <span>{t(item.labelKey)}</span>
                 </div>
 
                 {item.id === 'notifications' && unreadCount > 0 && (
@@ -109,10 +112,9 @@ export default function Sidebar({ currentScreen, onNavigate, onLogout, userName 
           className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
         >
           <LogOut className="w-5 h-5" />
-          <span>Đăng xuất</span>
+          <span>{t('logout')}</span>
         </button>
       </div>
     </div>
   );
 }
-

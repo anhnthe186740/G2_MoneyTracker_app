@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -22,6 +23,7 @@ interface Wallet {
 }
 
 export default function Wallets() {
+  const { t } = useTranslation('accounts');
   const auth = useContext(AuthContext);
   const user = auth?.user;
   
@@ -49,12 +51,10 @@ export default function Wallets() {
     note: ''
   });
 
-  const accountTypes = [
-    { value: 'CASH', label: 'Tiền mặt' },
-    { value: 'BANK', label: 'Ngân hàng' },
-    { value: 'E_WALLET', label: 'Ví điện tử' },
-    { value: 'CREDIT', label: 'Thẻ tín dụng' }
-  ];
+  const getAccountTypeLabel = (type: string) => {
+    const typeKey = `types.${type}` as const;
+    return t(typeKey);
+  };
 
   useEffect(() => {
     const loadWallets = async () => {
@@ -78,7 +78,7 @@ export default function Wallets() {
         }
       } catch (error) {
         console.error('Lỗi khi tải ví:', error);
-        toast.error('Không thể tải danh sách ví');
+        toast.error(t('toast.loadError'));
         setWallets([]);
       } finally {
         setLoading(false);
@@ -86,6 +86,7 @@ export default function Wallets() {
     };
     
     loadWallets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -100,7 +101,7 @@ export default function Wallets() {
     });
     
     if (isDuplicate) {
-      toast.error('Đã tồn tại ví cùng tên và cùng loại! Vui lòng chọn tên khác hoặc loại khác.');
+      toast.error(t('toast.duplicateError'));
       return;
     }
     
@@ -116,7 +117,7 @@ export default function Wallets() {
         };
         const { data } = await api.put<Wallet>(`/wallets/${editingWallet.id}`, payload);
         setWallets(prev => prev.map(w => w.id === editingWallet.id ? data : w));
-        toast.success('Cập nhật ví thành công!');
+        toast.success(t('toast.updateSuccess'));
       } else {
        
         const now = new Date();
@@ -143,13 +144,13 @@ export default function Wallets() {
         
         const { data } = await api.post<Wallet>('/wallets', payload);
         setWallets(prev => [...prev, data]);
-        toast.success('Thêm ví thành công!');
+        toast.success(t('toast.addSuccess'));
       }
       setIsDialogOpen(false);
       resetForm();
     } catch (error) {
       console.error('Lỗi khi lưu ví:', error);
-      toast.error('Không thể lưu ví');
+      toast.error(t('toast.saveError'));
     }
   };
 
@@ -166,14 +167,14 @@ export default function Wallets() {
   };
 
   const handleDelete = async (id: number | string) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa ví này?')) {
+    if (window.confirm(t('confirm.delete'))) {
       try {
         await api.delete(`/wallets/${id}`);
         setWallets(prev => prev.filter(w => w.id !== id));
-        toast.success('Xóa ví thành công!');
+        toast.success(t('toast.deleteSuccess'));
       } catch (error) {
-        console.error('Lỗi khi xóa ví:', error);
-        toast.error('Không thể xóa ví');
+        console.error('Error deleting wallet:', error);
+        toast.error(t('toast.deleteError'));
       }
     }
   };
@@ -190,7 +191,7 @@ export default function Wallets() {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    return `${amount.toLocaleString()} ${t('currency')}`;
   };
 
   const totalBalance = wallets.reduce((sum, wallet) => sum + (wallet.balance || 0), 0);
@@ -200,7 +201,7 @@ export default function Wallets() {
   };
 
   const getWalletTypeLabel = (type: string) => {
-    return accountTypes.find(t => t.value === type)?.label || type;
+    return getAccountTypeLabel(type);
   };
 
   const toggleWalletVisibility = (walletId: number | string) => {
@@ -229,7 +230,7 @@ export default function Wallets() {
     return (
       <section className="space-y-6">
         <div className="flex justify-center items-center min-h-[400px]">
-          <p className="text-muted-foreground">Đang tải dữ liệu...</p>
+          <p className="text-muted-foreground">{t('loading')}</p>
         </div>
       </section>
     );
@@ -239,15 +240,15 @@ export default function Wallets() {
     <section className="space-y-6">
       <header className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Quản lý ví</h1>
-          <p className="text-muted-foreground">Theo dõi các ví tài chính của bạn</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t('title')}</h1>
+          <p className="text-muted-foreground">{t('subtitle')}</p>
         </div>
         <Button onClick={() => {
           resetForm();
           setIsDialogOpen(true);
         }}>
           <Plus className="w-4 h-4 mr-2" />
-          Thêm ví
+          {t('actions.addWallet')}
         </Button>
       </header>
 
@@ -267,18 +268,18 @@ export default function Wallets() {
         >
           <DialogHeader>
             <DialogTitle>
-              {editingWallet ? 'Chỉnh sửa ví' : 'Thêm ví mới'}
+              {editingWallet ? t('dialog.editTitle') : t('dialog.addTitle')}
             </DialogTitle>
             <DialogDescription>
-              {editingWallet ? 'Cập nhật thông tin ví hiện tại của bạn' : 'Tạo ví mới'}
+              {editingWallet ? t('dialog.editDescription') : t('dialog.addDescription')}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '12px' }}>
             <div>
-              <Label htmlFor="name">Tên ví</Label>
+              <Label htmlFor="name">{t('form.name')}</Label>
               <Input
                 id="name"
-                placeholder="VD: Ví tiền mặt"
+                placeholder={t('form.namePlaceholder')}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
@@ -286,20 +287,20 @@ export default function Wallets() {
             </div>
             
             <div>
-              <Label htmlFor="type">Loại ví</Label>
+              <Label htmlFor="type">{t('form.type')}</Label>
               <Select 
                 value={formData.type} 
                 onValueChange={(value) => setFormData({ ...formData, type: value as typeof formData.type })}
               >
                 <SelectTrigger>
                   <SelectValue>
-                    {accountTypes.find(t => t.value === formData.type)?.label || 'Chọn loại ví'}
+                    {getAccountTypeLabel(formData.type) || t('form.selectType')}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  {accountTypes.map(type => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
+                  {(['CASH', 'BANK', 'E_WALLET', 'CREDIT'] as const).map(type => (
+                    <SelectItem key={type} value={type}>
+                      {getAccountTypeLabel(type)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -307,7 +308,7 @@ export default function Wallets() {
             </div>
             
             <div>
-              <Label htmlFor="balance">Số dư ban đầu</Label>
+              <Label htmlFor="balance">{t('form.balance')}</Label>
               <Input
                 id="balance"
                 type="number"
@@ -319,7 +320,7 @@ export default function Wallets() {
             </div>
             
             <div>
-              <Label htmlFor="color">Màu sắc</Label>
+              <Label htmlFor="color">{t('form.color')}</Label>
               <div className="flex gap-3 items-center">
                 <Input
                   id="color"
@@ -333,10 +334,10 @@ export default function Wallets() {
             </div>
             
             <div>
-              <Label htmlFor="note">Ghi chú</Label>
+              <Label htmlFor="note">{t('form.note')}</Label>
               <Input
                 id="note"
-                placeholder="Thêm ghi chú..."
+                placeholder={t('form.notePlaceholder')}
                 value={formData.note}
                 onChange={(e) => setFormData({ ...formData, note: e.target.value })}
               />
@@ -344,7 +345,7 @@ export default function Wallets() {
             
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '12px' }}>
               <Button type="submit" style={{ flex: 1, background: '#2563eb', color: '#fff', padding: '10px 24px' }}>
-                {editingWallet ? 'Cập nhật' : 'Thêm'}
+                {t('form.save')}
               </Button>
               <Button 
                 type="button" 
@@ -355,17 +356,17 @@ export default function Wallets() {
                   resetForm();
                 }}
               >
-                Hủy
+                {t('form.cancel')}
               </Button>
             </div>
           </form>
         </DialogContent>
       </Dialog>
 
-      {/* Tổng số dư */}
+      {/* Total Balance */}
       <Card className="p-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
         <p className="text-lg opacity-90 mb-2">
-          Tổng số dư của {wallets.length} ví
+          {t('totalBalance')} ({wallets.length} {t('walletCount')})
         </p>
         <div className="flex items-center gap-3">
           <p className="text-4xl font-bold">
@@ -385,12 +386,12 @@ export default function Wallets() {
         </div>
       </Card>
 
-      {/* Danh sách ví */}
+      {/* Wallet List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {wallets.length === 0 ? (
           <div className="col-span-full">
             <Card className="p-12">
-              <p className="text-muted-foreground text-center">Chưa có ví nào. Hãy thêm ví đầu tiên!</p>
+              <p className="text-muted-foreground text-center">{t('empty.title')}</p>
             </Card>
           </div>
         ) : (

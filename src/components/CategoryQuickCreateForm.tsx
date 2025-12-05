@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X, Tag } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import api from '../services/api';
 
 interface CategoryQuickCreateFormProps {
@@ -9,6 +10,7 @@ interface CategoryQuickCreateFormProps {
 }
 
 export default function CategoryQuickCreateForm({ userId, onClose, onSuccess }: CategoryQuickCreateFormProps) {
+  const { t } = useTranslation('transactions');
   const [formData, setFormData] = useState({
     name: '',
     type: 'EXPENSE' as 'INCOME' | 'EXPENSE',
@@ -23,7 +25,7 @@ export default function CategoryQuickCreateForm({ userId, onClose, onSuccess }: 
     setError('');
 
     if (!formData.name.trim()) {
-      setError('Vui lòng nhập tên danh mục');
+      setError(t('quickCreate.nameRequired'));
       return;
     }
 
@@ -39,7 +41,7 @@ export default function CategoryQuickCreateForm({ userId, onClose, onSuccess }: 
       onSuccess();
       onClose();
     } catch (err) {
-      setError('Có lỗi xảy ra khi tạo danh mục');
+      setError(t('quickCreate.createError'));
     } finally {
       setLoading(false);
     }
@@ -51,7 +53,7 @@ export default function CategoryQuickCreateForm({ userId, onClose, onSuccess }: 
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-2">
             <Tag className="h-6 w-6 text-blue-600" />
-            <h2 className="text-2xl font-bold">Tạo danh mục nhanh</h2>
+            <h2 className="text-2xl font-bold">{t('quickCreate.title')}</h2>
           </div>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <X size={24} />
@@ -66,19 +68,19 @@ export default function CategoryQuickCreateForm({ userId, onClose, onSuccess }: 
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2">Tên danh mục *</label>
+            <label className="block text-sm font-medium mb-2">{t('quickCreate.nameLabel')}</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="w-full border rounded px-3 py-2"
-              placeholder="Ăn uống, Di chuyển, Lương..."
+              placeholder={t('quickCreate.namePlaceholder')}
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Loại</label>
+            <label className="block text-sm font-medium mb-2">{t('quickCreate.typeLabel')}</label>
             <div className="flex gap-4">
               <label className="flex items-center">
                 <input
@@ -93,7 +95,7 @@ export default function CategoryQuickCreateForm({ userId, onClose, onSuccess }: 
                   })}
                   className="mr-2"
                 />
-                Chi tiêu
+                {t('categoryManagement.expense')}
               </label>
               <label className="flex items-center">
                 <input
@@ -108,7 +110,7 @@ export default function CategoryQuickCreateForm({ userId, onClose, onSuccess }: 
                   })}
                   className="mr-2"
                 />
-                Thu nhập
+                {t('categoryManagement.income')}
               </label>
             </div>
           </div>
@@ -120,14 +122,14 @@ export default function CategoryQuickCreateForm({ userId, onClose, onSuccess }: 
               className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50"
               disabled={loading}
             >
-              Hủy
+              {t('quickCreate.cancel')}
             </button>
             <button
               type="submit"
               className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
               disabled={loading}
             >
-              {loading ? 'Đang tạo...' : 'Tạo danh mục'}
+              {loading ? t('quickCreate.creating') : t('quickCreate.create')}
             </button>
           </div>
         </form>

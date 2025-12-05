@@ -1,5 +1,46 @@
 {
-  "title": "Hồ sơ",
-  "comingSoon": "bổ sung các tính năng."
+  "title": "Thông tin cá nhân",
+  "subtitle": "Quản lý thông tin tài khoản của bạn",
+  "user": "Người dùng",
+  "changeAvatar": "Thay đổi ảnh đại diện",
+  "accountInfo": {
+    "title": "Thông tin tài khoản",
+    "fullName": "Họ và tên",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "edit": "Chỉnh sửa",
+    "save": "Lưu thay đổi",
+    "saving": "Đang lưu...",
+    "cancel": "Hủy"
+  },
+  "security": {
+    "title": "Bảo mật",
+    "changePassword": "Đổi mật khẩu",
+    "currentPassword": "Mật khẩu hiện tại",
+    "newPassword": "Mật khẩu mới",
+    "confirmPassword": "Xác nhận mật khẩu mới",
+    "processing": "Đang xử lý...",
+    "description": "Để bảo mật tài khoản, bạn nên thường xuyên đổi mật khẩu và sử dụng mật khẩu mạnh."
+  },
+  "details": {
+    "title": "Thông tin tài khoản",
+    "createdAt": "Ngày tạo tài khoản",
+    "loginStatus": "Trạng thái đăng nhập",
+    "loggedIn": "Đã đăng nhập",
+    "loginMethod": "Phương thức đăng nhập",
+    "emailPassword": "Email & Mật khẩu"
+  },
+  "validation": {
+    "nameRequired": "Họ và tên không được để trống!",
+    "emailRequired": "Email không được để trống!",
+    "emailInvalid": "Email phải chứa ký tự @",
+    "passwordMismatch": "Mật khẩu xác nhận không khớp!",
+    "passwordIncorrect": "Mật khẩu hiện tại không đúng!"
+  },
+  "messages": {
+    "updateSuccess": "Cập nhật thông tin thành công!",
+    "updateError": "Lỗi khi cập nhật thông tin.",
+    "passwordSuccess": "Đổi mật khẩu thành công!",
+    "serverError": "Lỗi server."
+  }
 }
-

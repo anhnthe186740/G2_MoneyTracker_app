@@ -1,5 +1,30 @@
 {
   "title": "Financial Overview",
-  "financialStatus": "Current Financial Status"
+  "welcome": "Welcome back!",
+  "currency": "đ",
+  "hiddenBalance": "••••••••",
+  "pleaseLogin": "Please login to view your financial information",
+  "totalBalance": "Total Account Balance",
+  "loading": "Loading...",
+  "walletCount": "{{count}} wallets • Just updated",
+  "incomeExpense": "Income & Expenses {{period}}",
+  "totalIncome": "Total Income",
+  "totalExpense": "Total Expenses",
+  "expenseByCategory": "Expenses by Category {{period}}",
+  "noExpense": "No expenses in this period",
+  "goalProgress": "Financial Goal Progress",
+  "noGoals": "No goals yet",
+  "period": {
+    "thisMonth": "This Month",
+    "sixMonths": "6 Months",
+    "thisYear": "This Year",
+    "monthLabel": "{{month}}/{{year}}",
+    "sixMonthsLabel": "Last 6 months",
+    "yearLabel": "Year {{year}}"
+  },
+  "deadline": {
+    "overdue": "Overdue",
+    "today": "Today",
+    "daysLeft": "{{days}} days left"
+  }
 }
-

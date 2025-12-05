@@ -1,5 +1,6 @@
 import { Button } from "../components/ui/Button";
 import { useEffect, useState, useContext } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 
@@ -20,7 +21,9 @@ type Wallet = {
   name: string;
   balance: number;
 };
+
 export default function Goals() {
+  const { t } = useTranslation("goals");
   const auth = useContext(AuthContext) as any;
   const user = auth?.user;
 
@@ -43,15 +46,14 @@ export default function Goals() {
         : Math.round((current / goal.target_amount) * 100);
     return { current, percent, completed: percent >= 100 };
   };
-  const format = (v: number) => v.toLocaleString("vi-VN");
+  const format = (v: number) => v.toLocaleString();
 
   const [open, setOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [title, setTitle] = useState<string>("");
   const [targetAmount, setTargetAmount] = useState<string>("");
   const [selectedWallet, setSelectedWallet] = useState<string>("");
-  const [selectedStatus, setSelectedStatus] =
-    useState<string>("Đang thực hiện");
+  const [selectedStatus, setSelectedStatus] = useState<string>("inProgress");
   const [dueDate, setDueDate] = useState<string>("");
   const [initialAmount, setInitialAmount] = useState<string>("");
   const [sourceWallet, setSourceWallet] = useState<string>("");
@@ -65,7 +67,7 @@ export default function Goals() {
     setTitle("");
     setTargetAmount("");
     setSelectedWallet("");
-    setSelectedStatus("Đang thực hiện");
+    setSelectedStatus("inProgress");
     setDueDate("");
     setInitialAmount("");
     setSourceWallet("");
@@ -96,12 +98,13 @@ export default function Goals() {
           setWallets(Array.isArray(walletsRes.data) ? walletsRes.data : []);
         }
       } catch (e) {
-        setError("Tải dữ liệu thất bại");
+        setError(t("loadError"));
       } finally {
         setLoading(false);
       }
     };
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -111,11 +114,11 @@ export default function Goals() {
     const target = Number(targetAmount);
 
     if (!name) {
-      setError("Tên mục tiêu không được để trống");
+      setError(t("validation.nameRequired"));
       return;
     }
     if (isNaN(target) || target <= 0) {
-      setError("Số tiền mục tiêu phải lớn hơn 0");
+      setError(t("validation.amountPositive"));
       return;
     }
 
@@ -125,22 +128,21 @@ export default function Goals() {
       const srcWalletId = Number(sourceWallet);
 
       if (isNaN(srcWalletId) || srcWalletId <= 0) {
-        setError("Vui lòng chọn ví nguồn để lấy tiền");
+        setError(t("validation.selectSourceWallet"));
         return;
       }
 
       const fromWallet = wallets.find((w) => Number(w.id) === srcWalletId);
       if (!fromWallet) {
-        setError("Không tìm thấy ví nguồn");
+        setError(t("validation.walletNotFound"));
         return;
       }
 
       if (fromWallet.balance < initAmount) {
-        setError(
-          `Số dư ví "${fromWallet.name}" không đủ (còn ${format(
-            fromWallet.balance
-          )} đ)`
-        );
+        setError(t("validation.insufficientBalance", { 
+          wallet: fromWallet.name, 
+          balance: format(fromWallet.balance) 
+        }));
         return;
       }
     }
@@ -195,7 +197,7 @@ export default function Goals() {
       resetForm();
       setEditingId(null);
     } catch (err) {
-      setError("Lưu mục tiêu thất bại");
+      setError(t("toast.saveError"));
     }
   };
 
@@ -207,10 +209,10 @@ export default function Goals() {
         <div className="flex justify-between items-center">
           <div>
             <h2 className="m-0 font-bold text-[32px] leading-tight text-slate-900">
-              Mục tiêu tài chính
+              {t("title")}
             </h2>
             <div className="mt-2 text-sm text-gray-500">
-              Theo dõi tiến độ tiết kiệm và đầu tư
+              {t("subtitle")}
             </div>
           </div>
           <Button
@@ -218,7 +220,7 @@ export default function Goals() {
             onClick={() => setOpen(true)}
           >
             <span>+</span>
-            Thêm mục tiêu
+            {t("actions.addGoal")}
           </Button>
         </div>
         {error && (
@@ -228,16 +230,16 @@ export default function Goals() {
         )}
         <div className="mt-4">
           {loading ? (
-            <div className="p-4 text-gray-500">Đang tải mục tiêu...</div>
+            <div className="p-4 text-gray-500">{t("loading")}</div>
           ) : !Array.isArray(goals) ? (
             <div className="p-4 text-red-700">
-              Dữ liệu mục tiêu không hợp lệ
+              {t("invalidData")}
             </div>
           ) : filtered.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-gray-200 bg-white p-6">
               <div className="min-h-[120px] flex items-center justify-center">
                 <div className="text-center text-sm text-gray-500">
-                  Chưa có mục tiêu nào. Hãy thêm mục tiêu đầu tiên!
+                  {t("empty.title")}
                 </div>
               </div>
             </div>
@@ -246,7 +248,7 @@ export default function Goals() {
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
                   <div className="text-sm font-medium text-gray-600 mb-1">
-                    Tổng mục tiêu
+                    {t("summary.totalGoals")}
                   </div>
                   <div className="text-3xl font-bold text-slate-900">
                     {filtered.length}
@@ -255,7 +257,7 @@ export default function Goals() {
 
                 <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200 shadow-sm hover:shadow-md transition-shadow">
                   <div className="text-sm font-medium text-green-700 mb-1">
-                    Đã hoàn thành
+                    {t("summary.completed")}
                   </div>
                   <div className="text-3xl font-bold text-green-600">
                     {
@@ -267,7 +269,7 @@ export default function Goals() {
 
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200 shadow-sm hover:shadow-md transition-shadow">
                   <div className="text-sm font-medium text-blue-700 mb-1">
-                    Đang thực hiện
+                    {t("summary.inProgress")}
                   </div>
                   <div className="text-3xl font-bold text-blue-600">
                     {
@@ -302,18 +304,18 @@ export default function Goals() {
                             {g.name}
                           </div>
                           <div className="text-[11px] text-gray-500 mt-1">
-                            Ví: {wallet?.name || "N/A"}
+                            {t("card.wallet")}: {wallet?.name || t("card.notAvailable")}
                           </div>
                           <div className="text-xs mt-1.5">
                             {completed ? (
                               <span className="text-green-600 font-semibold">
-                                ✓ Hoàn thành
+                                {t("card.completed")}
                               </span>
                             ) : (
                               <span className="text-gray-500">
                                 {daysLeft !== null
-                                  ? `Còn ${daysLeft} ngày`
-                                  : `Tiến độ: ${percent}%`}
+                                  ? t("card.daysLeft", { days: daysLeft })
+                                  : t("card.progress", { percent })}
                               </span>
                             )}
                           </div>
@@ -337,9 +339,7 @@ export default function Goals() {
                           <button
                             onClick={async () => {
                               if (
-                                !window.confirm(
-                                  `Bạn có chắc muốn xóa mục tiêu "${g.name}"?`
-                                )
+                                !window.confirm(t("confirm.delete", { name: g.name }))
                               ) {
                                 return;
                               }
@@ -373,7 +373,7 @@ export default function Goals() {
                                 await api.delete(`/goals/${g.id}`);
                                 setGoals((p) => p.filter((x) => x.id !== g.id));
                               } catch {
-                                alert("Xóa mục tiêu thất bại");
+                                alert(t("toast.deleteError"));
                               }
                             }}
                             className="border-none bg-transparent hover:bg-gray-100 cursor-pointer p-1 rounded transition-colors text-red-600 text-sm"
@@ -385,8 +385,8 @@ export default function Goals() {
                       </div>
 
                       <div className="flex justify-between text-[13px] text-gray-500 mb-2">
-                        <div>Hiện tại: {format(current)} đ</div>
-                        <div>Mục tiêu: {format(g.target_amount)} đ</div>
+                        <div>{t("card.current")}: {format(current)} {t("currency")}</div>
+                        <div>{t("card.target")}: {format(g.target_amount)} {t("currency")}</div>
                       </div>
 
                       <div className="h-2.5 bg-gray-200 rounded-full overflow-hidden mb-2">
@@ -397,14 +397,14 @@ export default function Goals() {
                         />
                       </div>
                       <div className="text-center text-xs text-gray-500 mb-2">
-                        {Math.min(100, percent)}% hoàn thành
+                        {t("card.percentComplete", { percent: Math.min(100, percent) })}
                       </div>
 
                       <div className="border-t border-gray-100 mt-3 pt-3 text-[13px] text-gray-600 flex justify-between items-center">
                         <div>
-                          Còn thiếu:{" "}
+                          {t("card.remaining")}:{" "}
                           <span className="font-semibold">
-                            {format(Math.max(0, g.target_amount - current))} đ
+                            {format(Math.max(0, g.target_amount - current))} {t("currency")}
                           </span>
                         </div>
                         {!completed && (
@@ -417,7 +417,7 @@ export default function Goals() {
                               setAddMoneyOpen(true);
                             }}
                           >
-                            Thêm tiền
+                            {t("actions.addMoney")}
                           </Button>
                         )}
                       </div>
@@ -435,7 +435,7 @@ export default function Goals() {
           <div className="w-[480px] bg-white rounded-lg shadow-2xl p-5">
             <div className="flex justify-between items-center mb-3">
               <h3 className="m-0 font-bold">
-                {editingId ? "Cập nhật mục tiêu" : "Thêm mục tiêu mới"}
+                {editingId ? t("dialog.editTitle") : t("dialog.addTitle")}
               </h3>
               <button
                 aria-label="Close"
@@ -453,15 +453,15 @@ export default function Goals() {
             <div className="text-[13px] text-gray-500 mb-3">
               {editingId ? (
                 <>
-                  Chỉnh sửa mục tiêu:{" "}
+                  {t("dialog.editDescription")}:{" "}
                   <strong>
                     {wallets.find(
                       (w) => Number(w.id) === Number(selectedWallet)
-                    )?.name || "N/A"}
+                    )?.name || t("card.notAvailable")}
                   </strong>
                 </>
               ) : (
-                "Tạo một mục tiêu mới"
+                t("dialog.addDescription")
               )}
             </div>
 
@@ -470,10 +470,10 @@ export default function Goals() {
 
               <div>
                 <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
-                  Tên mục tiêu
+                  {t("form.name")}
                 </label>
                 <input
-                  placeholder="VD: Mua nhà, Du lịch..."
+                  placeholder={t("form.namePlaceholder")}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -482,16 +482,16 @@ export default function Goals() {
 
               <div>
                 <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
-                  Số tiền mục tiêu (VNĐ)
+                  {t("form.targetAmount")}
                 </label>
                 <input
                   type="text"
-                  value={targetAmount ? Number(targetAmount).toLocaleString('vi-VN') : ''}
+                  value={targetAmount ? Number(targetAmount).toLocaleString() : ''}
                   onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, '');
                     setTargetAmount(value);
                   }}
-                  placeholder="Nhập số tiền mục tiêu"
+                  placeholder={t("form.targetAmountPlaceholder")}
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -500,23 +500,23 @@ export default function Goals() {
                 <>
                   <div>
                     <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
-                      Số tiền hiện tại (VNĐ)
+                      {t("form.currentAmount")}
                     </label>
                     <input
                       type="text"
-                      value={initialAmount ? Number(initialAmount).toLocaleString('vi-VN') : ''}
+                      value={initialAmount ? Number(initialAmount).toLocaleString() : ''}
                       onChange={(e) => {
                         const value = e.target.value.replace(/\D/g, '');
                         setInitialAmount(value);
                       }}
-                      placeholder="Nhập số tiền muốn nạp"
+                      placeholder={t("form.currentAmountPlaceholder")}
                       className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
 
                   <div>
                     <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
-                      Lấy từ ví
+                      {t("form.sourceWallet")}
                     </label>
                     <select
                       value={sourceWallet}
@@ -524,10 +524,10 @@ export default function Goals() {
                       className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       disabled={!initialAmount || Number(initialAmount) <= 0}
                     >
-                      <option value="">-- Chọn ví --</option>
+                      <option value="">{t("form.selectWallet")}</option>
                       {wallets.map((w) => (
                         <option key={w.id} value={w.id}>
-                          {w.name} ({w.balance.toLocaleString("vi-VN")} đ)
+                          {w.name} ({w.balance.toLocaleString()} {t("currency")})
                         </option>
                       ))}
                     </select>
@@ -537,25 +537,25 @@ export default function Goals() {
 
               <div>
                 <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
-                  Trạng thái
+                  {t("form.status")}
                 </label>
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="Đang thực hiện">Đang thực hiện</option>
-                  <option value="Tạm dừng">Tạm dừng</option>
+                  <option value="inProgress">{t("status.inProgress")}</option>
+                  <option value="paused">{t("status.paused")}</option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
-                  Hạn hoàn thành
+                  {t("form.deadline")}
                 </label>
                 <input
                   type="date"
-                  placeholder="Hạn hoàn thành"
+                  placeholder={t("form.deadline")}
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -567,7 +567,7 @@ export default function Goals() {
                   className="flex-1 bg-black text-white px-6 py-2.5"
                   type="submit"
                 >
-                  {editingId ? "Cập nhật" : "Thêm"}
+                  {editingId ? t("actions.update") : t("actions.add")}
                 </Button>
 
                 <Button
@@ -580,7 +580,7 @@ export default function Goals() {
                   }}
                   type="button"
                 >
-                  Hủy
+                  {t("actions.cancel")}
                 </Button>
               </div>
             </form>
@@ -593,7 +593,7 @@ export default function Goals() {
         <div className="fixed inset-0 flex items-center justify-center bg-slate-900/50 z-[60]">
           <div className="w-[480px] bg-white rounded-lg shadow-2xl p-5">
             <div className="flex justify-between items-center mb-3">
-              <h3 className="m-0 font-bold">Thêm tiền vào mục tiêu</h3>
+              <h3 className="m-0 font-bold">{t("dialog.addMoneyTitle")}</h3>
               <button
                 aria-label="Close"
                 onClick={() => {
@@ -609,13 +609,12 @@ export default function Goals() {
             </div>
 
             <div className="text-[13px] text-gray-500 mb-3">
-              Chuyển tiền vào ví:{" "}
+              {t("card.wallet")}:{" "}
               <strong>
                 {getWallet(
                   goals.find((g) => g.id === addMoneyGoalId)?.wallet_id || 0
-                )?.name || "N/A"}
-              </strong>{" "}
-              để tăng tiến độ
+                )?.name || t("card.notAvailable")}
+              </strong>
             </div>
 
             <form
@@ -626,11 +625,11 @@ export default function Goals() {
                 const fromWalletId = Number(addMoneyFromWallet);
 
                 if (isNaN(amount) || amount <= 0) {
-                  alert("Số tiền phải lớn hơn 0");
+                  alert(t("validation.amountMustBePositive"));
                   return;
                 }
                 if (isNaN(fromWalletId) || fromWalletId <= 0) {
-                  alert("Vui lòng chọn ví nguồn");
+                  alert(t("validation.selectWallet"));
                   return;
                 }
 
@@ -643,17 +642,17 @@ export default function Goals() {
                 );
 
                 if (!fromWallet || !toWallet) {
-                  alert("Không tìm thấy ví");
+                  alert(t("validation.walletNotFoundGeneral"));
                   return;
                 }
 
                 if (fromWallet.balance < amount) {
-                  alert("Số dư ví nguồn không đủ");
+                  alert(t("validation.insufficientSourceBalance"));
                   return;
                 }
 
                 if (!goal) {
-                  alert("Không tìm thấy mục tiêu");
+                  alert(t("validation.goalNotFound"));
                   return;
                 }
 
@@ -688,36 +687,36 @@ export default function Goals() {
                   setAddMoneyAmount("");
                   setAddMoneyFromWallet("");
                 } catch (err) {
-                  alert("Thêm tiền thất bại");
+                  alert(t("toast.addMoneyError"));
                 }
               }}
             >
               <div>
                 <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
-                  Số tiền cần thêm (VNĐ)
+                  {t("form.amountToAdd")}
                 </label>
                 <input
                   type="text"
-                  value={addMoneyAmount ? Number(addMoneyAmount).toLocaleString('vi-VN') : ''}
+                  value={addMoneyAmount ? Number(addMoneyAmount).toLocaleString() : ''}
                   onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, '');
                     setAddMoneyAmount(value);
                   }}
-                  placeholder="Nhập số tiền"
+                  placeholder={t("form.amountPlaceholder")}
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div>
                 <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
-                  Lấy từ ví
+                  {t("form.sourceWallet")}
                 </label>
                 <select
                   value={addMoneyFromWallet}
                   onChange={(e) => setAddMoneyFromWallet(e.target.value)}
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">-- Chọn ví nguồn --</option>
+                  <option value="">{t("form.selectSourceWallet")}</option>
                   {wallets
                     .filter((w) => {
                       const goal = goals.find((g) => g.id === addMoneyGoalId);
@@ -725,7 +724,7 @@ export default function Goals() {
                     })
                     .map((w) => (
                       <option key={w.id} value={w.id}>
-                        {w.name} ({w.balance.toLocaleString("vi-VN")} đ)
+                        {w.name} ({w.balance.toLocaleString()} {t("currency")})
                       </option>
                     ))}
                 </select>
@@ -736,7 +735,7 @@ export default function Goals() {
                   className="flex-1 bg-black text-white px-6 py-2.5"
                   type="submit"
                 >
-                  Xác nhận
+                  {t("actions.confirm")}
                 </Button>
 
                 <Button
@@ -750,7 +749,7 @@ export default function Goals() {
                   }}
                   type="button"
                 >
-                  Hủy
+                  {t("actions.cancel")}
                 </Button>
               </div>
             </form>

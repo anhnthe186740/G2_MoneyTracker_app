@@ -1,10 +1,12 @@
 // src/pages/Login.tsx
 import { useState, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Loader2, Mail, Lock } from 'lucide-react';
 
 export default function Login() {
+  const { t } = useTranslation('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,9 +22,9 @@ export default function Login() {
 
     const success = await login(email, password);
     if (success) {
-      navigate('/dashboard'); // chuyển về dashboard
+      navigate('/dashboard');
     } else {
-      setError('Email/username hoặc mật khẩu không đúng');
+      setError(t('error'));
     }
     setLoading(false);
   };
@@ -33,20 +35,20 @@ export default function Login() {
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <div className="bg-indigo-600 rounded-2xl p-4 shadow-lg">
-            <span className="text-white text-4xl font-bold">₫</span>
+            <span className="text-white text-4xl font-bold">{t('logoSymbol')}</span>
           </div>
         </div>
 
         <div className="bg-white rounded-3xl shadow-2xl p-8">
           <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">
-            Đăng nhập tài khoản
+            {t('title')}
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email
+                {t('email')}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
@@ -54,7 +56,7 @@ export default function Login() {
                   type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="example@email.com"
+                  placeholder={t('emailPlaceholder')}
                   className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
                   required
                 />
@@ -64,7 +66,7 @@ export default function Login() {
             {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Mật khẩu
+                {t('password')}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
@@ -72,7 +74,7 @@ export default function Login() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••"
+                  placeholder={t('passwordPlaceholder')}
                   className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
                   required
                 />
@@ -87,7 +89,7 @@ export default function Login() {
             {/* Forgot password */}
             <div className="text-right">
               <a href="#" className="text-indigo-600 text-sm hover:underline">
-                Quên mật khẩu?
+                {t('forgotPassword')}
               </a>
             </div>
 
@@ -100,10 +102,10 @@ export default function Login() {
               {loading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  Đang đăng nhập...
+                  {t('loggingIn')}
                 </>
               ) : (
-                'Đăng nhập'
+                t('loginButton')
               )}
             </button>
           </form>
@@ -111,22 +113,22 @@ export default function Login() {
           {/* Divider */}
           <div className="flex items-center my-8">
             <div className="flex-1 border-t border-gray-300"></div>
-            <span className="px-4 text-gray-500 text-sm">Hoặc</span>
+            <span className="px-4 text-gray-500 text-sm">{t('or')}</span>
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
 
           {/* Register link */}
           <p className="text-center mt-8 text-gray-600">
-            Chưa có tài khoản?{' '}
+            {t('noAccount')}{' '}
             <Link to="/register" className="text-indigo-600 font-semibold hover:underline">
-              Đăng ký ngay
+              {t('registerNow')}
             </Link>
           </p>
 
           {/* Back home */}
           <div className="text-center mt-6">
             <Link to="/" className="text-gray-500 text-sm hover:text-gray-700">
-              ← Quay lại trang chủ
+              {t('backHome')}
             </Link>
           </div>
         </div>

@@ -2,17 +2,16 @@
   "menu": {
     "dashboard": "Dashboard",
     "transactions": "Transactions",
-    "accounts": "Accounts",
+    "wallets": "Wallets",
     "budget": "Budget",
     "goals": "Goals",
     "recurring": "Recurring",
-    "analytics": "Analytics",
     "notifications": "Notifications",
     "profile": "Profile",
     "settings": "Settings",
     "export": "Export Reports"
   },
   "logout": "Logout",
-  "logoutConfirm": "Are you sure you want to logout?"
+  "logoutConfirm": "Are you sure you want to logout?",
+  "user": "User"
 }
-

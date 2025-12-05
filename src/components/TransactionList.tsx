@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { Trash2, Filter, ArrowUpDown, Edit } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { TransactionContext } from '../context/TransactionContext';
 import type { Category, Wallet, Transaction } from '../types';
 import { format } from 'date-fns';
@@ -13,6 +14,7 @@ interface TransactionListProps {
 }
 
 export default function TransactionList({ userId, wallets, categories, onUpdate, onEdit }: TransactionListProps) {
+    const { t } = useTranslation('transactions');
     const transactionContext = useContext(TransactionContext);
     if (!transactionContext) {
         throw new Error('TransactionList must be used within TransactionProvider');
@@ -179,21 +181,21 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
                                     <td className={`py-3 px-4 text-right font-semibold ${transaction.type === 'INCOME' ? 'text-green-600' : 'text-red-600'
                                         }`}>
                                         {transaction.type === 'INCOME' ? '+' : '-'}
-                                        {transaction.amount.toLocaleString('vi-VN')} ₫
+                                        {transaction.amount.toLocaleString()} {t('currency')}
                                     </td>
                                     <td className="py-3 px-4 text-center">
                                         <div className="flex justify-center gap-2">
                                             <button
                                                 onClick={() => onEdit(transaction)}
                                                 className="text-blue-600 hover:text-blue-800"
-                                                title="Sửa"
+                                                title={t('actions.edit')}
                                             >
                                                 <Edit size={18} />
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(transaction.id)}
                                                 className="text-red-600 hover:text-red-800"
-                                                title="Xóa"
+                                                title={t('actions.delete')}
                                             >
                                                 <Trash2 size={18} />
                                             </button>

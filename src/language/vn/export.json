@@ -1,5 +1,47 @@
 {
   "title": "Xuất báo cáo",
-  "comingSoon": "bổ sung các tính năng."
+  "subtitle": "Xuất dữ liệu tài chính của bạn",
+  "loading": "Đang tải...",
+  "exportOptions": {
+    "title": "Tùy chọn xuất",
+    "format": "Định dạng",
+    "dateRange": "Khoảng thời gian",
+    "dataType": "Loại dữ liệu"
+  },
+  "formats": {
+    "pdf": "PDF",
+    "excel": "Excel",
+    "csv": "CSV"
+  },
+  "dateRanges": {
+    "thisMonth": "Tháng này",
+    "lastMonth": "Tháng trước",
+    "last3Months": "3 tháng gần nhất",
+    "last6Months": "6 tháng gần nhất",
+    "thisYear": "Năm nay",
+    "custom": "Tùy chỉnh"
+  },
+  "dataTypes": {
+    "all": "Tất cả",
+    "transactions": "Giao dịch",
+    "budgets": "Ngân sách",
+    "goals": "Mục tiêu",
+    "summary": "Tổng hợp"
+  },
+  "actions": {
+    "export": "Xuất báo cáo",
+    "preview": "Xem trước",
+    "download": "Tải xuống"
+  },
+  "labels": {
+    "startDate": "Từ ngày",
+    "endDate": "Đến ngày",
+    "includeCharts": "Bao gồm biểu đồ",
+    "includeSummary": "Bao gồm tổng hợp"
+  },
+  "toast": {
+    "exportSuccess": "Xuất báo cáo thành công!",
+    "exportError": "Không thể xuất báo cáo",
+    "downloading": "Đang tải xuống..."
+  }
 }
-

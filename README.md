@@ -11,11 +11,11 @@ Cách lấy code + chạy lần đầu (chỉ làm 1 lần):
 3. Cài dependencies:
    npm install
 
-   npm install i18next react-i18next i18next-browser-languagedetector    (cái này để sử dụng ngôn ngữ)
+   npm install i18next react-i18next i18next-browser-languagedetector (cái này để sử dụng ngôn ngữ)
 4. Chạy project:
    npm run dev
 
-Quy tắc làm việc:
+Quy tắc làm việc: 
 
 1. Luôn pull develop mới nhất:
    git checkout develop

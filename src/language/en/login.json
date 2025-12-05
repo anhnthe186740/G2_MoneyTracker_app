@@ -1,5 +1,6 @@
 {
   "title": "Login to Account",
+  "logoSymbol": "₫",
   "email": "Email",
   "emailPlaceholder": "example@email.com",
   "password": "Password",

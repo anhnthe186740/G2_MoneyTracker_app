@@ -1,5 +1,46 @@
 {
-  "title": "Profile",
-  "comingSoon": "Features coming soon."
+  "title": "Personal Information",
+  "subtitle": "Manage your account information",
+  "user": "User",
+  "changeAvatar": "Change avatar",
+  "accountInfo": {
+    "title": "Account Information",
+    "fullName": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "edit": "Edit",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "cancel": "Cancel"
+  },
+  "security": {
+    "title": "Security",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "processing": "Processing...",
+    "description": "For account security, you should regularly change your password and use a strong password."
+  },
+  "details": {
+    "title": "Account Details",
+    "createdAt": "Account Created",
+    "loginStatus": "Login Status",
+    "loggedIn": "Logged In",
+    "loginMethod": "Login Method",
+    "emailPassword": "Email & Password"
+  },
+  "validation": {
+    "nameRequired": "Full name is required!",
+    "emailRequired": "Email is required!",
+    "emailInvalid": "Email must contain @",
+    "passwordMismatch": "Password confirmation does not match!",
+    "passwordIncorrect": "Current password is incorrect!"
+  },
+  "messages": {
+    "updateSuccess": "Information updated successfully!",
+    "updateError": "Error updating information.",
+    "passwordSuccess": "Password changed successfully!",
+    "serverError": "Server error."
+  }
 }
-

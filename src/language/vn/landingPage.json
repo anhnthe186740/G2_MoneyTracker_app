@@ -1,5 +1,58 @@
 {
-  "title": "Trang chủ",
-  "comingSoon": "bổ sung các tính năng."
+  "nav": {
+    "features": "Tính năng",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "login": "Đăng nhập",
+    "register": "Đăng ký"
+  },
+  "hero": {
+    "title": "Quản lý tài chính cá nhân thông minh",
+    "subtitle": "Theo dõi chi tiêu, lập ngân sách và đạt được mục tiêu tài chính của bạn với MoneyTracker",
+    "cta": "Bắt đầu ngay",
+    "ctaSecondary": "Tìm hiểu thêm"
+  },
+  "features": {
+    "title": "Tính năng nổi bật",
+    "subtitle": "Tất cả những gì bạn cần để quản lý tài chính hiệu quả",
+    "tracking": {
+      "title": "Theo dõi chi tiêu",
+      "description": "Ghi lại mọi giao dịch thu chi một cách dễ dàng và trực quan"
+    },
+    "budget": {
+      "title": "Lập ngân sách",
+      "description": "Đặt giới hạn chi tiêu theo danh mục và nhận thông báo khi gần vượt"
+    },
+    "goals": {
+      "title": "Mục tiêu tiết kiệm",
+      "description": "Đặt mục tiêu và theo dõi tiến độ tiết kiệm của bạn"
+    },
+    "reports": {
+      "title": "Báo cáo chi tiết",
+      "description": "Phân tích xu hướng chi tiêu với biểu đồ và báo cáo trực quan"
+    },
+    "multiWallet": {
+      "title": "Đa ví",
+      "description": "Quản lý nhiều tài khoản: tiền mặt, ngân hàng, ví điện tử"
+    },
+    "recurring": {
+      "title": "Giao dịch định kỳ",
+      "description": "Tự động hóa các khoản chi/thu lặp lại hàng tháng"
+    }
+  },
+  "stats": {
+    "users": "Người dùng",
+    "transactions": "Giao dịch",
+    "saved": "Tiết kiệm được"
+  },
+  "cta": {
+    "title": "Sẵn sàng kiểm soát tài chính?",
+    "subtitle": "Tham gia cùng hàng nghìn người dùng đã cải thiện quản lý tài chính với MoneyTracker",
+    "button": "Đăng ký miễn phí"
+  },
+  "footer": {
+    "copyright": "© {{year}} MoneyTracker. Tất cả quyền được bảo lưu.",
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản sử dụng"
+  }
 }
-

@@ -1,5 +1,21 @@
 {
   "title": "Notifications",
-  "comingSoon": "Features coming soon."
+  "subtitle": "You have {{count}} unread notifications",
+  "loading": "Loading notifications...",
+  "filter": {
+    "label": "Filter notifications:",
+    "all": "All",
+    "unread": "Unread ({{count}})",
+    "read": "Read ({{count}})"
+  },
+  "actions": {
+    "markAllRead": "Mark all as read",
+    "markRead": "Mark as read"
+  },
+  "empty": "No notifications",
+  "new": "New",
+  "toast": {
+    "markedRead": "Marked as read",
+    "markedAllRead": "Marked all as read"
+  }
 }
-

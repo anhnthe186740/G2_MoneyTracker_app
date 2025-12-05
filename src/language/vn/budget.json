@@ -1,5 +1,75 @@
 {
   "title": "Ngân sách",
-  "comingSoon": "bổ sung các tính năng."
+  "currency": "₫",
+  "summary": {
+    "totalBudgets": "Tổng số ngân sách",
+    "active": "Đang hoạt động",
+    "totalLimit": "Tổng hạn mức"
+  },
+  "filter": {
+    "all": "Tất cả",
+    "active": "Đang hoạt động",
+    "expired": "Hết hạn",
+    "cancelled": "Đã hủy"
+  },
+  "actions": {
+    "addBudget": "Thêm ngân sách",
+    "edit": "Chỉnh sửa",
+    "cancel": "Hủy ngân sách",
+    "delete": "Xóa"
+  },
+  "currentBudgets": "Các ngân sách hiện tại",
+  "modal": {
+    "addTitle": "Thêm ngân sách mới",
+    "editTitle": "Chỉnh sửa ngân sách",
+    "categoryLabel": "Danh mục chi tiêu",
+    "categoryPlaceholder": "-- Chọn danh mục --",
+    "limitLabel": "Hạn mức tối đa (VND)",
+    "limitPlaceholder": "Ví dụ: 5000000",
+    "startDateLabel": "Bắt đầu từ ngày",
+    "endDateLabel": "Kết thúc vào ngày",
+    "descriptionLabel": "Ghi chú (không bắt buộc)",
+    "descriptionPlaceholder": "Ví dụ: Ngân sách ăn uống tháng 12...",
+    "cancel": "Hủy bỏ",
+    "saving": "Đang lưu...",
+    "update": "Cập nhật",
+    "create": "Tạo mới",
+    "errors": {
+      "requiredFields": "Vui lòng điền đầy đủ các trường bắt buộc.",
+      "invalidLimit": "Hạn mức phải là số lớn hơn 0.",
+      "invalidDateRange": "Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.",
+      "conflict": "Bạn đã có một ngân sách khác cho danh mục này trong khoảng thời gian trùng lặp. Vui lòng chỉnh lại ngày hoặc chọn danh mục khác.",
+      "saveError": "Không thể lưu ngân sách. Vui lòng thử lại.",
+      "systemError": "Lỗi hệ thống: {{error}}"
+    }
+  },
+  "status": {
+    "active": "Đang hoạt động",
+    "expired": "Hết hạn",
+    "cancelled": "Đã hủy",
+    "notStarted": "Chưa bắt đầu",
+    "overBudget": "Vượt ngân sách"
+  },
+  "labels": {
+    "category": "Danh mục",
+    "categoryUnknown": "Danh mục không xác định",
+    "categoryDeleted": "Danh mục đã bị xóa",
+    "limit": "Hạn mức",
+    "spent": "Đã chi",
+    "remaining": "Còn lại",
+    "period": "Thời gian",
+    "daysLeft": "còn {{days}} ngày",
+    "daysUntilStart": "bắt đầu sau {{days}} ngày",
+    "daysOverdue": "quá hạn {{days}} ngày",
+    "noEndDate": "Không có ngày kết thúc"
+  },
+  "empty": {
+    "title": "Chưa có ngân sách nào",
+    "description": "Bắt đầu tạo ngân sách để quản lý chi tiêu của bạn",
+    "noResults": "Không có ngân sách nào phù hợp với bộ lọc"
+  },
+  "confirm": {
+    "cancel": "Hủy ngân sách cho danh mục \"{{category}}\"?",
+    "delete": "Xóa vĩnh viễn ngân sách này? Hành động không thể hoàn tác."
+  }
 }
-

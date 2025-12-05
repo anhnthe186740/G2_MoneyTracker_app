@@ -4,20 +4,18 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
 import { useBudgetContext } from '../context/BudgetContext';
 import { useCategoryContext } from '../context/CategoryContext';
 import type { Budget } from '../types';
 import BudgetModal from '../components/BudgetModal';
 
-const formatCurrency = (value: number) =>
-  value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-
 const formatDate = (value?: string | null) => {
   if (!value) return '—';
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return '—';
-  return d.toLocaleDateString('vi-VN');
+  return d.toLocaleDateString();
 };
 
 type FilterStatus = 'ALL' | 'ACTIVE' | 'EXPIRED' | 'CANCELLED';
@@ -81,9 +79,13 @@ const getTimeStatus = (start_date?: string | null, end_date?: string | null) => 
 };
 
 export default function BudgetPage() {
+  const { t } = useTranslation('budget');
   const auth = useContext(AuthContext);
   if (!auth) throw new Error('Budget page must be used inside AuthProvider');
   const { user } = auth;
+
+  const formatCurrency = (value: number) => 
+    `${value.toLocaleString()} ${t('currency')}`;
 
   const {
     budgets,
@@ -120,7 +122,7 @@ export default function BudgetPage() {
 
     // Trường hợp dữ liệu cũ / lỗi không có categoryId
     if (categoryId === null) {
-      return 'Danh mục không xác định';
+      return t('labels.categoryUnknown');
     }
 
     // Dùng so sánh lỏng để tránh lệch kiểu string / number
@@ -128,7 +130,7 @@ export default function BudgetPage() {
 
     // Nếu không tìm thấy, có thể là danh mục đã bị xóa
     if (!category) {
-      return 'Danh mục đã bị xóa';
+      return t('labels.categoryDeleted');
     }
 
     return category.name;
@@ -181,7 +183,7 @@ export default function BudgetPage() {
   const handleCancelBudget = async (budget: Budget) => {
     if (budget.status !== 'ACTIVE') return;
     const ok = window.confirm(
-      `Hủy ngân sách cho danh mục "${getCategoryName(budget)}"?`
+      t('confirm.cancel', { category: getCategoryName(budget) })
     );
     if (!ok) return;
     try {
@@ -192,9 +194,7 @@ export default function BudgetPage() {
   };
 
   const handleDeleteBudget = async (budget: Budget) => {
-    const ok = window.confirm(
-      'Xóa vĩnh viễn ngân sách này? Hành động không thể hoàn tác.'
-    );
+    const ok = window.confirm(t('confirm.delete'));
     if (!ok) return;
     try {
       await deleteBudget(budget.id);
@@ -249,7 +249,7 @@ export default function BudgetPage() {
       {/* Header */}
       <header className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Ngân sách
+          {t('title')}
         </h1>
       </header>
 
@@ -261,7 +261,7 @@ export default function BudgetPage() {
           <div className="relative">
             <div className="flex items-center justify-between">
               <p className="text-xs font-semibold uppercase tracking-wider text-blue-700 dark:text-blue-300">
-                Tổng số ngân sách
+                {t('summary.totalBudgets')}
               </p>
               <svg className="h-8 w-8 text-blue-500/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -280,7 +280,7 @@ export default function BudgetPage() {
           <div className="relative">
             <div className="flex items-center justify-between">
               <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
-                Đang hoạt động
+                {t('summary.active')}
               </p>
               <svg className="h-8 w-8 text-emerald-500/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -299,7 +299,7 @@ export default function BudgetPage() {
           <div className="relative">
             <div className="flex items-center justify-between">
               <p className="text-xs font-semibold uppercase tracking-wider text-violet-700 dark:text-violet-300">
-                Tổng hạn mức
+                {t('summary.totalLimit')}
               </p>
               <svg className="h-8 w-8 text-violet-500/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -324,7 +324,7 @@ export default function BudgetPage() {
             </div>
             <div>
               <h2 className="text-lg font-bold text-foreground">
-                Các ngân sách hiện tại
+                {t('currentBudgets')}
               </h2>
 
             </div>
@@ -339,17 +339,17 @@ export default function BudgetPage() {
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              <span>Thêm ngân sách</span>
+              <span>{t('actions.addBudget')}</span>
             </button>
 
 
             <div className="inline-flex rounded-full bg-muted p-1 text-xs">
               {(
                 [
-                  ['ALL', 'Tất cả'],
-                  ['ACTIVE', 'Đang hoạt động'],
-                  ['EXPIRED', 'Hết hạn'],
-                  ['CANCELLED', 'Đã hủy'],
+                  ['ALL', t('filter.all')],
+                  ['ACTIVE', t('filter.active')],
+                  ['EXPIRED', t('filter.expired')],
+                  ['CANCELLED', t('filter.cancelled')],
                 ] as [FilterStatus, string][]
               ).map(([value, label]) => {
                 const active = statusFilter === value;
@@ -377,8 +377,8 @@ export default function BudgetPage() {
           {filteredBudgets.length === 0 ? (
             <div className="p-6 text-center text-sm text-muted-foreground">
               {budgets.length === 0
-                ? 'Chưa có ngân sách nào. Hãy tạo ngân sách mới.'
-                : 'Không có ngân sách nào khớp với bộ lọc.'}
+                ? t('empty.title')
+                : t('empty.noResults')}
             </div>
           ) : (
             <table className="w-full text-sm">
@@ -554,17 +554,17 @@ export default function BudgetPage() {
                           {st === 'ACTIVE' ? (
                             <>
                               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                              <span>Đang hoạt động</span>
+                              <span>{t('status.active')}</span>
                             </>
                           ) : st === 'EXPIRED' ? (
                             <>
                               <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                              <span>Hết hạn</span>
+                              <span>{t('status.expired')}</span>
                             </>
                           ) : (
                             <>
                               <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
-                              <span>Đã hủy</span>
+                              <span>{t('status.cancelled')}</span>
                             </>
                           )}
                         </span>

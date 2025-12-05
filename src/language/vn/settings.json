@@ -1,26 +1,59 @@
 {
   "title": "Cài đặt hệ thống",
-  "subtitle": "Tùy chỉnh giao diện và hành vi ứng dụng",
+  "subtitle": "Tùy chỉnh giao diện và hành vi ứng dụng theo ý thích của bạn",
   "display": {
+    "label": "Giao diện",
     "title": "Giao diện",
-    "heading": "Chế độ hiển thị",
+    "description": "Chọn chế độ hiển thị phù hợp với bạn",
     "lightMode": {
       "title": "Chế độ sáng",
-      "description": "Tông màu sáng, sắc nét"
+      "description": "Tông màu sáng, sắc nét, phù hợp ban ngày"
     },
     "darkMode": {
       "title": "Chế độ tối",
-      "description": "Tối giản, dịu mắt ban đêm"
+      "description": "Tối giản, dịu mắt, phù hợp ban đêm"
     }
   },
   "language": {
+    "label": "Ngôn ngữ & Tiền tệ",
     "title": "Ngôn ngữ & Tiền tệ",
-    "heading": "Tùy chọn hiển thị",
-    "languageLabel": "Ngôn ngữ",
-    "currencyLabel": "Đơn vị tiền tệ"
+    "description": "Tùy chọn hiển thị theo khu vực",
+    "languageLabel": "Ngôn ngữ hiển thị",
+    "currencyLabel": "Đơn vị tiền tệ",
+    "options": {
+      "vi": "🇻🇳 Tiếng Việt",
+      "en": "🇺🇸 English"
+    },
+    "currencies": {
+      "VND": "💰 VNĐ - Việt Nam Đồng",
+      "USD": "💵 USD - US Dollar",
+      "EUR": "💶 EUR - Euro"
+    }
   },
   "notifications": {
-    "title": "Thông báo"
+    "label": "Thông báo",
+    "title": "Thông báo",
+    "description": "Quản lý các loại thông báo bạn muốn nhận",
+    "budgetAlerts": {
+      "title": "Cảnh báo ngân sách",
+      "description": "Thông báo khi chi tiêu gần đạt giới hạn"
+    },
+    "transactionAlerts": {
+      "title": "Giao dịch mới",
+      "description": "Thông báo khi có giao dịch được ghi nhận"
+    },
+    "weeklyReport": {
+      "title": "Báo cáo hàng tuần",
+      "description": "Nhận tổng kết chi tiêu mỗi tuần qua email"
+    },
+    "sound": {
+      "title": "Âm thanh thông báo",
+      "description": "Phát âm thanh khi có thông báo mới"
+    }
+  },
+  "actions": {
+    "reset": "Đặt lại mặc định",
+    "save": "Lưu thay đổi",
+    "saved": "Đã lưu!"
   }
 }
-

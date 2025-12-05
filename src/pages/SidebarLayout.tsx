@@ -1,9 +1,11 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useContext, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import Sidebar, { SIDEBAR_MENU } from '../components/Sidebar';
 import { AuthContext } from '../context/AuthContext';
 
 export default function SidebarLayout() {
+  const { t } = useTranslation('sidebar');
   const auth = useContext(AuthContext);
   if (!auth) {
     throw new Error('SidebarLayout must be used within AuthProvider');
@@ -34,7 +36,7 @@ export default function SidebarLayout() {
         currentScreen={currentScreen}
         onNavigate={handleNavigate}
         onLogout={logout}
-        userName={user?.fullName ?? 'Người dùng'}
+        userName={user?.fullName ?? t('user')}
       />
 
       <main className="ml-64 flex-1 bg-muted/10">
@@ -45,4 +47,3 @@ export default function SidebarLayout() {
     </div>
   );
 }
-

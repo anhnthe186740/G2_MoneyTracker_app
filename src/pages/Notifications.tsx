@@ -1,4 +1,5 @@
 import { useState, useContext, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
 import { useNotificationsContext } from '../context/NotificationContext';
 import type { Notification } from '../types';
@@ -8,6 +9,7 @@ import { toast } from 'sonner';
 import Pagination from '../components/common/Pagination';
 
 export default function Notifications() {
+  const { t } = useTranslation('notifications');
   const auth = useContext(AuthContext);
   if (!auth) {
     throw new Error('AuthContext must be used inside AuthProvider');
@@ -23,9 +25,9 @@ export default function Notifications() {
 
   const [filter, setFilter] = useState<'all' | 'unread' | 'read'>('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Số thông báo mỗi trang
+  const itemsPerPage = 5;
 
-  // Icon cho từng loại thông báo
+  // Icon for each notification type
   const getIcon = (type: Notification['type']) => {
     switch (type) {
       case 'WARNING': return <AlertCircle className="w-6 h-6 text-orange-600" />;
@@ -36,7 +38,7 @@ export default function Notifications() {
     }
   };
 
-  // Màu nền icon
+  // Background color for icon
   const getBgColor = (type: Notification['type']) => {
     switch (type) {
       case 'WARNING': return 'bg-orange-50';
@@ -49,16 +51,16 @@ export default function Notifications() {
 
   const handleMarkAsReadClick = async (id: string) => {
     await markAsRead(id);
-    toast.success('Đã đánh dấu là đã đọc');
+    toast.success(t('toast.markedRead'));
   };
 
   const handleMarkAllAsReadClick = async () => {
     if (unreadCount === 0) return;
     await markAllAsRead();
-    toast.success('Đã đánh dấu tất cả là đã đọc');
+    toast.success(t('toast.markedAllRead'));
   };
 
-  // Lọc theo trạng thái
+  // Filter by status
   const filteredNotifications = useMemo(() => {
     return notifications.filter(n => {
       if (filter === 'unread') return !n.is_read;
@@ -67,50 +69,49 @@ export default function Notifications() {
     });
   }, [notifications, filter]);
 
-  // Tính toán phân trang
+  // Pagination calculation
   const totalPages = Math.ceil(filteredNotifications.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedNotifications = filteredNotifications.slice(startIndex, endIndex);
 
-  // Reset về trang 1 khi filter thay đổi
+  // Reset to page 1 when filter changes
   const handleFilterChange = (newFilter: 'all' | 'unread' | 'read') => {
     setFilter(newFilter);
     setCurrentPage(1);
   };
 
-  // Xử lý đổi trang
+  // Handle page change
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll lên đầu trang khi đổi trang
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64">Đang tải thông báo...</div>;
+    return <div className="flex justify-center items-center h-64">{t('loading')}</div>;
   }
 
   return (
     <section className="space-y-6">
       <header className="space-y-1">
-        <h1 className="text-3xl font-bold text-gray-900">Thông báo</h1>
+        <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
         <p className="text-gray-600">
-          Bạn có {unreadCount} thông báo chưa đọc
+          {t('subtitle', { count: unreadCount })}
         </p>
       </header>
 
       {/* Filter */}
       <div className="bg-white p-4 rounded-xl shadow-md border border-gray-200 flex items-center gap-4">
-        <label className="text-gray-700">Lọc thông báo:</label>
+        <label className="text-gray-700">{t('filter.label')}</label>
 
         <select
           value={filter}
           onChange={(e) => handleFilterChange(e.target.value as 'all' | 'unread' | 'read')}
           className="w-48 border border-gray-300 rounded-lg p-2 bg-white"
         >
-          <option value="all">Tất cả</option>
-          <option value="unread">Chưa đọc ({unreadCount})</option>
-          <option value="read">Đã đọc ({notifications.length - unreadCount})</option>
+          <option value="all">{t('filter.all')}</option>
+          <option value="unread">{t('filter.unread', { count: unreadCount })}</option>
+          <option value="read">{t('filter.read', { count: notifications.length - unreadCount })}</option>
         </select>
 
         <button
@@ -119,11 +120,11 @@ export default function Notifications() {
           className="ml-auto bg-primary text-white py-2 px-4 rounded-lg disabled:opacity-50 hover:bg-indigo-600 transition"
         >
           <Check className="w-4 h-4 inline mr-2" />
-          Đánh dấu tất cả đã đọc
+          {t('actions.markAllRead')}
         </button>
       </div>
 
-      {/* Pagination - Đặt ở trên */}
+      {/* Pagination - Top */}
       {filteredNotifications.length > 0 && totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
@@ -139,7 +140,7 @@ export default function Notifications() {
       {filteredNotifications.length === 0 ? (
         <div className="bg-white p-12 text-center rounded-xl shadow-md border border-gray-200">
           <Bell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">Không có thông báo nào</p>
+          <p className="text-gray-500">{t('empty')}</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -173,7 +174,7 @@ export default function Notifications() {
 
                         {!notification.is_read && (
                           <span className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded mt-1">
-                            Mới
+                            {t('new')}
                           </span>
                         )}
                       </div>
@@ -184,7 +185,7 @@ export default function Notifications() {
                           className="text-gray-500 hover:text-gray-700 flex items-center"
                         >
                           <Check className="w-4 h-4 mr-1" />
-                          Đánh dấu đã đọc
+                          {t('actions.markRead')}
                         </button>
                       )}
                     </div>

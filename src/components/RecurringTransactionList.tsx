@@ -1,5 +1,6 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useMemo } from 'react';
 import { Trash2, ToggleLeft, ToggleRight, Edit } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { RecurringTransactionContext } from '../context/RecurringTransactionContext';
 import type { Category, Wallet, RecurringTransaction } from '../types';
 import { format } from 'date-fns';
@@ -12,13 +13,6 @@ interface RecurringTransactionListProps {
     onEdit: (transaction: RecurringTransaction) => void;
 }
 
-const frequencyLabels = {
-    DAILY: 'Hàng ngày',
-    WEEKLY: 'Hàng tuần',
-    MONTHLY: 'Hàng tháng',
-    YEARLY: 'Hàng năm',
-};
-
 export default function RecurringTransactionList({
     userId,
     wallets,
@@ -26,6 +20,7 @@ export default function RecurringTransactionList({
     onUpdate,
     onEdit
 }: RecurringTransactionListProps) {
+    const { t } = useTranslation('recurring');
     const recurringTransactionContext = useContext(RecurringTransactionContext);
     if (!recurringTransactionContext) {
         throw new Error('RecurringTransactionList must be used within RecurringTransactionProvider');
@@ -39,6 +34,13 @@ export default function RecurringTransactionList({
         deleteRecurringTransaction: deleteRecurringTransactionContext
     } = recurringTransactionContext;
 
+    const frequencyLabels = useMemo(() => ({
+        DAILY: t('frequency.daily'),
+        WEEKLY: t('frequency.weekly'),
+        MONTHLY: t('frequency.monthly'),
+        YEARLY: t('frequency.yearly'),
+    }), [t]);
+
     useEffect(() => {
         console.log('[RecurringTransactionList] Loading recurring transactions for user:', userId);
         getRecurringTransactions(userId);
@@ -50,7 +52,7 @@ export default function RecurringTransactionList({
             onUpdate();
         } catch (error) {
             console.error('Error toggling recurring transaction:', error);
-            alert('Có lỗi xảy ra khi cập nhật trạng thái');
+            alert(t('toast.error'));
         }
     };
 
@@ -162,14 +164,14 @@ export default function RecurringTransactionList({
                                     <td className={`py-3 px-4 text-right font-semibold ${rt.type === 'INCOME' ? 'text-green-600' : 'text-red-600'
                                         }`}>
                                         {rt.type === 'INCOME' ? '+' : '-'}
-                                        {rt.amount.toLocaleString('vi-VN')} ₫
+                                        {rt.amount.toLocaleString()} {t('currency')}
                                     </td>
                                     <td className="py-3 px-4 text-center">
                                         <button
                                             onClick={() => handleToggleActive(rt.id, rt.isActive)}
                                             className={`${rt.isActive ? 'text-green-600' : 'text-gray-400'
                                                 } hover:opacity-70`}
-                                            title={rt.isActive ? 'Tắt' : 'Bật'}
+                                            title={rt.isActive ? t('toggle.on') : t('toggle.off')}
                                         >
                                             {rt.isActive ? <ToggleRight size={24} /> : <ToggleLeft size={24} />}
                                         </button>

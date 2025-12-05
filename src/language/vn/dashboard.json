@@ -1,5 +1,30 @@
 {
   "title": "Tổng quan tài chính",
-  "financialStatus": "Tình hình tài chính hiện tại"
+  "welcome": "Chào mừng bạn trở lại!",
+  "currency": "đ",
+  "hiddenBalance": "••••••••",
+  "pleaseLogin": "Vui lòng đăng nhập để xem thông tin tài chính",
+  "totalBalance": "Tổng số dư tài khoản",
+  "loading": "Đang tải...",
+  "walletCount": "{{count}} ví • Cập nhật vừa xong",
+  "incomeExpense": "Thu chi {{period}}",
+  "totalIncome": "Tổng thu nhập",
+  "totalExpense": "Tổng chi tiêu",
+  "expenseByCategory": "Chi tiêu theo danh mục {{period}}",
+  "noExpense": "Chưa có chi tiêu trong kỳ",
+  "goalProgress": "Tiến độ mục tiêu tài chính",
+  "noGoals": "Chưa có mục tiêu nào",
+  "period": {
+    "thisMonth": "Tháng này",
+    "sixMonths": "6 tháng",
+    "thisYear": "Năm nay",
+    "monthLabel": "Tháng {{month}}/{{year}}",
+    "sixMonthsLabel": "6 tháng gần nhất",
+    "yearLabel": "Năm {{year}}"
+  },
+  "deadline": {
+    "overdue": "Đã quá hạn",
+    "today": "Hôm nay",
+    "daysLeft": "Còn {{days}} ngày"
+  }
 }
-

@@ -1,5 +1,6 @@
 {
   "title": "Register New Account",
+  "logoSymbol": "₫",
   "fullName": "Full Name",
   "fullNamePlaceholder": "John Doe",
   "email": "Email",

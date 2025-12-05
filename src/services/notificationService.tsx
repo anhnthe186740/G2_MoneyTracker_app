@@ -1,11 +1,8 @@
 import api from './api';
 
-// Format số tiền VND
+// Format số tiền - sẽ sử dụng locale mặc định của trình duyệt
 const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-  }).format(amount);
+  return amount.toLocaleString();
 };
 
 // Hàm gửi thông báo
