@@ -329,15 +329,10 @@ export default function Goals() {
                             ) : (
                               <span className="text-gray-500">
                                 {daysLeft !== null
-<<<<<<< HEAD
+
                                   ? t("card.daysLeft", { days: daysLeft })
                                   : t("card.progress", { percent })}
-=======
-                                  ? daysLeft < 0
-                                    ? `Đã quá hạn`
-                                    : `Còn ${daysLeft} ngày`
-                                  : `Tiến độ: ${percent}%`}
->>>>>>> d91560b9ac8526790bdbc65909184a444db93d66
+
                               </span>
                             )}
                           </div>
@@ -394,14 +389,10 @@ export default function Goals() {
 
                                 await api.delete(`/goals/${g.id}`);
                                 setGoals((p) => p.filter((x) => x.id !== g.id));
-<<<<<<< HEAD
+
                               } catch {
                                 alert(t("toast.deleteError"));
-=======
-                              } catch (error) {
-                                console.error("Lỗi xóa mục tiêu:", error);
-                                alert("Xóa mục tiêu thất bại: " + (error instanceof Error ? error.message : "Lỗi không xác định"));
->>>>>>> d91560b9ac8526790bdbc65909184a444db93d66
+
                               }
                             }}
                             className="border-none bg-transparent hover:bg-gray-100 cursor-pointer p-1 rounded transition-colors text-red-600 text-sm"
@@ -656,13 +647,10 @@ export default function Goals() {
                   alert(t("validation.amountMustBePositive"));
                   return;
                 }
-<<<<<<< HEAD
+
                 if (isNaN(fromWalletId) || fromWalletId <= 0) {
                   alert(t("validation.selectWallet"));
-=======
-                if (!fromWalletId) {
-                  alert("Vui lòng chọn ví nguồn");
->>>>>>> d91560b9ac8526790bdbc65909184a444db93d66
+
                   return;
                 }
 
@@ -749,7 +737,7 @@ export default function Goals() {
                   onChange={(e) => setAddMoneyFromWallet(e.target.value)}
                   className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-<<<<<<< HEAD
+
                   <option value="">{t("form.selectSourceWallet")}</option>
                   {wallets
                     .filter((w) => {
@@ -761,14 +749,7 @@ export default function Goals() {
                         {w.name} ({w.balance.toLocaleString()} {t("currency")})
                       </option>
                     ))}
-=======
-                  <option value="">-- Chọn ví nguồn --</option>
-                  {wallets.map((w) => (
-                    <option key={w.id} value={w.id}>
-                      {w.name} ({w.balance.toLocaleString("vi-VN")} đ)
-                    </option>
-                  ))}
->>>>>>> d91560b9ac8526790bdbc65909184a444db93d66
+
                 </select>
               </div>
 
