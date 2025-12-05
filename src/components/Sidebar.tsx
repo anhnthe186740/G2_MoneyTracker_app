@@ -25,11 +25,10 @@ export interface SidebarMenuItem {
 export const SIDEBAR_MENU: SidebarMenuItem[] = [
   { id: 'dashboard', icon: LayoutDashboard, label: 'Tổng quan', path: '/dashboard' },
   { id: 'transactions', icon: Receipt, label: 'Giao dịch', path: '/transactions' },
-  { id: 'accounts', icon: Wallet, label: 'Tài khoản', path: '/accounts' },
+  { id: 'wallets', icon: Wallet, label: 'Ví', path: '/wallets' },
   { id: 'budget', icon: PiggyBank, label: 'Ngân sách', path: '/budget' },
   { id: 'goals', icon: Target, label: 'Mục tiêu', path: '/goals' },
   { id: 'recurring', icon: RefreshCw, label: 'Định kỳ', path: '/recurring' },
-  { id: 'analytics', icon: BarChart3, label: 'Phân tích', path: '/analytics' },
   { id: 'notifications', icon: Bell, label: 'Thông báo', path: '/notifications' },
   { id: 'profile', icon: User, label: 'Hồ sơ', path: '/profile' },
   { id: 'settings', icon: Settings, label: 'Cài đặt', path: '/settings' },
@@ -84,8 +83,8 @@ export default function Sidebar({ currentScreen, onNavigate, onLogout, userName 
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${isActive
-                    ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-800'
-                    : 'text-foreground hover:bg-accent'
+                  ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-800'
+                  : 'text-foreground hover:bg-accent'
                   }`}
               >
                 <div className="flex items-center gap-3">

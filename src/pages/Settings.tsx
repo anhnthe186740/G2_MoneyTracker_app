@@ -2,6 +2,7 @@ import { Bell, Globe, Moon, Sun } from 'lucide-react';
 
 export default function Settings() {
   return (
+<<<<<<< HEAD
     <section className="space-y-6 max-w-4xl">
       <div>
         <h1 className="text-3xl text-foreground mb-2">Cài đặt hệ thống</h1>
@@ -89,6 +90,14 @@ export default function Settings() {
         >
           Lưu thay đổi
         </button>
+=======
+    <section className="space-y-6">
+      <header className="space-y-1">
+        <h1 className="text-3xl font-bold text-foreground">Cài đặt</h1>
+      </header>
+      <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-muted-foreground">
+        bổ sung các tính năng.
+>>>>>>> 01165d2db2ca8dd9d7e54fa4bcb558245c526a31
       </div>
     </section>
   );
