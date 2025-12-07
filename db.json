@@ -142,36 +142,116 @@
       "icon": "local_hospital"
     },
     {
-      "id": "8",
-      "user_id": 2,
-      "name": "Ăn uống",
+      "id": "651f",
+      "user_id": "7bc0",
+      "name": "ăn uống ",
       "type": "EXPENSE",
-      "color": "#e74c3c",
-      "icon": "restaurant"
+      "color": "#EC4899",
+      "icon": "🍔"
     },
     {
-      "id": "9",
-      "user_id": 2,
+      "id": "061d",
+      "user_id": "7bc0",
+      "name": "du lịch",
+      "type": "EXPENSE",
+      "color": "#3B82F6",
+      "icon": "🏠"
+    },
+    {
+      "id": "6deb",
+      "user_id": "7bc0",
       "name": "Lương",
       "type": "INCOME",
-      "color": "#2ecc71",
-      "icon": "account_balance"
+      "color": "#3B82F6",
+      "icon": "🍔"
     },
     {
-      "id": "10",
-      "user_id": 2,
-      "name": "Mua sắm",
-      "type": "EXPENSE",
-      "color": "#9b59b6",
-      "icon": "shopping_cart"
+      "id": "aba4",
+      "user_id": "7bc0",
+      "name": "tiền trọ",
+      "type": "INCOME",
+      "color": "#8B5CF6",
+      "icon": "🏠"
     },
     {
-      "id": "11",
-      "user_id": 2,
-      "name": "Làm đẹp",
+      "id": "80b0",
+      "user_id": "7bc0",
+      "name": "mama",
+      "type": "INCOME",
+      "color": "#EF4444",
+      "icon": "⚡"
+    },
+    {
+      "id": "647d",
+      "user_id": "7bc0",
+      "name": "ăn ",
       "type": "EXPENSE",
-      "color": "#d35400",
-      "icon": "spa"
+      "color": "#3B82F6",
+      "icon": "🍔"
+    },
+    {
+      "id": "eadc",
+      "user_id": "2",
+      "name": "Lương",
+      "type": "INCOME",
+      "color": "#3B82F6",
+      "icon": "📁"
+    },
+    {
+      "id": "d07e",
+      "user_id": "2",
+      "name": "Ăn uống",
+      "type": "EXPENSE",
+      "color": "#3B82F6",
+      "icon": "📁"
+    },
+    {
+      "id": "d6ae",
+      "user_id": "2",
+      "name": "Đi chơi",
+      "type": "EXPENSE",
+      "color": "#3B82F6",
+      "icon": "📁"
+    },
+    {
+      "id": "f32d",
+      "user_id": "2",
+      "name": "Du lịch",
+      "type": "EXPENSE",
+      "color": "#EF4444",
+      "icon": "💸"
+    },
+    {
+      "id": "71b7",
+      "user_id": "2",
+      "name": "Tiền thu trọ",
+      "type": "INCOME",
+      "color": "#10B981",
+      "icon": "💰"
+    },
+    {
+      "id": "8030",
+      "user_id": "2",
+      "name": "Đi bay",
+      "type": "EXPENSE",
+      "color": "#EF4444",
+      "icon": "💸"
+    },
+    {
+      "id": "19f6",
+      "user_id": "1805",
+      "name": "hi",
+      "type": "EXPENSE",
+      "color": "#EF4444",
+      "icon": "💸"
+    },
+    {
+      "id": "7340",
+      "user_id": "7699",
+      "name": "ăn",
+      "type": "EXPENSE",
+      "color": "#EF4444",
+      "icon": "💸"
     }
   ],
   "transactions": [
@@ -443,7 +523,37 @@
       "end_date": "2026-10-24T00:00:00.000Z",
       "next_date": "2025-12-22T17:00:00.000Z",
       "is_active": true,
-      "created_at": "2025-11-23T17:06:47.887Z"
+      "created_at": "2025-12-02T09:10:23.810Z"
+    },
+    {
+      "id": "5556",
+      "user_id": "7699",
+      "wallet_id": "1000",
+      "category_id": "7340",
+      "amount": 99999999,
+      "type": "EXPENSE",
+      "description": "tiền ăn hàng ngày",
+      "frequency": "DAILY",
+      "start_date": "2025-12-03T00:00:00.000Z",
+      "end_date": "2026-02-03T00:00:00.000Z",
+      "next_date": "2025-12-03T17:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-03T16:39:32.360Z"
+    },
+    {
+      "id": "0239",
+      "user_id": "2",
+      "wallet_id": "1002",
+      "category_id": "d6ae",
+      "amount": 7654320,
+      "type": "EXPENSE",
+      "description": "Đi TTTM",
+      "frequency": "DAILY",
+      "start_date": "2025-12-04T00:00:00.000Z",
+      "end_date": "2026-02-04T00:00:00.000Z",
+      "next_date": "2025-12-05T00:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-04T07:32:59.250Z"
     }
   ],
   "goals": [
