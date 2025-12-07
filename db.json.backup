@@ -35,24 +35,6 @@
       "fullName": "1",
       "currency": "VND",
       "createdAt": "2025-11-21T08:07:48.010Z"
-    },
-    {
-      "id": "7bc0",
-      "username": "HuyMT",
-      "email": "HuyMT@email.com",
-      "password": "123",
-      "fullName": "HuyMT",
-      "currency": "VND",
-      "createdAt": "2025-11-25T16:28:13.247Z"
-    },
-    {
-      "id": "1805",
-      "username": "AnhBN2",
-      "email": "AnhBN2@email.com",
-      "password": "123",
-      "fullName": "AnhBN2",
-      "currency": "VND",
-      "createdAt": "2025-12-03T09:47:20.371Z"
     }
   ],
   "wallets": [
@@ -61,7 +43,7 @@
       "user_id": 1,
       "name": "Vietcombank",
       "type": "BANK",
-      "balance": 1234568013,
+      "balance": 40500000,
       "color": "#3498db",
       "created_at": "2024-01-15T09:00:00Z"
     },
@@ -79,7 +61,7 @@
       "user_id": 2,
       "name": "Techcombank",
       "type": "BANK",
-      "balance": 100439874,
+      "balance": 15800000,
       "color": "#e74c3c",
       "created_at": "2024-02-10T15:00:00Z"
     },
@@ -88,7 +70,7 @@
       "user_id": 2,
       "name": "Tiền mặt",
       "type": "CASH",
-      "balance": 15570000,
+      "balance": 2500000,
       "color": "#2ecc71",
       "created_at": "2024-02-15T10:20:00Z"
     },
@@ -102,49 +84,13 @@
       "created_at": "2024-03-01T14:00:00Z"
     },
     {
-      "id": "8b56",
-      "user_id": "7bc0",
-      "name": "TP bank",
+      "id": "05122025131211416",
+      "name": "BUI NGOC ANH",
       "type": "BANK",
-      "balance": 100000000,
-      "color": "#3B82F6",
-      "created_at": "2025-11-26T02:13:00.597Z"
-    },
-    {
-      "id": "5206",
-      "user_id": "7bc0",
-      "name": "MB bank",
-      "type": "BANK",
-      "balance": 100000000,
-      "color": "#F97316",
-      "created_at": "2025-11-26T02:23:45.700Z"
-    },
-    {
-      "id": "08a5",
-      "user_id": "2",
-      "name": "Agri",
-      "type": "BANK",
-      "balance": 10000000,
-      "color": "#3B82F6",
-      "created_at": "2025-11-27T07:05:15.332Z"
-    },
-    {
-      "id": "2697",
-      "user_id": "2",
-      "name": "Momo",
-      "type": "E_WALLET",
-      "balance": 199900032,
-      "color": "#3B82F6",
-      "created_at": "2025-11-27T07:10:51.344Z"
-    },
-    {
-      "id": "1",
-      "name": "bla bla",
-      "type": "BANK",
-      "balance": 1234567890,
+      "balance": 1134555546,
       "color": "#3498db",
       "note": "",
-      "created_at": "2025-12-03T16:28:11.181Z",
+      "created_at": "2025-12-05T06:12:11.416Z",
       "user_id": "7699"
     }
   ],
@@ -316,6 +262,14 @@
       "type": "EXPENSE",
       "color": "#EF4444",
       "icon": "💸"
+    },
+    {
+      "id": "7e77",
+      "user_id": "7699",
+      "name": "Lương",
+      "type": "INCOME",
+      "color": "#10B981",
+      "icon": "💰"
     }
   ],
   "transactions": [
@@ -397,6 +351,50 @@
       "created_at": "2024-03-19T14:30:00Z"
     },
     {
+      "id": "8",
+      "user_id": 2,
+      "wallet_id": 3,
+      "category_id": 9,
+      "amount": 15000000,
+      "type": "INCOME",
+      "description": "Lương tháng 3 công ty XYZ",
+      "date": "2024-03-10T10:00:00Z",
+      "created_at": "2024-03-10T10:30:00Z"
+    },
+    {
+      "id": "9",
+      "user_id": 2,
+      "wallet_id": 3,
+      "category_id": 8,
+      "amount": 80000,
+      "type": "EXPENSE",
+      "description": "Cafe sáng Highlands",
+      "date": "2024-03-18T08:00:00Z",
+      "created_at": "2024-03-18T08:15:00Z"
+    },
+    {
+      "id": "10",
+      "user_id": 2,
+      "wallet_id": 4,
+      "category_id": 10,
+      "amount": 450000,
+      "type": "EXPENSE",
+      "description": "Mua mỹ phẩm Innisfree",
+      "date": "2024-03-19T14:20:00Z",
+      "created_at": "2024-03-19T14:30:00Z"
+    },
+    {
+      "id": "11",
+      "user_id": 2,
+      "wallet_id": 3,
+      "category_id": 11,
+      "amount": 650000,
+      "type": "EXPENSE",
+      "description": "Spa chăm sóc da",
+      "date": "2024-03-20T16:00:00Z",
+      "created_at": "2024-03-20T16:30:00Z"
+    },
+    {
       "id": "12",
       "user_id": 1,
       "wallet_id": 1,
@@ -430,238 +428,85 @@
       "created_at": "2024-03-22T12:30:00Z"
     },
     {
-      "id": "d81a",
-      "user_id": "7bc0",
-      "wallet_id": null,
-      "category_id": null,
-      "amount": 100000,
+      "id": "15",
+      "user_id": 2,
+      "wallet_id": 4,
+      "category_id": 8,
+      "amount": 120000,
       "type": "EXPENSE",
-      "description": "Đi chơi",
-      "date": "2025-11-26T00:00:00.000Z",
-      "created_at": "2025-11-26T02:14:27.449Z"
+      "description": "Ăn trưa văn phòng",
+      "date": "2024-03-22T00:00:00.000Z",
+      "created_at": "2024-03-22T12:45:00Z"
     },
     {
-      "id": "42fd",
-      "user_id": "7bc0",
-      "wallet_id": null,
-      "category_id": null,
-      "amount": 100000,
+      "id": "d1b4",
+      "user_id": "1",
+      "wallet_id": "1",
+      "category_id": "1",
+      "amount": 2000000,
       "type": "EXPENSE",
-      "description": "Đi chơi",
-      "date": "2025-11-26T00:00:00.000Z",
-      "created_at": "2025-11-26T02:14:27.625Z"
+      "description": "",
+      "date": "2025-12-05T00:00:00.000Z",
+      "created_at": "2025-12-05T05:41:55.000Z"
     },
     {
-      "id": "1aca",
-      "user_id": "7bc0",
-      "wallet_id": null,
-      "category_id": null,
-      "amount": 100000,
-      "type": "EXPENSE",
-      "description": "Đi chơi",
-      "date": "2025-11-26T00:00:00.000Z",
-      "created_at": "2025-11-26T02:14:27.849Z"
-    },
-    {
-      "id": "2d73",
-      "user_id": "7bc0",
-      "wallet_id": null,
-      "category_id": null,
-      "amount": 100000,
-      "type": "EXPENSE",
-      "description": "Đi chơi",
-      "date": "2025-11-26T00:00:00.000Z",
-      "created_at": "2025-11-26T02:14:58.878Z"
-    },
-    {
-      "id": "2bd0",
-      "user_id": "7bc0",
-      "wallet_id": null,
-      "category_id": null,
-      "amount": 100000,
-      "type": "EXPENSE",
-      "description": "Đi chơi",
-      "date": "2025-11-26T00:00:00.000Z",
-      "created_at": "2025-11-26T02:14:59.052Z"
-    },
-    {
-      "id": "b111",
-      "user_id": "7bc0",
-      "wallet_id": "NaN",
-      "category_id": "NaN",
-      "amount": 1234567,
-      "type": "EXPENSE",
-      "description": "ăn chơi",
-      "date": "2025-11-26T00:00:00.000Z",
-      "created_at": "2025-11-26T02:33:39.127Z"
-    },
-    {
-      "id": "026c",
-      "user_id": "7bc0",
-      "wallet_id": "NaN",
-      "category_id": "NaN",
-      "amount": 1234567,
-      "type": "EXPENSE",
-      "description": "ăn chơi",
-      "date": "2025-11-26T00:00:00.000Z",
-      "created_at": "2025-11-26T02:34:08.597Z"
-    },
-    {
-      "id": "e3c0",
-      "user_id": "7bc0",
-      "wallet_id": "NaN",
-      "category_id": "NaN",
-      "amount": 987654,
-      "type": "EXPENSE",
-      "description": "hi`",
-      "date": "2025-11-26T00:00:00.000Z",
-      "created_at": "2025-11-26T02:35:15.727Z"
-    },
-    {
-      "id": "6f0b",
-      "user_id": "7bc0",
-      "wallet_id": "NaN",
-      "category_id": "NaN",
-      "amount": 100000,
-      "type": "INCOME",
-      "description": "a",
-      "date": "2025-11-26T00:00:00.000Z",
-      "created_at": "2025-11-26T02:38:04.575Z"
-    },
-    {
-      "id": "2d0e",
-      "user_id": "7bc0",
-      "wallet_id": "NaN",
-      "category_id": "NaN",
-      "amount": 100000,
-      "type": "INCOME",
-      "description": "h",
-      "date": "2025-11-26T00:00:00.000Z",
-      "created_at": "2025-11-26T02:57:46.432Z"
-    },
-    {
-      "id": "8d7e",
-      "user_id": "7bc0",
-      "wallet_id": "NaN",
-      "category_id": "NaN",
-      "amount": 123456,
-      "type": "INCOME",
-      "description": "y",
-      "date": "2025-11-26T00:00:00.000Z",
-      "created_at": "2025-11-26T02:59:57.715Z"
-    },
-    {
-      "id": "f331",
+      "id": "73b3",
       "user_id": "2",
-      "wallet_id": "2697",
-      "category_id": "f32d",
-      "amount": 3000000,
+      "wallet_id": 3,
+      "category_id": 10,
+      "amount": 2800000,
       "type": "EXPENSE",
-      "description": "DU lịch",
-      "date": "2025-12-02T00:00:00.000Z",
-      "created_at": "2025-12-02T07:33:55.870Z"
+      "description": "Tiền trọ",
+      "date": "2025-12-04T17:00:00.000Z",
+      "created_at": "2025-12-05T06:03:46.385Z",
+      "recurring_transaction_id": "1eea"
     },
     {
-      "id": "0ebd",
+      "id": "c294",
       "user_id": "2",
-      "wallet_id": "2697",
-      "category_id": "d07e",
-      "amount": 18212121,
+      "wallet_id": 3,
+      "category_id": 10,
+      "amount": 2800000,
       "type": "EXPENSE",
-      "description": "Ăn phở landmark",
-      "date": "2025-12-02T00:00:00.000Z",
-      "created_at": "2025-12-02T07:42:10.238Z"
+      "description": "Tiền trọ",
+      "date": "2025-12-04T17:00:00.000Z",
+      "created_at": "2025-12-05T06:03:46.386Z",
+      "recurring_transaction_id": "1eea"
     },
     {
-      "id": "ab7a",
-      "user_id": "2",
-      "wallet_id": "4",
-      "category_id": "eadc",
-      "amount": 10000000,
-      "type": "INCOME",
-      "description": "Lương",
-      "date": "2025-12-02T00:00:00.000Z",
-      "created_at": "2025-12-02T07:51:57.712Z"
-    },
-    {
-      "id": "759d",
-      "user_id": "2",
-      "wallet_id": "2697",
-      "category_id": "d07e",
-      "amount": 100000,
-      "type": "EXPENSE",
-      "description": "ăn chơi",
-      "date": "2025-12-02T00:00:00.000Z",
-      "created_at": "2025-12-02T07:53:26.946Z"
-    },
-    {
-      "id": "1af0",
-      "user_id": "2",
-      "wallet_id": "3",
-      "category_id": "71b7",
-      "amount": 4000000,
-      "type": "INCOME",
-      "description": "Đi chơiiii",
-      "date": "2025-12-01T17:00:00.000Z",
-      "created_at": "2025-12-02T07:57:43.172Z",
-      "recurring_transaction_id": "6b3f"
-    },
-    {
-      "id": "c6ad",
-      "user_id": "2",
-      "wallet_id": "08a5",
-      "category_id": "f32d",
-      "amount": 1234567,
-      "type": "EXPENSE",
-      "description": "Đi hạ long",
-      "date": "2025-12-01T17:00:00.000Z",
-      "created_at": "2025-12-02T08:02:14.254Z",
-      "recurring_transaction_id": "c0fa"
-    },
-    {
-      "id": "2056",
-      "user_id": "2",
-      "wallet_id": "3",
-      "category_id": "d6ae",
-      "amount": 123456,
-      "type": "EXPENSE",
-      "description": "đi chs",
-      "date": "2025-11-02T00:00:00.000Z",
-      "created_at": "2025-12-02T09:09:52.967Z"
-    },
-    {
-      "id": "b24f",
-      "user_id": "2",
-      "wallet_id": "3",
-      "category_id": "8030",
-      "amount": 12345678,
-      "type": "EXPENSE",
-      "description": "Đi bar",
-      "date": "2025-12-01T17:00:00.000Z",
-      "created_at": "2025-12-02T09:10:57.921Z",
-      "recurring_transaction_id": "06ad"
-    },
-    {
-      "id": "8a39",
-      "user_id": "2",
-      "wallet_id": "3",
-      "category_id": "8030",
+      "id": "b1c1",
+      "user_id": "7699",
+      "wallet_id": "05122025131211416",
+      "category_id": "7340",
       "amount": 12345,
       "type": "EXPENSE",
-      "description": "đi ra linh lang",
-      "date": "2025-10-03T00:00:00.000Z",
-      "created_at": "2025-12-03T02:36:58.621Z"
+      "description": "đi ăn",
+      "date": "2025-12-05T00:00:00.000Z",
+      "created_at": "2025-12-05T06:12:32.645Z"
     },
     {
-      "id": "9c2d",
+      "id": "5b43",
       "user_id": "7699",
-      "wallet_id": "1",
+      "wallet_id": "05122025131211416",
       "category_id": "7340",
-      "amount": 1234,
+      "amount": 99999999,
       "type": "EXPENSE",
-      "description": "a",
-      "date": "2025-12-03T00:00:00.000Z",
-      "created_at": "2025-12-03T16:29:45.148Z"
+      "description": "tiền ăn hàng ngày",
+      "date": "2025-12-04T00:00:00.000Z",
+      "created_at": "2025-12-05T06:12:39.755Z",
+      "recurring_transaction_id": "5556"
+    },
+    {
+      "id": "fa70",
+      "user_id": "7699",
+      "wallet_id": "5122025131211416",
+      "category_id": "7340",
+      "amount": 9876,
+      "type": "EXPENSE",
+      "description": "",
+      "date": "2025-12-04T17:00:00.000Z",
+      "created_at": "2025-12-05T06:14:18.592Z",
+      "recurring_transaction_id": "9925"
     }
   ],
   "recurring_transactions": [
@@ -697,77 +542,101 @@
       "next_date": "2024-04-01"
     },
     {
-      "id": "c5a0",
-      "user_id": "7bc0",
-      "wallet_id": null,
-      "category_id": null,
-      "amount": 1000000,
-      "type": "EXPENSE",
-      "description": "tiền du lịch",
+      "id": "4",
+      "user_id": 2,
+      "wallet_id": 3,
+      "category_id": 9,
+      "amount": 15000000,
+      "description": "Cho ngọc anh đi học",
       "frequency": "MONTHLY",
-      "start_date": "2025-11-26T00:00:00.000Z",
-      "next_date": "2025-11-26T00:00:00.000Z",
-      "is_active": true,
-      "created_at": "2025-11-26T03:14:11.456Z"
+      "next_date": "2024-04-10T00:00:00.000Z",
+      "is_active": false,
+      "start_date": "2025-11-23T00:00:00.000Z"
     },
     {
-      "id": "d051",
-      "user_id": "7bc0",
-      "wallet_id": null,
-      "category_id": null,
-      "amount": 999998,
+      "id": "5",
+      "user_id": 2,
+      "wallet_id": 4,
+      "category_id": 11,
+      "amount": 800000,
+      "description": "Chăm sóc da định kỳ",
+      "frequency": "MONTHLY",
+      "next_date": "2024-04-15"
+    },
+    {
+      "id": "1eea",
+      "user_id": "2",
+      "wallet_id": 3,
+      "category_id": 10,
+      "amount": 2800000,
+      "type": "EXPENSE",
+      "description": "Tiền trọ",
+      "frequency": "MONTHLY",
+      "start_date": "2025-11-23T00:00:00.000Z",
+      "end_date": "2026-10-24T00:00:00.000Z",
+      "next_date": "2025-12-22T17:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-02T09:10:23.810Z"
+    },
+    {
+      "id": "5556",
+      "user_id": "7699",
+      "wallet_id": "5122025131211416",
+      "category_id": "7340",
+      "amount": 99999999,
       "type": "EXPENSE",
       "description": "tiền ăn hàng ngày",
       "frequency": "DAILY",
-      "start_date": "2025-11-25T00:00:00.000Z",
-      "next_date": "2025-11-26T00:00:00.000Z",
+      "start_date": "2025-12-03T00:00:00.000Z",
+      "end_date": "2026-02-03T00:00:00.000Z",
+      "next_date": "2025-12-03T00:00:00.000Z",
       "is_active": true,
-      "created_at": "2025-11-26T03:19:35.308Z"
+      "created_at": "2025-12-03T16:39:32.360Z"
     },
     {
-      "id": "6b3f",
+      "id": "0239",
       "user_id": "2",
-      "wallet_id": "3",
-      "category_id": "71b7",
-      "amount": 4000000,
-      "type": "INCOME",
-      "description": "Đi chơiiii",
-      "frequency": "MONTHLY",
-      "start_date": "2025-12-02T00:00:00.000Z",
-      "next_date": "2026-01-01T17:00:00.000Z",
-      "is_active": true,
-      "created_at": "2025-12-02T07:53:59.273Z",
-      "end_date": "2026-01-02T00:00:00.000Z"
-    },
-    {
-      "id": "c0fa",
-      "user_id": "2",
-      "wallet_id": "08a5",
-      "category_id": "f32d",
-      "amount": 1234567,
+      "wallet_id": "1002",
+      "category_id": "d6ae",
+      "amount": 7654320,
       "type": "EXPENSE",
-      "description": "Đi hạ long",
-      "frequency": "WEEKLY",
-      "start_date": "2025-12-02T00:00:00.000Z",
-      "end_date": "2026-01-02T00:00:00.000Z",
-      "next_date": "2025-12-08T17:00:00.000Z",
+      "description": "Đi TTTM",
+      "frequency": "DAILY",
+      "start_date": "2025-12-04T00:00:00.000Z",
+      "end_date": "2026-02-04T00:00:00.000Z",
+      "next_date": "2025-12-05T00:00:00.000Z",
       "is_active": true,
-      "created_at": "2025-12-02T07:59:46.189Z"
+      "created_at": "2025-12-04T07:32:59.250Z"
     },
     {
-      "id": "06ad",
-      "user_id": "2",
-      "wallet_id": "3",
-      "category_id": "8030",
-      "amount": 12345678,
+      "id": "9925",
+      "user_id": "7699",
+      "wallet_id": "5122025131211416",
+      "category_id": "7340",
+      "amount": 9876,
       "type": "EXPENSE",
-      "description": "Đi bar",
-      "frequency": "MONTHLY",
-      "start_date": "2025-12-02T00:00:00.000Z",
-      "end_date": "2026-01-02T00:00:00.000Z",
-      "next_date": "2026-01-01T17:00:00.000Z",
+      "description": "ăn hàng ngày\n",
+      "frequency": "DAILY",
+      "start_date": "2025-12-05T00:00:00.000Z",
+      "next_date": "2025-12-05T00:00:00.000Z",
       "is_active": true,
-      "created_at": "2025-12-02T09:10:23.810Z"
+      "created_at": "2025-12-05T06:14:04.227Z",
+      "end_date": "2026-01-05T00:00:00.000Z"
+    },
+    {
+      "id": "6bdb",
+      "user_id": "7699",
+      "wallet_id": "5122025131211416",
+      "category_id": "7340",
+      "amount": 45678,
+      "type": "EXPENSE",
+      "description": "chơi",
+      "frequency": "DAILY",
+      "start_date": "2025-12-05T00:00:00.000Z",
+      "end_date": "2026-01-05T00:00:00.000Z",
+      "next_date": "2025-12-06T00:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-05T06:15:53.912Z"
     }
   ],
   "goals": [
@@ -777,7 +646,9 @@
       "name": "Mua MacBook Pro M3",
       "target_amount": 45000000,
       "current_amount": 25000000,
-      "deadline": "2024-08-30"
+      "deadline": "2024-08-30",
+      "status": "In Progress",
+      "wallet_id": 1
     },
     {
       "id": "2",
@@ -785,7 +656,9 @@
       "name": "Du lịch Đà Lạt",
       "target_amount": 8000000,
       "current_amount": 3200000,
-      "deadline": "2024-05-30"
+      "deadline": "2024-05-30",
+      "status": "In Progress",
+      "wallet_id": 1
     },
     {
       "id": "3",
@@ -793,7 +666,9 @@
       "name": "Học khoá React Master",
       "target_amount": 5000000,
       "current_amount": 2000000,
-      "deadline": "2024-06-15"
+      "deadline": "2024-06-15",
+      "status": "In Progress",
+      "wallet_id": 2
     },
     {
       "id": "4",
@@ -801,7 +676,9 @@
       "name": "Mua iPhone 15 Pro",
       "target_amount": 28000000,
       "current_amount": 12500000,
-      "deadline": "2024-09-20"
+      "deadline": "2024-09-20",
+      "status": "In Progress",
+      "wallet_id": 3
     },
     {
       "id": "5",
@@ -809,7 +686,9 @@
       "name": "Du lịch Phú Quốc",
       "target_amount": 12000000,
       "current_amount": 4500000,
-      "deadline": "2024-07-10"
+      "deadline": "2024-07-10",
+      "status": "In Progress",
+      "wallet_id": 3
     }
   ],
   "notifications": [
@@ -828,7 +707,7 @@
       "type": "WARNING",
       "title": "Chi tiêu tháng 3",
       "message": "Bạn đã chi 4,245,000₫ trong tháng 3. Hãy xem lại các khoản chi nhé!",
-      "is_read": true,
+      "is_read": false,
       "created_at": "2024-03-22T08:00:00Z"
     },
     {
@@ -837,7 +716,7 @@
       "type": "SUCCESS",
       "title": "Tiến độ mục tiêu",
       "message": "Bạn đã đạt 55% mục tiêu 'Mua MacBook Pro M3'. Rất tốt!",
-      "is_read": true,
+      "is_read": false,
       "created_at": "2024-03-20T15:30:00Z"
     },
     {
@@ -846,7 +725,7 @@
       "type": "REMINDER",
       "title": "Giao dịch định kỳ",
       "message": "Lương tháng sẽ được nhận vào ngày 05/04/2024.",
-      "is_read": true,
+      "is_read": false,
       "created_at": "2024-03-25T10:00:00Z"
     },
     {
@@ -882,7 +761,7 @@
       "type": "WARNING",
       "title": "Ví sắp cạn!",
       "message": "Số dư ví Tiền mặt của bạn còn dưới 200,000₫.",
-      "is_read": true,
+      "is_read": false,
       "created_at": "2024-03-26T08:20:00Z"
     },
     {
@@ -891,7 +770,7 @@
       "type": "REMINDER",
       "title": "Nhắc nhở tiết kiệm",
       "message": "Bạn còn 10 ngày để đạt mục tiêu tháng này.",
-      "is_read": true,
+      "is_read": false,
       "created_at": "2024-03-26T09:00:00Z"
     },
     {
@@ -900,7 +779,7 @@
       "type": "SUCCESS",
       "title": "Đã nhận 20,000₫ cashback",
       "message": "Chúc mừng! Bạn vừa nhận hoàn tiền từ ShopeePay.",
-      "is_read": true,
+      "is_read": false,
       "created_at": "2024-03-26T12:15:00Z"
     },
     {
@@ -920,6 +799,33 @@
       "message": "Bạn cần thanh toán hóa đơn Internet trước ngày 30/03.",
       "is_read": true,
       "created_at": "2024-03-26T14:10:00Z"
+    },
+    {
+      "id": "f319",
+      "user_id": 7699,
+      "type": "WARNING",
+      "title": "Giao dịch chi tiêu lớn",
+      "message": "Bạn vừa thực hiện một giao dịch chi tiêu lớn: 99,999,999 cho \"tiền ăn hàng ngày\". Hãy kiểm tra lại chi tiêu của mình!",
+      "is_read": true,
+      "created_at": "2025-12-05T06:12:53.648Z"
+    },
+    {
+      "id": "f20c",
+      "user_id": 7699,
+      "type": "WARNING",
+      "title": "Giao dịch chi tiêu lớn",
+      "message": "Bạn vừa thực hiện một giao dịch chi tiêu lớn: 99,999,999 cho \"tiền ăn hàng ngày\". Hãy kiểm tra lại chi tiêu của mình!",
+      "is_read": true,
+      "created_at": "2025-12-05T06:13:12.901Z"
+    },
+    {
+      "id": "92ed",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"chơi\" (45,678) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-05T06:15:53.928Z"
     }
   ],
   "app_settings": [
@@ -947,6 +853,78 @@
       "id": "5",
       "key": "date_format",
       "value": "dd/MM/yyyy"
+    }
+  ],
+  "budgets": [
+    {
+      "id": "3e3f",
+      "user_id": "1",
+      "category_id": "1",
+      "limit_amount": 6000000,
+      "start_date": "2025-11-30",
+      "end_date": "2025-12-30",
+      "description": "Ngân sách ăn uống tháng 12",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "3d09",
+      "user_id": "1",
+      "category_id": 3,
+      "limit_amount": 6000000,
+      "start_date": "2025-12-03",
+      "end_date": "2025-12-30",
+      "description": "Ngân sách ăn uống tháng 12",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "cb7c",
+      "user_id": "1",
+      "category_id": 4,
+      "limit_amount": 1000000,
+      "start_date": "2025-12-03",
+      "end_date": "2025-12-18",
+      "description": "Test",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "d474",
+      "user_id": "1",
+      "category_id": 1,
+      "limit_amount": 5000000,
+      "start_date": "2026-01-01",
+      "end_date": "2026-01-06",
+      "description": "",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "1e30",
+      "user_id": "1",
+      "category_id": 5,
+      "limit_amount": 200000,
+      "start_date": "2025-11-30",
+      "end_date": "2025-12-30",
+      "description": "",
+      "status": "CANCELLED"
+    },
+    {
+      "id": "6edb",
+      "user_id": "1",
+      "category_id": 7,
+      "limit_amount": 500000,
+      "start_date": "2026-01-01",
+      "end_date": "2026-01-21",
+      "description": "",
+      "status": "CANCELLED"
+    },
+    {
+      "id": "3b18",
+      "user_id": "1",
+      "category_id": 6,
+      "limit_amount": 1000000,
+      "start_date": "2025-11-21",
+      "end_date": "2025-12-18",
+      "description": "Test Ngân SÁch",
+      "status": "ACTIVE"
     }
   ]
 }
