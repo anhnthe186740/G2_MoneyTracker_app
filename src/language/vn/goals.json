@@ -5,6 +5,12 @@
   "loadError": "Tải dữ liệu thất bại",
   "invalidData": "Dữ liệu mục tiêu không hợp lệ",
   "currency": "đ",
+  "favorites": {
+    "title": "Mục tiêu yêu thích"
+  },
+  "allGoals": {
+    "title": "Các mục tiêu khác"
+  },
   "summary": {
     "totalGoals": "Tổng mục tiêu",
     "completed": "Đã hoàn thành",
@@ -23,10 +29,11 @@
     "notAvailable": "N/A",
     "completed": "✓ Hoàn thành",
     "daysLeft": "Còn {{days}} ngày",
+    "overdue": "Đã quá hạn",
     "progress": "Tiến độ: {{percent}}%",
     "current": "Hiện tại",
     "target": "Mục tiêu",
-    "percentComplete": "{{percent}}% hoàn thành",
+    "percentComplete": "hoàn thành",
     "remaining": "Còn thiếu"
   },
   "empty": {

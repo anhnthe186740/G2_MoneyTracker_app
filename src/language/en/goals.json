@@ -5,6 +5,12 @@
   "loadError": "Failed to load data",
   "invalidData": "Invalid goal data",
   "currency": "đ",
+  "favorites": {
+    "title": "Favorite Goals"
+  },
+  "allGoals": {
+    "title": "All Goals"
+  },
   "summary": {
     "totalGoals": "Total Goals",
     "completed": "Completed",
@@ -23,6 +29,7 @@
     "notAvailable": "N/A",
     "completed": "✓ Completed",
     "daysLeft": "{{days}} days left",
+    "overdue": "Overdue",
     "progress": "Progress: {{percent}}%",
     "current": "Current",
     "target": "Target",

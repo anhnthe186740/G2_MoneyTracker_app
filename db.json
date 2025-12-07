@@ -52,7 +52,7 @@
       "user_id": 1,
       "name": "Ví Momo",
       "type": "E_WALLET",
-      "balance": 7500000,
+      "balance": 7400000,
       "color": "#8e44ad",
       "created_at": "2024-01-20T11:30:00Z"
     },
@@ -431,17 +431,18 @@
       "current_amount": 25000000,
       "deadline": "2024-08-30",
       "status": "In Progress",
-      "wallet_id": 1
+      "wallet_id": 1,
+      "is_favorite": false
     },
     {
-      "id": "2",
-      "user_id": 1,
       "name": "Du lịch Đà Lạt",
-      "target_amount": 8000000,
-      "current_amount": 3200000,
+      "target_amount": 9000000,
+      "wallet_id": "1",
       "deadline": "2024-05-30",
       "status": "In Progress",
-      "wallet_id": 1
+      "current_amount": 3300000,
+      "user_id": 1,
+      "id": "2"
     },
     {
       "id": "3",
