@@ -7,14 +7,17 @@
   "walletCount": "ví",
   "actions": {
     "addWallet": "Thêm ví",
+    "addMoney": "Nạp tiền",
     "edit": "Chỉnh sửa",
     "delete": "Xóa"
   },
   "dialog": {
     "addTitle": "Thêm ví mới",
     "editTitle": "Chỉnh sửa ví",
+    "addMoneyTitle": "Nạp tiền vào ví",
     "addDescription": "Tạo ví mới",
-    "editDescription": "Cập nhật thông tin ví hiện tại của bạn"
+    "editDescription": "Cập nhật thông tin ví hiện tại của bạn",
+    "addMoneyDescription": "Nhập số tiền muốn nạp thêm vào ví"
   },
   "form": {
     "name": "Tên ví",
@@ -22,11 +25,16 @@
     "type": "Loại ví",
     "selectType": "Chọn loại ví",
     "balance": "Số dư ban đầu",
+    "amount": "Số tiền",
+    "amountPlaceholder": "Nhập số tiền muốn nạp",
+    "currentBalance": "Số dư hiện tại",
+    "newBalance": "Số dư sau khi nạp",
     "color": "Màu sắc",
     "note": "Ghi chú",
     "notePlaceholder": "Ghi chú về ví này...",
     "cancel": "Hủy",
-    "save": "Lưu"
+    "save": "Lưu",
+    "add": "Nạp tiền"
   },
   "types": {
     "CASH": "Tiền mặt",
@@ -44,9 +52,11 @@
   "toast": {
     "addSuccess": "Thêm ví thành công!",
     "updateSuccess": "Cập nhật ví thành công!",
+    "addMoneySuccess": "Nạp tiền thành công!",
     "deleteSuccess": "Xóa ví thành công!",
     "loadError": "Không thể tải danh sách ví",
     "saveError": "Không thể lưu ví",
+    "addMoneyError": "Không thể nạp tiền",
     "deleteError": "Không thể xóa ví",
     "duplicateError": "Đã tồn tại ví cùng tên và cùng loại! Vui lòng chọn tên khác hoặc loại khác."
   }
