@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Trash2, FolderOpen, RefreshCw } from 'lucide-react';
-import { useSearchParams } from 'react-router-dom';
+import { Plus, Trash2 } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { RecurringTransactionContext } from '../context/RecurringTransactionContext';
 import RecurringTransactionList from '../components/RecurringTransactionList';
@@ -29,136 +28,16 @@ interface CategoryResponse {
   icon: string;
 }
 
-type TabType = 'recurring' | 'categories';
-
-function CategoryManagementTab({
-  categories,
-  onUpdate,
-  onOpenCategoryForm
-}: {
-  categories: Category[];
-  onUpdate: () => void;
-  onOpenCategoryForm: () => void;
-}) {
-  const { t } = useTranslation('recurring');
-  
-  const handleDeleteCategory = async (categoryId: number | string, categoryName: string) => {
-    const confirmDelete = window.confirm(
-      t('categoryManagement.confirmDelete', { name: categoryName })
-    );
-
-    if (!confirmDelete) {
-      return;
-    }
-
-    try {
-      await api.delete(`/categories/${categoryId}`);
-      alert(t('categoryManagement.deleteSuccess'));
-      onUpdate();
-    } catch (error) {
-      console.error('Error deleting category:', error);
-      alert(t('categoryManagement.deleteError'));
-    }
-  };
-
-  const expenseCategories = categories.filter(c => c.type === 'EXPENSE');
-  const incomeCategories = categories.filter(c => c.type === 'INCOME');
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">{t('categoryManagement.title')}</h2>
-        <button
-          onClick={onOpenCategoryForm}
-          className="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 font-semibold text-white hover:bg-purple-700"
-        >
-          <Plus size={20} />
-          {t('categoryManagement.createCategory')}
-        </button>
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Expense Categories */}
-        <div className="rounded-2xl border border-border bg-card p-6">
-          <h3 className="mb-4 text-xl font-semibold text-red-500">
-            {t('categoryManagement.expense')} ({expenseCategories.length})
-          </h3>
-          {expenseCategories.length === 0 ? (
-            <p className="text-muted-foreground">{t('categoryManagement.noExpenseCategory')}</p>
-          ) : (
-            <div className="space-y-2">
-              {expenseCategories.map((category) => (
-                <div
-                  key={category.id}
-                  className="flex items-center justify-between rounded-lg border border-border bg-background p-3 hover:bg-accent"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="font-medium">{category.name}</span>
-</div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      console.log('Button clicked!', category.id, category.name);
-                      handleDeleteCategory(category.id, category.name);
-                    }}
-                    className="rounded-lg p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20"
-                    title="Xóa danh mục"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Income Categories */}
-        <div className="rounded-2xl border border-border bg-card p-6">
-          <h3 className="mb-4 text-xl font-semibold text-green-500">
-            {t('categoryManagement.income')} ({incomeCategories.length})
-          </h3>
-          {incomeCategories.length === 0 ? (
-            <p className="text-muted-foreground">{t('categoryManagement.noIncomeCategory')}</p>
-          ) : (
-            <div className="space-y-2">
-              {incomeCategories.map((category) => (
-                <div
-                  key={category.id}
-                  className="flex items-center justify-between rounded-lg border border-border bg-background p-3 hover:bg-accent"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="font-medium">{category.name}</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      console.log('Button clicked!', category.id, category.name);
-                      handleDeleteCategory(category.id, category.name);
-                    }}
-                    className="rounded-lg p-2 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20"
-                    title="Xóa danh mục"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Recurring() {
   const { t } = useTranslation('recurring');
-  const [searchParams, setSearchParams] = useSearchParams();
   const authContext = useContext(AuthContext);
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [showRecurringForm, setShowRecurringForm] = useState(false);
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [editRecurringTransaction, setEditRecurringTransaction] = useState<RecurringTransaction | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hasProcessedOnMount, setHasProcessedOnMount] = useState(false); // Flag to process only once
   const recurringContext = useContext(RecurringTransactionContext);
 
   if (!authContext || !authContext.user) {
@@ -172,19 +51,6 @@ export default function Recurring() {
   const { user } = authContext;
   const { processRecurringTransactions } = recurringContext;
 
-
-
-  const [showCategoryForm, setShowCategoryForm] = useState(false);
-
-
-  // Get active tab from URL params or default to 'recurring'
-  const activeTab = (searchParams.get('tab') as TabType) || 'recurring';
-
-  // Function to change tab
-  const changeTab = (tab: TabType) => {
-    setSearchParams({ tab });
-  };
-
   const loadData = async () => {
     try {
       setLoading(true);
@@ -196,7 +62,7 @@ export default function Recurring() {
 
       // Map snake_case to camelCase
       const mappedWallets = walletsRes.data.map((w: WalletResponse) => ({
-        id: Number(w.id),
+        id: w.id, // Keep as string or number
         userId: w.user_id,
         name: w.name,
         type: w.type as "BANK" | "E_WALLET" | "CASH",
@@ -206,7 +72,7 @@ export default function Recurring() {
       }));
 
       const mappedCategories = categoriesRes.data.map((c: CategoryResponse) => ({
-        id: Number(c.id),
+        id: c.id, // Keep as string or number
         userId: c.user_id,
         name: c.name,
         type: c.type as "INCOME" | "EXPENSE",
@@ -226,57 +92,68 @@ export default function Recurring() {
   };
 
   useEffect(() => {
-    const initializePage = async () => {
-      await loadData();
-      // Tự động xử lý giao dịch định kỳ khi vào trang
-      try {
-        console.log('=== RECURRING PAGE: Processing recurring transactions ===');
-        console.log('User ID:', user.id);
-        await processRecurringTransactions(user.id);
-        console.log('=== RECURRING PAGE: Transactions processed, reloading data ===');
-        // Reload data sau khi xử lý
-        await loadData();
-      } catch (error) {
-        console.error('=== RECURRING PAGE: Error processing recurring transactions ===', error);
-      }
-    };
-
-    initializePage();
+    loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.id]);
+
+  // Process recurring transactions chỉ 1 lần khi component mount lần đầu
+  useEffect(() => {
+    if (!hasProcessedOnMount) {
+      const processRecurring = async () => {
+        try {
+          console.log('=== RECURRING PAGE: Processing recurring transactions (first time only) ===');
+          await processRecurringTransactions(user.id);
+          setHasProcessedOnMount(true);
+          console.log('=== RECURRING PAGE: Processing complete ===');
+          // Reload data sau khi xử lý
+          await loadData();
+        } catch (error) {
+          console.error('=== RECURRING PAGE: Error processing ===', error);
+        }
+      };
+      processRecurring();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array = chỉ chạy 1 lần khi mount
 
   const handleUpdate = async () => {
     await loadData();
   };
 
-  const handleCleanupInvalidData = async () => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa tất cả giao dịch định kỳ có danh mục đã bị xóa?')) {
+  const handleDeleteAll = async () => {
+    if (!window.confirm('⚠️ BẠN CÓ CHẮC CHẮN MUỐN XÓA TẤT CẢ GIAO DỊCH ĐỊNH KỲ?\n\nLưu ý: Thao tác này sẽ xóa tất cả giao dịch định kỳ của bạn và KHÔNG THỂ HOÀN TÁC!')) {
+      return;
+    }
+
+    // Double confirmation
+    if (!window.confirm('Xác nhận lần cuối: Xóa hết tất cả giao dịch định kỳ?')) {
       return;
     }
 
     try {
       setLoading(true);
-      const validCategoryIds = categories.map(c => String(c.id));
 
       // Get all recurring transactions
       const recurringRes = await api.get(`/recurring_transactions?user_id=${user.id}`);
       const allRecurring = recurringRes.data;
 
-      // Find and delete invalid recurring transactions
-      let deletedCount = 0;
-for (const rt of allRecurring) {
-        const categoryId = String(rt.category_id);
-        if (!validCategoryIds.includes(categoryId)) {
-          await api.delete(`/recurring_transactions/${rt.id}`);
-          deletedCount++;
-        }
+      if (allRecurring.length === 0) {
+        alert('Không có giao dịch định kỳ nào để xóa');
+        return;
       }
 
-      alert(`Đã xóa ${deletedCount} giao dịch định kỳ không hợp lệ`);
+      // Delete all recurring transactions
+      let deletedCount = 0;
+      for (const rt of allRecurring) {
+        await api.delete(`/recurring_transactions/${rt.id}`);
+        deletedCount++;
+      }
+
+      alert(`✅ Đã xóa thành công ${deletedCount} giao dịch định kỳ`);
       await handleUpdate();
     } catch (error) {
-      console.error('Error cleaning up data:', error);
-      alert('Có lỗi xảy ra khi dọn dẹp dữ liệu');
+      console.error('Error deleting all recurring transactions:', error);
+      alert('❌ Có lỗi xảy ra khi xóa giao dịch định kỳ');
     } finally {
       setLoading(false);
     }
@@ -332,11 +209,6 @@ for (const rt of allRecurring) {
   // Check if user has wallets and categories
   const hasNoData = wallets.length === 0 || categories.length === 0;
 
-  const tabs = [
-    { id: 'recurring' as TabType, label: t('tabs.recurring'), icon: RefreshCw },
-    { id: 'categories' as TabType, label: t('tabs.categories'), icon: FolderOpen },
-  ];
-
   return (
     <section className="space-y-6">
       <header className="flex items-start justify-between">
@@ -347,7 +219,7 @@ for (const rt of allRecurring) {
       </header>
 
       {/* Warning if no wallets or categories */}
-      {hasNoData && activeTab === 'recurring' && (
+      {hasNoData && (
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
           <div className="flex items-start justify-between">
             <div className="flex">
@@ -369,30 +241,8 @@ for (const rt of allRecurring) {
         </div>
       )}
 
-      {/* Tabs Navigation */}
-      <div className="flex gap-2 border-b border-border">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => changeTab(tab.id)}
-              className={`flex items-center gap-2 px-6 py-3 font-medium transition-colors ${activeTab === tab.id
-                ? 'border-b-2 border-purple-600 text-purple-600'
-                : 'text-muted-foreground hover:text-foreground'
-                }`}
-            >
-              <Icon size={20} />
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Tab Content */}
-      <div>
-        {activeTab === 'recurring' && (
-          <div className="space-y-6">
+      {/* Main Content */}
+      <div className="space-y-6">
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-card rounded-lg shadow p-6 border border-border">
@@ -413,12 +263,12 @@ for (const rt of allRecurring) {
 
             <div className="flex justify-end gap-3">
               <button
-                onClick={handleCleanupInvalidData}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700"
-                title={t('actions.deleteAllTooltip')}
+                onClick={handleDeleteAll}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
+                title="Xóa tất cả giao dịch định kỳ"
               >
                 <Trash2 size={18} />
-                {t('actions.deleteAll')}
+                Xóa hết
               </button>
               <button
                 onClick={() => setShowRecurringForm(true)}
@@ -446,16 +296,6 @@ for (const rt of allRecurring) {
               />
             )}
           </div>
-        )}
-
-        {activeTab === 'categories' && (
-          <CategoryManagementTab
-            categories={categories}
-            onUpdate={handleUpdate}
-            onOpenCategoryForm={() => setShowCategoryForm(true)}
-          />
-        )}
-      </div>
 
       {/* Recurring Transaction Form Modal */}
       {showRecurringForm && (

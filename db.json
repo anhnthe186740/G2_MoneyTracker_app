@@ -39,7 +39,7 @@
   ],
   "wallets": [
     {
-      "id": "1",
+      "id": "1000",
       "user_id": 1,
       "name": "Vietcombank",
       "type": "BANK",
@@ -48,7 +48,7 @@
       "created_at": "2024-01-15T09:00:00Z"
     },
     {
-      "id": "2",
+      "id": "1001",
       "user_id": 1,
       "name": "Ví Momo",
       "type": "E_WALLET",
@@ -57,7 +57,7 @@
       "created_at": "2024-01-20T11:30:00Z"
     },
     {
-      "id": "3",
+      "id": "1002",
       "user_id": 2,
       "name": "Techcombank",
       "type": "BANK",
@@ -66,7 +66,7 @@
       "created_at": "2024-02-10T15:00:00Z"
     },
     {
-      "id": "4",
+      "id": "1003",
       "user_id": 2,
       "name": "Tiền mặt",
       "type": "CASH",
@@ -75,13 +75,23 @@
       "created_at": "2024-02-15T10:20:00Z"
     },
     {
-      "id": "5",
+      "id": "1004",
       "user_id": 1,
       "name": "VietinBank",
       "type": "BANK",
       "balance": 12000000,
       "color": "#16a085",
       "created_at": "2024-03-01T14:00:00Z"
+    },
+    {
+      "id": "1005",
+      "name": "BUI NGOC ANH",
+      "type": "BANK",
+      "balance": 2238291674,
+      "color": "#3498db",
+      "note": "",
+      "created_at": "2025-12-05T06:12:11.416Z",
+      "user_id": "7699"
     }
   ],
   "categories": [
@@ -252,13 +262,37 @@
       "type": "EXPENSE",
       "color": "#EF4444",
       "icon": "💸"
+    },
+    {
+      "id": "7e77",
+      "user_id": "7699",
+      "name": "Lương",
+      "type": "INCOME",
+      "color": "#10B981",
+      "icon": "💰"
+    },
+    {
+      "id": "465b",
+      "user_id": "7699",
+      "name": "Chơi",
+      "type": "EXPENSE",
+      "color": "#EF4444",
+      "icon": "💸"
+    },
+    {
+      "id": "6ed1",
+      "user_id": "7699",
+      "name": "đi bay",
+      "type": "EXPENSE",
+      "color": "#EF4444",
+      "icon": "💸"
     }
   ],
   "transactions": [
     {
       "id": "1",
       "user_id": 1,
-      "wallet_id": 1,
+      "wallet_id": "1000",
       "category_id": 2,
       "amount": 20000000,
       "type": "INCOME",
@@ -269,7 +303,7 @@
     {
       "id": "2",
       "user_id": 1,
-      "wallet_id": 1,
+      "wallet_id": "1000",
       "category_id": 1,
       "amount": 150000,
       "type": "EXPENSE",
@@ -280,7 +314,7 @@
     {
       "id": "3",
       "user_id": 1,
-      "wallet_id": 2,
+      "wallet_id": "1001",
       "category_id": 3,
       "amount": 1200000,
       "type": "EXPENSE",
@@ -291,7 +325,7 @@
     {
       "id": "4",
       "user_id": 1,
-      "wallet_id": 1,
+      "wallet_id": "1000",
       "category_id": 4,
       "amount": 350000,
       "type": "EXPENSE",
@@ -302,7 +336,7 @@
     {
       "id": "5",
       "user_id": 1,
-      "wallet_id": 2,
+      "wallet_id": "1001",
       "category_id": 5,
       "amount": 500000,
       "type": "EXPENSE",
@@ -313,7 +347,7 @@
     {
       "id": "6",
       "user_id": 1,
-      "wallet_id": 5,
+      "wallet_id": "1004",
       "category_id": 6,
       "amount": 850000,
       "type": "EXPENSE",
@@ -324,7 +358,7 @@
     {
       "id": "7",
       "user_id": 1,
-      "wallet_id": 1,
+      "wallet_id": "1000",
       "category_id": 7,
       "amount": 320000,
       "type": "EXPENSE",
@@ -335,7 +369,7 @@
     {
       "id": "8",
       "user_id": 2,
-      "wallet_id": 3,
+      "wallet_id": "1002",
       "category_id": 9,
       "amount": 15000000,
       "type": "INCOME",
@@ -346,7 +380,7 @@
     {
       "id": "9",
       "user_id": 2,
-      "wallet_id": 3,
+      "wallet_id": "1002",
       "category_id": 8,
       "amount": 80000,
       "type": "EXPENSE",
@@ -357,7 +391,7 @@
     {
       "id": "10",
       "user_id": 2,
-      "wallet_id": 4,
+      "wallet_id": "1003",
       "category_id": 10,
       "amount": 450000,
       "type": "EXPENSE",
@@ -368,7 +402,7 @@
     {
       "id": "11",
       "user_id": 2,
-      "wallet_id": 3,
+      "wallet_id": "1002",
       "category_id": 11,
       "amount": 650000,
       "type": "EXPENSE",
@@ -379,7 +413,7 @@
     {
       "id": "12",
       "user_id": 1,
-      "wallet_id": 1,
+      "wallet_id": "1000",
       "category_id": 1,
       "amount": 75000,
       "type": "EXPENSE",
@@ -390,7 +424,7 @@
     {
       "id": "13",
       "user_id": 1,
-      "wallet_id": 1,
+      "wallet_id": "1000",
       "category_id": 3,
       "amount": 850000,
       "type": "EXPENSE",
@@ -401,7 +435,7 @@
     {
       "id": "14",
       "user_id": 1,
-      "wallet_id": 2,
+      "wallet_id": "1001",
       "category_id": 2,
       "amount": 3000000,
       "type": "INCOME",
@@ -412,7 +446,7 @@
     {
       "id": "15",
       "user_id": 2,
-      "wallet_id": 4,
+      "wallet_id": "1003",
       "category_id": 8,
       "amount": 120000,
       "type": "EXPENSE",
@@ -423,7 +457,7 @@
     {
       "id": "d1b4",
       "user_id": "1",
-      "wallet_id": "1",
+      "wallet_id": "1000",
       "category_id": "1",
       "amount": 2000000,
       "type": "EXPENSE",
@@ -434,7 +468,7 @@
     {
       "id": "73b3",
       "user_id": "2",
-      "wallet_id": 3,
+      "wallet_id": "1002",
       "category_id": 10,
       "amount": 2800000,
       "type": "EXPENSE",
@@ -444,23 +478,93 @@
       "recurring_transaction_id": "1eea"
     },
     {
-      "id": "c294",
-      "user_id": "2",
-      "wallet_id": 3,
-      "category_id": 10,
-      "amount": 2800000,
+      "id": "7b4f",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7340",
+      "amount": 1234567,
       "type": "EXPENSE",
-      "description": "Tiền trọ",
-      "date": "2025-12-04T17:00:00.000Z",
-      "created_at": "2025-12-05T06:03:46.386Z",
-      "recurring_transaction_id": "1eea"
+      "description": "Đi ăn ",
+      "date": "2025-12-06T00:00:00.000Z",
+      "created_at": "2025-12-06T17:14:44.469Z"
+    },
+    {
+      "id": "ffbd",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7340",
+      "amount": 123,
+      "type": "EXPENSE",
+      "description": "ăn",
+      "date": "2025-12-06T00:00:00.000Z",
+      "created_at": "2025-12-06T17:17:18.802Z"
+    },
+    {
+      "id": "f7e7",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7340",
+      "amount": 9876539,
+      "type": "EXPENSE",
+      "description": "",
+      "date": "2025-12-06T17:00:00.000Z",
+      "created_at": "2025-12-06T17:23:01.724Z",
+      "recurring_transaction_id": "4a17"
+    },
+    {
+      "id": "e844",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7340",
+      "amount": 9769,
+      "type": "EXPENSE",
+      "description": "ăn hàng ngày\n",
+      "date": "2025-12-06T17:00:00.000Z",
+      "created_at": "2025-12-06T17:26:39.202Z",
+      "recurring_transaction_id": "9925"
+    },
+    {
+      "id": "018a",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7e+77",
+      "amount": 123,
+      "type": "INCOME",
+      "description": "hâha",
+      "date": "2025-12-06T17:00:00.000Z",
+      "created_at": "2025-12-06T17:39:43.555Z",
+      "recurring_transaction_id": "f306"
+    },
+    {
+      "id": "9a20",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7e+77",
+      "amount": 123,
+      "type": "INCOME",
+      "description": "hâha",
+      "date": "2025-12-06T17:00:00.000Z",
+      "created_at": "2025-12-06T17:39:43.577Z",
+      "recurring_transaction_id": "f306"
+    },
+    {
+      "id": "276c",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7e77",
+      "amount": 1000000000,
+      "type": "INCOME",
+      "description": "",
+      "date": "2025-12-06T17:00:00.000Z",
+      "created_at": "2025-12-07T15:59:49.149Z",
+      "recurring_transaction_id": "d3c5"
     }
   ],
   "recurring_transactions": [
     {
       "id": "1",
       "user_id": 1,
-      "wallet_id": 1,
+      "wallet_id": "1000",
       "category_id": 2,
       "amount": 20000000,
       "description": "Lương tháng công ty chính",
@@ -471,7 +575,7 @@
     {
       "id": "2",
       "user_id": 1,
-      "wallet_id": 1,
+      "wallet_id": "1000",
       "category_id": 4,
       "amount": 500000,
       "description": "Tiền xăng ô tô hàng tháng",
@@ -481,7 +585,7 @@
     {
       "id": "3",
       "user_id": 1,
-      "wallet_id": 2,
+      "wallet_id": "1001",
       "category_id": 1,
       "amount": 2000000,
       "description": "Ngân sách ăn uống hàng tháng",
@@ -491,7 +595,7 @@
     {
       "id": "4",
       "user_id": 2,
-      "wallet_id": 3,
+      "wallet_id": "1002",
       "category_id": 9,
       "amount": 15000000,
       "description": "Cho ngọc anh đi học",
@@ -503,7 +607,7 @@
     {
       "id": "5",
       "user_id": 2,
-      "wallet_id": 4,
+      "wallet_id": "1003",
       "category_id": 11,
       "amount": 800000,
       "description": "Chăm sóc da định kỳ",
@@ -513,7 +617,7 @@
     {
       "id": "1eea",
       "user_id": "2",
-      "wallet_id": 3,
+      "wallet_id": "1002",
       "category_id": 10,
       "amount": 2800000,
       "type": "EXPENSE",
@@ -528,7 +632,7 @@
     {
       "id": "5556",
       "user_id": "7699",
-      "wallet_id": "1000",
+      "wallet_id": "1005",
       "category_id": "7340",
       "amount": 99999999,
       "type": "EXPENSE",
@@ -536,7 +640,7 @@
       "frequency": "DAILY",
       "start_date": "2025-12-03T00:00:00.000Z",
       "end_date": "2026-02-03T00:00:00.000Z",
-      "next_date": "2025-12-03T17:00:00.000Z",
+      "next_date": "2025-12-07T17:00:00.000Z",
       "is_active": true,
       "created_at": "2025-12-03T16:39:32.360Z"
     },
@@ -554,6 +658,123 @@
       "next_date": "2025-12-05T00:00:00.000Z",
       "is_active": true,
       "created_at": "2025-12-04T07:32:59.250Z"
+    },
+    {
+      "id": "9925",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7340",
+      "amount": 9769,
+      "type": "EXPENSE",
+      "description": "ăn hàng ngày\n",
+      "frequency": "DAILY",
+      "start_date": "2025-12-05T00:00:00.000Z",
+      "next_date": "2025-12-07T17:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-05T06:14:04.227Z",
+      "end_date": "2026-01-05T00:00:00.000Z"
+    },
+    {
+      "id": "4a17",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7340",
+      "amount": 9876539,
+      "type": "EXPENSE",
+      "description": "chơi",
+      "frequency": "DAILY",
+      "start_date": "2025-12-06T00:00:00.000Z",
+      "end_date": "2026-03-07T00:00:00.000Z",
+      "next_date": "2025-12-07T17:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-06T17:21:34.956Z"
+    },
+    {
+      "id": "16a5",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7340",
+      "amount": 9999,
+      "type": "EXPENSE",
+      "description": "hihi",
+      "frequency": "DAILY",
+      "start_date": "2025-12-06T00:00:00.000Z",
+      "end_date": "2026-02-28T00:00:00.000Z",
+      "next_date": "2025-12-07T17:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-06T17:33:26.807Z"
+    },
+    {
+      "id": "5b78",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "465b",
+      "amount": 12345666,
+      "type": "EXPENSE",
+      "description": "asa",
+      "frequency": "DAILY",
+      "start_date": "2025-12-05T00:00:00.000Z",
+      "end_date": "2026-04-03T00:00:00.000Z",
+      "next_date": "2025-12-07T17:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-06T17:42:32.309Z"
+    },
+    {
+      "id": "7b6e",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "6ed1",
+      "amount": 876543,
+      "type": "EXPENSE",
+      "description": "adsd",
+      "frequency": "DAILY",
+      "start_date": "2025-12-06T00:00:00.000Z",
+      "end_date": "2026-01-15T00:00:00.000Z",
+      "next_date": "2025-12-07T17:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-06T17:48:46.137Z"
+    },
+    {
+      "id": "1b8e",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7340",
+      "amount": 123321,
+      "type": "EXPENSE",
+      "description": "Test 2",
+      "frequency": "DAILY",
+      "start_date": "2025-12-06T00:00:00.000Z",
+      "next_date": "2025-12-07T17:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-07T15:48:09.393Z"
+    },
+    {
+      "id": "fc12",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "6ed1",
+      "amount": 9896,
+      "type": "EXPENSE",
+      "description": "Test3",
+      "frequency": "DAILY",
+      "start_date": "2025-12-06T00:00:00.000Z",
+      "next_date": "2025-12-07T17:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-07T15:52:29.695Z"
+    },
+    {
+      "id": "d3c5",
+      "user_id": "7699",
+      "wallet_id": "1005",
+      "category_id": "7e77",
+      "amount": 1000000000,
+      "type": "INCOME",
+      "description": "",
+      "frequency": "MONTHLY",
+      "start_date": "2025-12-07T00:00:00.000Z",
+      "next_date": "2026-01-06T17:00:00.000Z",
+      "is_active": true,
+      "created_at": "2025-12-07T15:57:30.760Z"
     }
   ],
   "goals": [
@@ -716,6 +937,249 @@
       "message": "Bạn cần thanh toán hóa đơn Internet trước ngày 30/03.",
       "is_read": true,
       "created_at": "2024-03-26T14:10:00Z"
+    },
+    {
+      "id": "f319",
+      "user_id": 7699,
+      "type": "WARNING",
+      "title": "Giao dịch chi tiêu lớn",
+      "message": "Bạn vừa thực hiện một giao dịch chi tiêu lớn: 99,999,999 cho \"tiền ăn hàng ngày\". Hãy kiểm tra lại chi tiêu của mình!",
+      "is_read": true,
+      "created_at": "2025-12-05T06:12:53.648Z"
+    },
+    {
+      "id": "f20c",
+      "user_id": 7699,
+      "type": "WARNING",
+      "title": "Giao dịch chi tiêu lớn",
+      "message": "Bạn vừa thực hiện một giao dịch chi tiêu lớn: 99,999,999 cho \"tiền ăn hàng ngày\". Hãy kiểm tra lại chi tiêu của mình!",
+      "is_read": true,
+      "created_at": "2025-12-05T06:13:12.901Z"
+    },
+    {
+      "id": "92ed",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"chơi\" (45,678) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-05T06:15:53.928Z"
+    },
+    {
+      "id": "f145",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"chơi\" (45,678) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:08:53.609Z"
+    },
+    {
+      "id": "960d",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"chơi\" (45,678) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:08:53.614Z"
+    },
+    {
+      "id": "d86d",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"ăn hàng ngày\n\" (9,876) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:11:07.972Z"
+    },
+    {
+      "id": "5d0c",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"ăn hàng ngày\n\" (9,876) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:11:07.973Z"
+    },
+    {
+      "id": "b4b2",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"tiền ăn hàng ngày\" (99,999,999) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:12:26.073Z"
+    },
+    {
+      "id": "6874",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"tiền ăn hàng ngày\" (99,999,999) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:12:26.077Z"
+    },
+    {
+      "id": "212a",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"lương tháng\" (12,345,678) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:20:41.146Z"
+    },
+    {
+      "id": "5567",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"lương tháng\" (12,345,678) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:20:41.155Z"
+    },
+    {
+      "id": "d986",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"\" (9,876,539) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:23:01.782Z"
+    },
+    {
+      "id": "5dbd",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"\" (9,876,539) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:23:01.783Z"
+    },
+    {
+      "id": "b922",
+      "user_id": 7699,
+      "type": "WARNING",
+      "title": "Giao dịch chi tiêu lớn",
+      "message": "Bạn vừa thực hiện một giao dịch chi tiêu lớn: 444,444,442 cho \"chơi đồ\". Hãy kiểm tra lại chi tiêu của mình!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:27:21.420Z"
+    },
+    {
+      "id": "e21f",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"hihi\" (9,999) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:34:25.248Z"
+    },
+    {
+      "id": "c141",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"hihi\" (9,999) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:34:25.249Z"
+    },
+    {
+      "id": "d198",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"hâha\" (123) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:39:43.629Z"
+    },
+    {
+      "id": "3218",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"hâha\" (123) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:39:43.630Z"
+    },
+    {
+      "id": "fe95",
+      "user_id": 7699,
+      "type": "WARNING",
+      "title": "Giao dịch chi tiêu lớn",
+      "message": "Bạn vừa thực hiện một giao dịch chi tiêu lớn: 12,345,666 cho \"asa\". Hãy kiểm tra lại chi tiêu của mình!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:42:32.327Z"
+    },
+    {
+      "id": "fd56",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"asa\" (12,345,666) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:42:49.934Z"
+    },
+    {
+      "id": "0d44",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"asa\" (12,345,666) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:42:49.945Z"
+    },
+    {
+      "id": "78a3",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"adsd\" (876,543) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:49:11.211Z"
+    },
+    {
+      "id": "3a0e",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"adsd\" (876,543) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-06T17:49:11.214Z"
+    },
+    {
+      "id": "0f04",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"\" (123,456) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-07T15:41:45.083Z"
+    },
+    {
+      "id": "ba75",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"Test1\" (123,654) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-07T15:44:49.878Z"
+    },
+    {
+      "id": "fe93",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"Test1\" (123,654) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": true,
+      "created_at": "2025-12-07T15:44:49.878Z"
+    },
+    {
+      "id": "27c8",
+      "user_id": 7699,
+      "type": "REMINDER",
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"Test3\" (9,896) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
+      "is_read": false,
+      "created_at": "2025-12-07T15:53:08.407Z"
     }
   ],
   "app_settings": [

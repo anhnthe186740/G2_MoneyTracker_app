@@ -240,33 +240,94 @@ export default function Transactions() {
   };
 
   const handleCleanupInvalidData = async () => {
-    if (!window.confirm(t('cleanup.confirm'))) {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa TẤT CẢ giao dịch? Hành động này không thể hoàn tác!')) {
       return;
     }
 
     try {
       setLoading(true);
-      const validCategoryIds = categories.map(c => String(c.id));
 
-      // Get all transactions
+      // Get all transactions for this user
       const transactionsRes = await api.get(`/transactions?user_id=${user.id}`);
       const allTransactions = transactionsRes.data;
 
-      // Find and delete invalid transactions
-      let deletedCount = 0;
+      // Calculate total balance change per wallet to validate
+      const walletBalanceChanges = new Map<string, { add: number; subtract: number }>();
+      
       for (const tx of allTransactions) {
-        const categoryId = String(tx.category_id);
-        if (!validCategoryIds.includes(categoryId)) {
-          await api.delete(`/transactions/${tx.id}`);
-          deletedCount++;
+        if (tx.wallet_id) {
+          const walletId = String(tx.wallet_id);
+          if (!walletBalanceChanges.has(walletId)) {
+            walletBalanceChanges.set(walletId, { add: 0, subtract: 0 });
+          }
+          
+          const changes = walletBalanceChanges.get(walletId)!;
+          const amount = Number(tx.amount);
+          
+          // Calculate what will be added back when deleting
+          if (tx.type === 'EXPENSE') {
+            changes.add += amount; // Money comes back
+          } else {
+            changes.subtract += amount; // Money goes away
+          }
         }
       }
 
-      alert(t('cleanup.success', { count: deletedCount }));
+      // Validate that no wallet will have negative balance after deletion
+      for (const [walletId, changes] of walletBalanceChanges) {
+        try {
+          const walletResponse = await api.get(`/wallets?id=${walletId}&user_id=${user.id}`);
+          if (walletResponse.data && walletResponse.data.length > 0) {
+            const wallet = walletResponse.data[0];
+            const currentBalance = Number(wallet.balance);
+            const finalBalance = currentBalance + changes.add - changes.subtract;
+            
+            if (finalBalance < 0) {
+              alert(`Không thể xóa: Ví "${wallet.name}" sẽ có số dư âm (${finalBalance.toLocaleString()} đ) sau khi hoàn tiền`);
+              setLoading(false);
+              return;
+            }
+          }
+        } catch (error) {
+          console.error(`Error validating wallet ${walletId}:`, error);
+        }
+      }
+
+      // Delete ALL transactions and restore wallet balance
+      let deletedCount = 0;
+      for (const tx of allTransactions) {
+        // Restore wallet balance before deleting
+        if (tx.wallet_id) {
+          try {
+            const walletResponse = await api.get(`/wallets?id=${tx.wallet_id}&user_id=${user.id}`);
+            if (walletResponse.data && walletResponse.data.length > 0) {
+              const wallet = walletResponse.data[0];
+              const currentBalance = Number(wallet.balance);
+              const amount = Number(tx.amount);
+              
+              // Reverse the transaction: EXPENSE -> add back, INCOME -> subtract back
+              const newBalance = tx.type === 'EXPENSE' 
+                ? currentBalance + amount 
+                : currentBalance - amount;
+              
+              await api.put(`/wallets/${wallet.id}`, { ...wallet, balance: newBalance });
+              console.log(`Restored balance for wallet ${wallet.id}: ${currentBalance} -> ${newBalance}`);
+            }
+          } catch (walletError) {
+            console.error(`Error restoring wallet balance for transaction ${tx.id}:`, walletError);
+          }
+        }
+        
+        // Delete transaction
+        await api.delete(`/transactions/${tx.id}`);
+        deletedCount++;
+      }
+
+      alert(`Đã xóa thành công ${deletedCount} giao dịch và hoàn tiền về ví`);
       await handleUpdate();
     } catch (error) {
-      console.error('Error cleaning up data:', error);
-      alert(t('cleanup.error'));
+      console.error('Error deleting all transactions:', error);
+      alert('Có lỗi xảy ra khi xóa giao dịch');
     } finally {
       setLoading(false);
     }
