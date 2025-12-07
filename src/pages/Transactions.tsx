@@ -253,17 +253,17 @@ export default function Transactions() {
 
       // Calculate total balance change per wallet to validate
       const walletBalanceChanges = new Map<string, { add: number; subtract: number }>();
-      
+
       for (const tx of allTransactions) {
         if (tx.wallet_id) {
           const walletId = String(tx.wallet_id);
           if (!walletBalanceChanges.has(walletId)) {
             walletBalanceChanges.set(walletId, { add: 0, subtract: 0 });
           }
-          
+
           const changes = walletBalanceChanges.get(walletId)!;
           const amount = Number(tx.amount);
-          
+
           // Calculate what will be added back when deleting
           if (tx.type === 'EXPENSE') {
             changes.add += amount; // Money comes back
@@ -281,7 +281,7 @@ export default function Transactions() {
             const wallet = walletResponse.data[0];
             const currentBalance = Number(wallet.balance);
             const finalBalance = currentBalance + changes.add - changes.subtract;
-            
+
             if (finalBalance < 0) {
               alert(`Không thể xóa: Ví "${wallet.name}" sẽ có số dư âm (${finalBalance.toLocaleString()} đ) sau khi hoàn tiền`);
               setLoading(false);
@@ -304,12 +304,12 @@ export default function Transactions() {
               const wallet = walletResponse.data[0];
               const currentBalance = Number(wallet.balance);
               const amount = Number(tx.amount);
-              
+
               // Reverse the transaction: EXPENSE -> add back, INCOME -> subtract back
-              const newBalance = tx.type === 'EXPENSE' 
-                ? currentBalance + amount 
+              const newBalance = tx.type === 'EXPENSE'
+                ? currentBalance + amount
                 : currentBalance - amount;
-              
+
               await api.put(`/wallets/${wallet.id}`, { ...wallet, balance: newBalance });
               console.log(`Restored balance for wallet ${wallet.id}: ${currentBalance} -> ${newBalance}`);
             }
@@ -317,7 +317,7 @@ export default function Transactions() {
             console.error(`Error restoring wallet balance for transaction ${tx.id}:`, walletError);
           }
         }
-        
+
         // Delete transaction
         await api.delete(`/transactions/${tx.id}`);
         deletedCount++;

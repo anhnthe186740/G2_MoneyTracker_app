@@ -67,7 +67,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
             return {
                 id: rt.id, // Keep original ID
                 userId: rt.user_id,
-walletId: rt.wallet_id,
+                walletId: rt.wallet_id,
                 categoryId: rt.category_id,
                 amount: rt.amount,
                 type: rt.type,
@@ -138,7 +138,7 @@ walletId: rt.wallet_id,
             if (recurringTransaction.userId !== undefined) updateData.user_id = recurringTransaction.userId;
             if (recurringTransaction.walletId !== undefined) updateData.wallet_id = recurringTransaction.walletId;
             if (recurringTransaction.categoryId !== undefined) updateData.category_id = recurringTransaction.categoryId;
-if (recurringTransaction.amount !== undefined) updateData.amount = recurringTransaction.amount;
+            if (recurringTransaction.amount !== undefined) updateData.amount = recurringTransaction.amount;
             if (recurringTransaction.type !== undefined) updateData.type = recurringTransaction.type;
             if (recurringTransaction.description !== undefined) updateData.description = recurringTransaction.description;
             if (recurringTransaction.frequency !== undefined) updateData.frequency = recurringTransaction.frequency;
@@ -185,7 +185,7 @@ if (recurringTransaction.amount !== undefined) updateData.amount = recurringTran
         // Prevent concurrent processing using both state and localStorage
         const lockKey = `processing_recurring_${userId}`;
         const isLocked = localStorage.getItem(lockKey);
-        
+
         if (processing || isLocked) {
             console.log('Already processing recurring transactions, skipping...', { processing, isLocked });
             return;
@@ -210,7 +210,7 @@ if (recurringTransaction.amount !== undefined) updateData.amount = recurringTran
                 startDate: rt.start_date,
                 endDate: rt.end_date,
                 nextDate: rt.next_date,
-isActive: rt.is_active,
+                isActive: rt.is_active,
                 createdAt: rt.created_at
             }));
             const today = new Date();
@@ -241,14 +241,14 @@ isActive: rt.is_active,
                     const nextDateStr = nextDate.toISOString().split('T')[0];
                     const now = new Date();
                     const fiveSecondsAgo = new Date(now.getTime() - 5000);
-                    
+
                     // Check if already processed for this exact date
                     // Also check for very recent duplicates (within 5 seconds)
                     const alreadyProcessedForDate = existingTransactionsResponse.data.some((t: any) => {
                         const tDate = new Date(t.date);
                         tDate.setHours(0, 0, 0, 0);
                         const tDateStr = tDate.toISOString().split('T')[0];
-                        
+
                         if (tDateStr === nextDateStr) {
                             // If same date, also check if created very recently
                             const tCreatedAt = new Date(t.created_at);
@@ -289,7 +289,7 @@ isActive: rt.is_active,
                     // Calculate next date FIRST (as a lock mechanism)
                     const newNextDate = calculateNextDate(nextDate, rt.frequency);
                     console.log(`Updating next_date from ${nextDate.toDateString()} to ${newNextDate.toDateString()}`);
-                    
+
                     // Update next_date immediately to prevent race condition
                     await api.patch(`/recurring_transactions/${rt.id}`, {
                         next_date: newNextDate.toISOString()
@@ -321,7 +321,7 @@ isActive: rt.is_active,
                     // Update wallet balance
                     console.log('Updating wallet balance...');
                     await updateWalletBalance(rt.walletId, rt.amount, rt.type, rt.userId);
-                    
+
                     // Send notification for the created transaction
                     try {
                         await sendRecurringTransactionReminder(rt.userId, {
@@ -334,7 +334,7 @@ isActive: rt.is_active,
                     } catch (notifyErr) {
                         console.error(`Error sending notification for recurring transaction ${rt.id}:`, notifyErr);
                     }
-                    
+
                     console.log(`Recurring transaction ${rt.id} processed successfully`);
                 }
             }
@@ -429,7 +429,7 @@ isActive: rt.is_active,
                 processRecurringTransactions,
             }}
         >
-{children}
+            {children}
         </RecurringTransactionContext.Provider>
     );
 };
