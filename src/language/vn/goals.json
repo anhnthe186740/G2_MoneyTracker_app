@@ -9,6 +9,9 @@
     "title": "Mục tiêu yêu thích"
   },
   "allGoals": {
+    "title": "Tất cả mục tiêu"
+  },
+  "otherGoals": {
     "title": "Các mục tiêu khác"
   },
   "summary": {
@@ -69,6 +72,7 @@
   "validation": {
     "nameRequired": "Tên mục tiêu không được để trống",
     "amountPositive": "Số tiền mục tiêu phải lớn hơn 0",
+    "currentAmountRequired": "Vui lòng nhập số tiền hiện tại (phải lớn hơn 0)",
     "selectSourceWallet": "Vui lòng chọn ví nguồn để lấy tiền",
     "walletNotFound": "Không tìm thấy ví nguồn",
     "insufficientBalance": "Số dư ví \"{{wallet}}\" không đủ (còn {{balance}} đ)",

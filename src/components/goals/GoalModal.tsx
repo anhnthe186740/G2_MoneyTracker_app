@@ -179,6 +179,7 @@ export default function GoalModal({
               type="date"
               value={dueDate}
               onChange={(e) => onDueDateChange(e.target.value)}
+              min={new Date().toISOString().split('T')[0]}
               className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>

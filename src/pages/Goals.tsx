@@ -151,6 +151,11 @@ export default function Goals() {
 
     const initAmount = Number(initialAmount) || 0;
 
+    if (!editingId && (initialAmount === "" || initAmount <= 0)) {
+      setError(t("validation.currentAmountRequired"));
+      return;
+    }
+
     if (!editingId && initAmount > 0) {
       const srcWalletId = Number(sourceWallet);
 
@@ -384,11 +389,6 @@ export default function Goals() {
             {t("actions.addGoal")}
           </Button>
         </div>
-        {error && (
-          <div className="px-3 py-2 bg-red-100 text-red-700 rounded-lg">
-            {error}
-          </div>
-        )}
         <div className="mt-4">
           {loading ? (
             <div className="p-4 text-gray-500">{t("loading")}</div>
@@ -429,10 +429,10 @@ export default function Goals() {
 
               <div>
                 <h3 className="font-semibold text-xl mb-4 text-slate-900">
-                  {t("allGoals.title")}
+                  {t("otherGoals.title")}
                 </h3>
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-3">
-                  {filtered.map((g) => {
+                  {filtered.filter((g) => !favoriteGoalIds.has(g.id)).map((g) => {
                     const { current, percent, completed } = calcProgress(g.id);
                     const wallet = getWallet(g.wallet_id);
                     const daysLeft = g.deadline
