@@ -10,6 +10,7 @@ import api from '../services/api';
 import type { Budget } from '../types/index';
 import { useNotificationsContext } from './NotificationContext'; // Sử dụng đúng hook
 import { useCategoryContext } from './CategoryContext';
+import i18n from '../language/i18next/config';
 
 // Kiểu dữ liệu cho context (tránh dùng any)
 interface BudgetContextType {
@@ -78,7 +79,7 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
       const response = await api.get(`/budgets?user_id=${userId}`);
       setBudgets(response.data);
     } catch (error) {
-      setError('Lỗi khi lấy ngân sách.');
+      setError(i18n.t('errors.fetchError', { ns: 'budget' }));
       console.error(error);
     } finally {
       setLoading(false);
@@ -110,7 +111,7 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
           return next;
         });
       } catch (error) {
-        setError('Lỗi khi tạo ngân sách.');
+        setError(i18n.t('errors.createError', { ns: 'budget' }));
         console.error(error);
       } finally {
         setLoading(false);
@@ -150,7 +151,7 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
           return next;
         });
       } catch (error) {
-        setError('Lỗi khi cập nhật ngân sách.');
+        setError(i18n.t('errors.updateError', { ns: 'budget' }));
         console.error(error);
       } finally {
         setLoading(false);
@@ -181,7 +182,7 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
           return copy;
         });
       } catch (error) {
-        setError('Lỗi khi xóa ngân sách.');
+        setError(i18n.t('errors.deleteError', { ns: 'budget' }));
         console.error(error);
       } finally {
         setLoading(false);
@@ -254,27 +255,54 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
         // Đã gửi cảnh báo level này rồi hoặc cao hơn → không gửi lại
         if (lastLevel >= level) return;
 
+        // Kiểm tra settings - xem budget alerts có được bật không
+        try {
+          const saved = localStorage.getItem('app-settings');
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.notifications && parsed.notifications.budgetAlerts === false) {
+              // Budget alerts đã bị tắt, không gửi thông báo
+              return;
+            }
+          }
+        } catch (error) {
+          console.error('Error reading notification settings:', error);
+          // Nếu có lỗi, vẫn gửi thông báo (default behavior)
+        }
+
         // Tìm tên danh mục để hiển thị đẹp trong thông báo
         const category = categories.find(
           (c) => String(c.id) === String(budget.category_id)
         );
-        const categoryName = category?.name ?? `Danh mục ${budget.category_id}`;
+        const categoryName = category?.name ?? i18n.t('errors.categoryFallback', { 
+          ns: 'budget', 
+          id: budget.category_id 
+        });
 
         // Gửi thông báo theo level (tùy chỉnh theo nghiệp vụ)
         let message = '';
         if (level === 50) {
-          message = `Ngân sách cho danh mục "${categoryName}" đã đạt 50% hạn mức.`;
+          message = i18n.t('messages.budgetWarning.message50', { 
+            ns: 'notifications',
+            categoryName 
+          });
         } else if (level === 80) {
-          message = `Ngân sách cho danh mục "${categoryName}" đã đạt 80% hạn mức.`;
+          message = i18n.t('messages.budgetWarning.message80', { 
+            ns: 'notifications',
+            categoryName 
+          });
         } else if (level === 100) {
-          message = `Ngân sách cho danh mục "${categoryName}" đã vượt 100% hạn mức.`;
+          message = i18n.t('messages.budgetWarning.message100', { 
+            ns: 'notifications',
+            categoryName 
+          });
         }
 
         // Gửi notification sang json-server
         await api.post('/notifications', {
           user_id: budget.user_id,
           type: 'WARNING', // phù hợp với type đã khai báo trong model Notification
-          title: 'Cảnh báo ngân sách',
+          title: i18n.t('messages.budgetWarning.title', { ns: 'notifications' }),
           message,
           is_read: false,
           created_at: new Date().toISOString(),
@@ -295,7 +323,7 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
           return next;
         });
       } catch (error) {
-        console.error('Lỗi khi kiểm tra tiến độ ngân sách:', error);
+        console.error(i18n.t('errors.checkProgressError', { ns: 'budget' }), error);
       }
     },
     [notifiedLevels, refresh, categories]
@@ -361,7 +389,7 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
 export const useBudgetContext = () => {
   const context = useContext(BudgetContext);
   if (!context) {
-    throw new Error('useBudgetContext phải được dùng bên trong BudgetProvider');
+    throw new Error(i18n.t('errors.contextError', { ns: 'budget' }));
   }
   return context;
 };

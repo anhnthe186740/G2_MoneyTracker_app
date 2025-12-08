@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import Pagination from '../components/common/Pagination';
 
 export default function Notifications() {
-  const { t } = useTranslation('notifications');
+  const { t, i18n } = useTranslation('notifications');
   const auth = useContext(AuthContext);
   if (!auth) {
     throw new Error('AuthContext must be used inside AuthProvider');
@@ -27,14 +27,42 @@ export default function Notifications() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  // Icon for each notification type
+  // Get current locale for date formatting
+  const currentLocale = i18n.language?.startsWith('en') ? 'en' : 'vi';
+
+  // Icon for each notification type with aria-label for accessibility
   const getIcon = (type: Notification['type']) => {
     switch (type) {
-      case 'WARNING': return <AlertCircle className="w-6 h-6 text-orange-600" />;
-      case 'SUCCESS': return <Target className="w-6 h-6 text-green-600" />;
-      case 'REMINDER': return <RefreshCw className="w-6 h-6 text-blue-600" />;
-      case 'INFO': return <TrendingUp className="w-6 h-6 text-purple-600" />;
-      default: return <Bell className="w-6 h-6 text-gray-600" />;
+      case 'WARNING': 
+        return (
+          <AlertCircle 
+            className="w-6 h-6 text-orange-600" 
+            aria-label={t('ariaLabels.warningIcon')}
+          />
+        );
+      case 'SUCCESS': 
+        return (
+          <Target 
+            className="w-6 h-6 text-green-600" 
+            aria-label={t('ariaLabels.successIcon')}
+          />
+        );
+      case 'REMINDER': 
+        return (
+          <RefreshCw 
+            className="w-6 h-6 text-blue-600" 
+            aria-label={t('ariaLabels.reminderIcon')}
+          />
+        );
+      case 'INFO': 
+        return (
+          <TrendingUp 
+            className="w-6 h-6 text-purple-600" 
+            aria-label={t('ariaLabels.infoIcon')}
+          />
+        );
+      default: 
+        return <Bell className="w-6 h-6 text-gray-600" />;
     }
   };
 
@@ -117,6 +145,7 @@ export default function Notifications() {
         <button
           onClick={handleMarkAllAsReadClick}
           disabled={unreadCount === 0}
+          aria-label={t('ariaLabels.markAllAsReadButton')}
           className="ml-auto bg-primary text-white py-2 px-4 rounded-lg disabled:opacity-50 hover:bg-indigo-600 transition"
         >
           <Check className="w-4 h-4 inline mr-2" />
@@ -182,6 +211,7 @@ export default function Notifications() {
                       {!notification.is_read && (
                         <button
                           onClick={() => handleMarkAsReadClick(notification.id)}
+                          aria-label={t('ariaLabels.markAsReadButton')}
                           className="text-gray-500 hover:text-gray-700 flex items-center"
                         >
                           <Check className="w-4 h-4 mr-1" />
@@ -193,7 +223,7 @@ export default function Notifications() {
                     <p className="text-gray-600 mb-3">{notification.message}</p>
 
                     <p className="text-sm text-gray-400">
-                      {formatDateTime(notification.created_at)}
+                      {formatDateTime(notification.created_at, currentLocale)}
                     </p>
                   </div>
                 </div>

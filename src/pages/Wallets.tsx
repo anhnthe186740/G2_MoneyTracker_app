@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -10,6 +10,7 @@ import { Plus, Trash2, Wallet, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
+import Pagination from '../components/common/Pagination';
 
 interface Wallet {
   id: number | string;
@@ -23,7 +24,7 @@ interface Wallet {
 }
 
 export default function Wallets() {
-  const { t } = useTranslation('accounts');
+  const { t } = useTranslation('wallets');
   const auth = useContext(AuthContext);
   const user = auth?.user;
   
@@ -34,16 +35,27 @@ export default function Wallets() {
   const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
   const [editingWallet, setEditingWallet] = useState<Wallet | null>(null);
   
-  // Tải trạng thái hiển thị số dư từ localStorage
+ 
   const [showBalance, setShowBalance] = useState(() => {
-    const saved = localStorage.getItem('showBalance');
-    return saved !== null ? JSON.parse(saved) : true;
+    
+    if (localStorage.getItem('showBalance')) {
+      localStorage.removeItem('showBalance');
+    }
+    return false; 
   });
   
-  // Tải danh sách ví bị ẩn từ localStorage
-  const [hiddenWallets, setHiddenWallets] = useState<Set<string>>(() => {
-    const saved = localStorage.getItem('hiddenWallets');
-    return saved ? new Set(JSON.parse(saved)) : new Set();
+ 
+
+  const [visibleWallets, setVisibleWallets] = useState<Set<string>>(() => {
+  
+    if (localStorage.getItem('hiddenWallets')) {
+      localStorage.removeItem('hiddenWallets');
+    }
+    if (localStorage.getItem('visibleWallets')) {
+      localStorage.removeItem('visibleWallets');
+    }
+ 
+    return new Set();
   });
   const [formData, setFormData] = useState({
     name: '',
@@ -53,11 +65,14 @@ export default function Wallets() {
     note: ''
   });
   const [addMoneyAmount, setAddMoneyAmount] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; 
 
   const getAccountTypeLabel = (type: string) => {
     const typeKey = `types.${type}` as const;
     return t(typeKey);
   };
+
 
   useEffect(() => {
     const loadWallets = async () => {
@@ -89,7 +104,7 @@ export default function Wallets() {
     };
     
     loadWallets();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+ 
   }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -223,6 +238,28 @@ export default function Wallets() {
 
   const totalBalance = wallets.reduce((sum, wallet) => sum + (wallet.balance || 0), 0);
 
+
+  const totalPages = Math.ceil(wallets.length / itemsPerPage);
+  
+  
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(1);
+    }
+  }, [wallets.length, totalPages, currentPage]);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedWallets = useMemo(() => {
+    return wallets.slice(startIndex, endIndex);
+  }, [wallets, startIndex, endIndex]);
+
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const getWalletIcon = () => {
     return <Wallet className="w-6 h-6" />;
   };
@@ -232,7 +269,7 @@ export default function Wallets() {
   };
 
   const toggleWalletVisibility = (walletId: number | string) => {
-    setHiddenWallets(prev => {
+    setVisibleWallets(prev => {
       const newSet = new Set(prev);
       const idStr = String(walletId);
       if (newSet.has(idStr)) {
@@ -240,8 +277,7 @@ export default function Wallets() {
       } else {
         newSet.add(idStr);
       }
-     
-      localStorage.setItem('hiddenWallets', JSON.stringify(Array.from(newSet)));
+
       return newSet;
     });
   };
@@ -250,7 +286,7 @@ export default function Wallets() {
   const handleToggleShowBalance = () => {
     const newValue = !showBalance;
     setShowBalance(newValue);
-    localStorage.setItem('showBalance', JSON.stringify(newValue));
+  
   };
 
   if (loading) {
@@ -494,7 +530,19 @@ export default function Wallets() {
         </div>
       </Card>
 
-      {/* Wallet List */}
+     
+      {wallets.length > 0 && totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          itemsPerPage={itemsPerPage}
+          totalItems={wallets.length}
+          showInfo={true}
+        />
+      )}
+
+    
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {wallets.length === 0 ? (
           <div className="col-span-full">
@@ -503,7 +551,7 @@ export default function Wallets() {
             </Card>
           </div>
         ) : (
-          wallets.map((wallet) => (
+          paginatedWallets.map((wallet) => (
             <Card key={wallet.id} className="p-6 hover:shadow-lg transition-shadow">
               <div className="flex items-start justify-between mb-4">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -526,14 +574,14 @@ export default function Wallets() {
               
               <div className="flex items-center gap-2 mb-2">
                 <p className="text-2xl font-bold" style={{ color: wallet.color || '#3498db' }}>
-                  {!hiddenWallets.has(String(wallet.id)) ? formatCurrency(wallet.balance || 0) : '••••••••'}
+                  {visibleWallets.has(String(wallet.id)) ? formatCurrency(wallet.balance || 0) : '••••••••'}
                 </p>
                 <button
                   onClick={() => toggleWalletVisibility(wallet.id)}
                   className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
-                  aria-label={hiddenWallets.has(String(wallet.id)) ? 'Hiện số dư' : 'Ẩn số dư'}
+                  aria-label={visibleWallets.has(String(wallet.id)) ? 'Ẩn số dư' : 'Hiện số dư'}
                 >
-                  {!hiddenWallets.has(String(wallet.id)) ? (
+                  {visibleWallets.has(String(wallet.id)) ? (
                     <Eye className="w-5 h-5 text-gray-500" />
                   ) : (
                     <EyeOff className="w-5 h-5 text-gray-500" />
