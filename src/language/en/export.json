@@ -2,6 +2,8 @@
   "title": "Export Reports",
   "subtitle": "Export your financial data",
   "loading": "Loading...",
+  "pageTitle": "Financial Overview",
+  "pageSubtitle": "View your overall financial situation",
   "exportOptions": {
     "title": "Export Options",
     "format": "Format",
@@ -19,7 +21,12 @@
     "last3Months": "Last 3 Months",
     "last6Months": "Last 6 Months",
     "thisYear": "This Year",
-    "custom": "Custom"
+    "custom": "Custom",
+    "1month": "Last 1 month",
+    "3months": "Last 3 months",
+    "6months": "Last 6 months",
+    "1year": "Last 1 year",
+    "all": "All"
   },
   "dataTypes": {
     "all": "All",
@@ -30,14 +37,67 @@
   },
   "actions": {
     "export": "Export Report",
+    "exportExcel": "Export Excel",
     "preview": "Preview",
-    "download": "Download"
+    "download": "Download",
+    "previous": "← Previous",
+    "next": "Next →",
+    "today": "Today",
+    "collapse": "Collapse",
+    "viewMore": "View more ({{count}} transactions)"
   },
   "labels": {
     "startDate": "From",
     "endDate": "To",
     "includeCharts": "Include Charts",
-    "includeSummary": "Include Summary"
+    "includeSummary": "Include Summary",
+    "viewData": "View data:",
+    "month": "Month {{number}}",
+    "totalIncome": "Total Income",
+    "totalExpense": "Total Expenses",
+    "savings": "Savings",
+    "currentBalance": "Current Balance",
+    "expenseByCategory": "Expense by Category",
+    "pieChartDescription": "Pie chart showing expense categories",
+    "cashFlowTrend": "Cash Flow Trend",
+    "recentTransactions": "Recent Transactions",
+    "noExpenseData": "No expense data",
+    "noTransactions": "No transactions"
+  },
+  "csv": {
+    "headers": {
+      "date": "Date",
+      "type": "Type",
+      "category": "Category",
+      "wallet": "Wallet",
+      "amount": "Amount",
+      "description": "Description"
+    },
+    "types": {
+      "income": "Income",
+      "expense": "Expense"
+    },
+    "stats": {
+      "title": "STATISTICS ({{period}})",
+      "totalIncome": "Total Income",
+      "totalExpense": "Total Expenses",
+      "savings": "Savings",
+      "currentBalance": "Current Balance"
+    },
+    "periodLabels": {
+      "1month": "1 month",
+      "3months": "3 months",
+      "6months": "6 months",
+      "1year": "1 year",
+      "all": "All"
+    },
+    "filenameLabels": {
+      "1month": "Month-{{month}}-{{year}}",
+      "3months": "3-month-overview",
+      "6months": "6-month-overview",
+      "1year": "1-year-overview",
+      "all": "All-income-expense"
+    }
   },
   "toast": {
     "exportSuccess": "Report exported successfully!",

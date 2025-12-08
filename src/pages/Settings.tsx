@@ -7,18 +7,14 @@ type Language = 'vi' | 'en';
 type Currency = 'VND' | 'USD';
 
 interface NotificationSettings {
-  // REMINDER types
   inactivityReminders: boolean;
   recurringTransactionReminders: boolean;
   goalDeadlineReminders: boolean;
-  // WARNING types
   budgetAlerts: boolean;
   lowBalanceAlerts: boolean;
   largeTransactionAlerts: boolean;
-  // SUCCESS types
   goalProgressAlerts: boolean;
   goalCompletionAlerts: boolean;
-  // INFO types
   monthlySummaryAlerts: boolean;
 }
 
@@ -26,14 +22,55 @@ const getInitialLanguage = (i18nLang: string): Language => {
   return i18nLang?.startsWith('vi') ? 'vi' : i18nLang?.startsWith('en') ? 'en' : 'vi';
 };
 
+const getInitialTheme = (): Theme => {
+  const saved = localStorage.getItem('app-settings');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if (parsed.theme === 'dark' || parsed.theme === 'light') {
+        return parsed.theme;
+      }
+    } catch (e) {
+      console.error('Error parsing saved settings:', e);
+    }
+  }
+  return 'light';
+};
+
+const applyTheme = (theme: Theme) => {
+  const root = document.documentElement;
+  if (theme === 'dark') {
+    root.classList.add('dark');
+  } else {
+    root.classList.remove('dark');
+  }
+};
+
 export default function Settings() {
   const { t, i18n } = useTranslation('settings');
   
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>(() => {
+    const initialTheme = getInitialTheme();
+    applyTheme(initialTheme);
+    return initialTheme;
+  });
   const [language, setLanguage] = useState<Language>(() => getInitialLanguage(i18n.language));
-  const [currency, setCurrency] = useState<Currency>('VND');
+  const [currency, setCurrency] = useState<Currency>(() => {
+    const saved = localStorage.getItem('app-settings');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.currency === 'VND' || parsed.currency === 'USD') {
+          return parsed.currency;
+        }
+      } catch (e) {
+        console.error('Error parsing saved settings:', e);
+      }
+    }
+    return 'VND';
+  });
   const [notifications, setNotifications] = useState<NotificationSettings>(() => {
-    // Load from localStorage or use defaults
+   
     const saved = localStorage.getItem('app-settings');
     if (saved) {
       try {
@@ -55,7 +92,7 @@ export default function Settings() {
         console.error('Error parsing saved settings:', e);
       }
     }
-    // Default values
+  
     return {
       inactivityReminders: true,
       recurringTransactionReminders: true,
@@ -75,6 +112,8 @@ export default function Settings() {
     if (language !== i18n.language) {
       i18n.changeLanguage(language);
     }
+    // Apply theme
+    applyTheme(theme);
     // Save settings to localStorage
     localStorage.setItem('app-settings', JSON.stringify({
       theme,
@@ -87,7 +126,8 @@ export default function Settings() {
   };
 
   const handleReset = () => {
-    setTheme('light');
+    const resetTheme = 'light';
+    setTheme(resetTheme);
     setLanguage('vi');
     setCurrency('VND');
     setNotifications({
@@ -142,7 +182,7 @@ export default function Settings() {
               onClick={() => setTheme('light')}
               className={`group relative flex w-full flex-col rounded-xl border-2 p-5 text-left transition-all duration-300 ${
                 theme === 'light'
-                  ? 'border-blue-500 bg-blue-50 shadow-lg shadow-blue-100'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-lg shadow-blue-100 dark:shadow-blue-900/20'
                   : 'border-border hover:border-blue-300 hover:bg-muted/50'
               }`}
             >
@@ -171,7 +211,7 @@ export default function Settings() {
               onClick={() => setTheme('dark')}
               className={`group relative flex w-full flex-col rounded-xl border-2 p-5 text-left transition-all duration-300 ${
                 theme === 'dark'
-                  ? 'border-blue-500 bg-blue-50 shadow-lg shadow-blue-100'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-lg shadow-blue-100 dark:shadow-blue-900/20'
                   : 'border-border hover:border-blue-300 hover:bg-muted/50'
               }`}
             >
@@ -200,7 +240,7 @@ export default function Settings() {
         {/* Language & Currency Section */}
         <div className="bg-card border rounded-2xl p-6 shadow-lg transition-all hover:shadow-xl">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2.5 rounded-xl bg-teal-100 text-teal-600">
+            <div className="p-2.5 rounded-xl !bg-white dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 border border-teal-600 dark:border-teal-400">
               <Globe className="w-5 h-5" />
             </div>
             <div>
@@ -219,7 +259,8 @@ export default function Settings() {
                   id="language"
                   value={language}
                   onChange={(e) => setLanguage(e.target.value as Language)}
-                  className="w-full appearance-none rounded-xl border-2 border-border bg-background px-4 py-3.5 pr-10 text-foreground font-medium transition-all focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 hover:border-blue-300"
+                  style={{ backgroundColor: 'white', color: 'rgb(17, 24, 39)' }}
+                  className="w-full appearance-none rounded-xl border-2 border-border bg-white dark:!bg-gray-800 px-4 py-3.5 pr-10 text-gray-900 dark:!text-gray-100 font-medium transition-all focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 hover:border-blue-300"
                 >
                   <option value="vi">{t('language.options.vi')}</option>
                   <option value="en">{t('language.options.en')}</option>
@@ -241,7 +282,8 @@ export default function Settings() {
                   id="currency"
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value as Currency)}
-                  className="w-full appearance-none rounded-xl border-2 border-border bg-background px-4 py-3.5 pr-10 text-foreground font-medium transition-all focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 hover:border-blue-300"
+                  style={{ backgroundColor: 'white', color: 'rgb(17, 24, 39)' }}
+                  className="w-full appearance-none rounded-xl border-2 border-border bg-white dark:!bg-gray-800 px-4 py-3.5 pr-10 text-gray-900 dark:!text-gray-100 font-medium transition-all focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 hover:border-blue-300"
                 >
                   <option value="VND">{t('language.currencies.VND')}</option>
                   <option value="USD">{t('language.currencies.USD')}</option>

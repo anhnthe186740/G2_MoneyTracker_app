@@ -195,10 +195,10 @@ export default function Dashboard() {
     const diffTime = due.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays < 0) return { text: t("deadline.overdue"), color: "text-red-600" };
-    if (diffDays === 0) return { text: t("deadline.today"), color: "text-orange-600" };
-    if (diffDays <= 7) return { text: t("deadline.daysLeft", { days: diffDays }), color: "text-orange-500" };
-    if (diffDays <= 30) return { text: t("deadline.daysLeft", { days: diffDays }), color: "text-yellow-600" };
+    if (diffDays < 0) return { text: t("deadline.overdue"), color: "text-red-600 dark:text-red-300" };
+    if (diffDays === 0) return { text: t("deadline.today"), color: "text-orange-600 dark:text-orange-300" };
+    if (diffDays <= 7) return { text: t("deadline.daysLeft", { days: diffDays }), color: "text-orange-500 dark:text-orange-300" };
+    if (diffDays <= 30) return { text: t("deadline.daysLeft", { days: diffDays }), color: "text-yellow-600 dark:text-yellow-300" };
     return { text: formatDate(deadline), color: "text-muted-foreground" };
   };
 
@@ -247,7 +247,7 @@ export default function Dashboard() {
               return (
                 <div
                   key={wallet.id}
-                  className="flex items-center justify-between p-4 rounded-xl bg-white border shadow-sm hover:shadow transition"
+                  className="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-slate-900 border dark:border-slate-800 shadow-sm hover:shadow transition dark:hover:bg-slate-800"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-3 h-12 rounded-full" style={{ backgroundColor: wallet.color }} />
@@ -262,9 +262,9 @@ export default function Dashboard() {
                   </div>
                   <button
                     onClick={() => toggleWalletVisibility(wallet.id)}
-                    className="p-2 rounded-lg hover:bg-gray-100"
+                    className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800"
                   >
-                    {isVisible ? <Eye className="h-5 w-5 text-gray-500" /> : <EyeOff className="h-5 w-5 text-gray-500" />}
+                    {isVisible ? <Eye className="h-5 w-5 text-gray-500 dark:text-gray-300" /> : <EyeOff className="h-5 w-5 text-gray-500 dark:text-gray-300" />}
                   </button>
                 </div>
               );
@@ -291,13 +291,13 @@ export default function Dashboard() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-                <p className="text-green-700 font-medium mb-2">{t("totalIncome")}</p>
-                <p className="text-3xl font-bold text-green-600">{formatMoney(totalIncome)}</p>
+              <div className="bg-green-50 dark:bg-green-900/30 rounded-xl p-6 border border-green-200 dark:border-green-700/60">
+                <p className="text-green-700 dark:text-green-200 font-medium mb-2">{t("totalIncome")}</p>
+                <p className="text-3xl font-bold text-green-600 dark:text-green-300">{formatMoney(totalIncome)}</p>
               </div>
-              <div className="bg-red-50 rounded-xl p-6 border border-red-200">
-                <p className="text-red-700 font-medium mb-2">{t("totalExpense")}</p>
-                <p className="text-3xl font-bold text-red-600">{formatMoney(totalExpense)}</p>
+              <div className="bg-red-50 dark:bg-red-900/30 rounded-xl p-6 border border-red-200 dark:border-red-700/60">
+                <p className="text-red-700 dark:text-red-200 font-medium mb-2">{t("totalExpense")}</p>
+                <p className="text-3xl font-bold text-red-600 dark:text-red-300">{formatMoney(totalExpense)}</p>
               </div>
             </div>
           </div>

@@ -37,25 +37,25 @@ export default function AddMoneyModal({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-slate-900/50 z-[60]">
-      <div className="w-[480px] bg-white rounded-lg shadow-2xl p-5">
+      <div className="w-[480px] bg-white dark:bg-slate-900 rounded-lg shadow-2xl p-5 border border-border dark:border-slate-800">
         <div className="flex justify-between items-center mb-3">
-          <h3 className="m-0 font-bold">{t("dialog.addMoneyTitle")}</h3>
+          <h3 className="m-0 font-bold text-foreground">{t("dialog.addMoneyTitle")}</h3>
           <button
             aria-label="Close"
             onClick={onClose}
-            className="border-none bg-transparent cursor-pointer text-xl hover:text-gray-600"
+            className="border-none bg-transparent cursor-pointer text-xl hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100"
           >
             ✕
           </button>
         </div>
 
-        <div className="text-[13px] text-gray-500 mb-3">
+        <div className="text-[13px] text-gray-500 dark:text-gray-400 mb-3">
           {t("card.wallet")}: <strong>{walletName || t("card.notAvailable")}</strong>
         </div>
 
         <form className="grid gap-3" onSubmit={onSubmit}>
           <div>
-            <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
+            <label className="block text-[13px] font-medium mb-1.5 text-foreground">
               {t("form.amountToAdd")}
             </label>
             <input
@@ -66,18 +66,18 @@ export default function AddMoneyModal({
                 onAmountChange(value);
               }}
               placeholder={t("form.amountPlaceholder")}
-              className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full box-border px-2.5 py-2 rounded border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-[13px] font-medium mb-1.5 text-gray-800">
+            <label className="block text-[13px] font-medium mb-1.5 text-foreground">
               {t("form.sourceWallet")}
             </label>
             <select
               value={fromWallet}
               onChange={(e) => onFromWalletChange(e.target.value)}
-              className="w-full box-border px-2.5 py-2 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full box-border px-2.5 py-2 rounded border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">{t("form.selectSourceWallet")}</option>
               {wallets.map((w) => (

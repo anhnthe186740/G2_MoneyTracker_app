@@ -323,7 +323,7 @@ export default function Wallets() {
         }}
       >
         <DialogContent 
-          className="w-[480px] p-5"
+          className="w-[480px] p-5 dark:bg-slate-900 dark:border-slate-800"
           onClose={() => {
             setIsDialogOpen(false);
             resetForm();
@@ -438,7 +438,7 @@ export default function Wallets() {
         }}
       >
         <DialogContent 
-          className="w-[480px] p-5"
+          className="w-[480px] p-5 dark:bg-slate-900 dark:border-slate-800"
           onClose={() => {
             setIsAddMoneyDialogOpen(false);
             setAddMoneyAmount('');
@@ -479,7 +479,7 @@ export default function Wallets() {
               {addMoneyAmount && !isNaN(parseFloat(addMoneyAmount)) && parseFloat(addMoneyAmount) > 0 && (
                 <div>
                   <Label>{t('form.newBalance')}</Label>
-                  <p className="text-lg font-semibold text-green-600 mt-1">
+                  <p className="text-lg font-semibold text-green-600 dark:text-green-300 mt-1">
                     {formatCurrency((selectedWallet.balance || 0) + parseFloat(addMoneyAmount))}
                   </p>
                 </div>
@@ -514,7 +514,7 @@ export default function Wallets() {
         </p>
         <div className="flex items-center gap-3">
           <p className="text-4xl font-bold">
-            {showBalance ? formatCurrency(totalBalance) : '••••••••'}
+            {showBalance ? formatCurrency(totalBalance) : `•••••••• ${t('currency')}`}
           </p>
           <button
             onClick={handleToggleShowBalance}
@@ -554,7 +554,7 @@ export default function Wallets() {
           paginatedWallets.map((wallet) => (
             <Card key={wallet.id} className="p-6 hover:shadow-lg transition-shadow">
               <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-full flex items-center justify-center">
                   {getWalletIcon()}
                 </div>
                 <div className="flex gap-2">
@@ -574,17 +574,17 @@ export default function Wallets() {
               
               <div className="flex items-center gap-2 mb-2">
                 <p className="text-2xl font-bold" style={{ color: wallet.color || '#3498db' }}>
-                  {visibleWallets.has(String(wallet.id)) ? formatCurrency(wallet.balance || 0) : '••••••••'}
+                  {visibleWallets.has(String(wallet.id)) ? formatCurrency(wallet.balance || 0) : `•••••••• ${t('currency')}`}
                 </p>
                 <button
                   onClick={() => toggleWalletVisibility(wallet.id)}
-                  className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-1.5 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors"
                   aria-label={visibleWallets.has(String(wallet.id)) ? 'Ẩn số dư' : 'Hiện số dư'}
                 >
                   {visibleWallets.has(String(wallet.id)) ? (
-                    <Eye className="w-5 h-5 text-gray-500" />
+                    <Eye className="w-5 h-5 text-gray-500 dark:text-gray-300" />
                   ) : (
-                    <EyeOff className="w-5 h-5 text-gray-500" />
+                    <EyeOff className="w-5 h-5 text-gray-500 dark:text-gray-300" />
                   )}
                 </button>
               </div>

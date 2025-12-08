@@ -69,11 +69,11 @@ export default function Notifications() {
   // Background color for icon
   const getBgColor = (type: Notification['type']) => {
     switch (type) {
-      case 'WARNING': return 'bg-orange-50';
-      case 'SUCCESS': return 'bg-green-50';
-      case 'REMINDER': return 'bg-blue-50';
-      case 'INFO': return 'bg-purple-50';
-      default: return 'bg-gray-50';
+      case 'WARNING': return 'bg-orange-50 dark:bg-orange-900/30';
+      case 'SUCCESS': return 'bg-green-50 dark:bg-green-900/30';
+      case 'REMINDER': return 'bg-blue-50 dark:bg-blue-900/30';
+      case 'INFO': return 'bg-purple-50 dark:bg-purple-900/30';
+      default: return 'bg-gray-50 dark:bg-slate-800';
     }
   };
 
@@ -122,20 +122,20 @@ export default function Notifications() {
   return (
     <section className="space-y-6">
       <header className="space-y-1">
-        <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-        <p className="text-gray-600">
+        <h1 className="text-3xl font-bold text-foreground">{t('title')}</h1>
+        <p className="text-muted-foreground">
           {t('subtitle', { count: unreadCount })}
         </p>
       </header>
 
       {/* Filter */}
-      <div className="bg-white p-4 rounded-xl shadow-md border border-gray-200 flex items-center gap-4">
-        <label className="text-gray-700">{t('filter.label')}</label>
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-md border border-gray-200 dark:border-slate-800 flex items-center gap-4">
+        <label className="text-gray-700 dark:text-gray-200">{t('filter.label')}</label>
 
         <select
           value={filter}
           onChange={(e) => handleFilterChange(e.target.value as 'all' | 'unread' | 'read')}
-          className="w-48 border border-gray-300 rounded-lg p-2 bg-white"
+          className="w-48 border border-gray-300 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-900 dark:text-foreground"
         >
           <option value="all">{t('filter.all')}</option>
           <option value="unread">{t('filter.unread', { count: unreadCount })}</option>
@@ -167,17 +167,17 @@ export default function Notifications() {
 
       {/* Notification list */}
       {filteredNotifications.length === 0 ? (
-        <div className="bg-white p-12 text-center rounded-xl shadow-md border border-gray-200">
-          <Bell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">{t('empty')}</p>
+        <div className="bg-white dark:bg-slate-900 p-12 text-center rounded-xl shadow-md border border-gray-200 dark:border-slate-800">
+          <Bell className="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+          <p className="text-gray-500 dark:text-gray-400">{t('empty')}</p>
         </div>
       ) : (
         <div className="space-y-3">
           {paginatedNotifications.map((notification) => (
               <div
                 key={notification.id}
-                className={`bg-white p-6 rounded-xl shadow-md border ${
-                  !notification.is_read ? 'border-l-4 border-l-primary' : 'border-gray-200'
+                className={`bg-white dark:bg-slate-900 p-6 rounded-xl shadow-md border ${
+                  !notification.is_read ? 'border-l-4 border-l-primary' : 'border-gray-200 dark:border-slate-800'
                 }`}
               >
                 <div className="flex gap-4">
@@ -195,14 +195,14 @@ export default function Notifications() {
                       <div>
                         <h3
                           className={`text-lg font-semibold ${
-                            !notification.is_read ? 'text-gray-900' : 'text-gray-600'
+                            !notification.is_read ? 'text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300'
                           }`}
                         >
                           {notification.title}
                         </h3>
 
                         {!notification.is_read && (
-                          <span className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded mt-1">
+                          <span className="inline-block px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded mt-1">
                             {t('new')}
                           </span>
                         )}
@@ -220,9 +220,9 @@ export default function Notifications() {
                       )}
                     </div>
 
-                    <p className="text-gray-600 mb-3">{notification.message}</p>
+                    <p className="text-gray-600 dark:text-gray-300 mb-3">{notification.message}</p>
 
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-gray-400 dark:text-gray-500">
                       {formatDateTime(notification.created_at, currentLocale)}
                     </p>
                   </div>

@@ -164,33 +164,22 @@ export default function BudgetModal({
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200"
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200 bg-black/70"
             onClick={onClose}
         >
             <div
-                className="relative w-full max-w-lg overflow-hidden rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200"
-                style={{ backgroundColor: '#ffffff' }}
+                className="relative w-full max-w-lg overflow-hidden rounded-2xl shadow-2xl animate-in zoom-in-95 duration-200 bg-white dark:bg-slate-900 border border-border dark:border-slate-800"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="flex items-center justify-between border-b p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                    <h2 className="text-lg font-bold" style={{ color: '#1f2937' }}>
+                <div className="flex items-center justify-between border-b border-border dark:border-slate-800 p-4 bg-muted/60 dark:bg-slate-900">
+                    <h2 className="text-lg font-bold text-foreground">
                         {editingBudget ? t('modal.editTitle') : t('modal.addTitle')}
                     </h2>
                     <button
                         type="button"
                         onClick={onClose}
-                        className="rounded-full p-1 transition-colors"
-                        style={{ color: '#6b7280' }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#f3f4f6';
-                            e.currentTarget.style.color = '#1f2937';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = 'transparent';
-                            e.currentTarget.style.color = '#6b7280';
-                        }}
+                        className="rounded-full p-1 transition-colors text-muted-foreground hover:bg-muted hover:text-foreground dark:hover:bg-slate-800"
                     >
                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -199,23 +188,18 @@ export default function BudgetModal({
                 </div>
 
                 {/* Body */}
-                <div className="p-6" style={{ backgroundColor: '#ffffff' }}>
+                <div className="p-6 bg-white dark:bg-slate-900">
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-1">
-                            <label htmlFor="category_id" className="text-sm font-medium" style={{ color: '#1f2937' }}>
-                                {t('modal.categoryLabel')} <span style={{ color: '#dc2626' }}>*</span>
+                            <label htmlFor="category_id" className="text-sm font-medium text-foreground">
+                                {t('modal.categoryLabel')} <span className="text-red-600">*</span>
                             </label>
                             <select
                                 id="category_id"
                                 name="category_id"
                                 value={form.category_id}
                                 onChange={handleFormChange}
-                                className="block w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
-                                style={{
-                                    backgroundColor: '#ffffff',
-                                    borderColor: '#d1d5db',
-                                    color: '#1f2937'
-                                }}
+                                className="block w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             >
                                 <option value="">{t('modal.categoryPlaceholder')}</option>
                                 {categories.map((cat) => (
@@ -227,8 +211,8 @@ export default function BudgetModal({
                         </div>
 
                         <div className="space-y-1">
-                            <label htmlFor="limit_amount" className="text-sm font-medium" style={{ color: '#1f2937' }}>
-                                {t('modal.limitLabel')} <span style={{ color: '#dc2626' }}>*</span>
+                            <label htmlFor="limit_amount" className="text-sm font-medium text-foreground">
+                                {t('modal.limitLabel')} <span className="text-red-600">*</span>
                             </label>
                             <input
                                 id="limit_amount"
@@ -237,20 +221,15 @@ export default function BudgetModal({
                                 min={0}
                                 value={form.limit_amount}
                                 onChange={handleFormChange}
-                                className="block w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
-                                style={{
-                                    backgroundColor: '#ffffff',
-                                    borderColor: '#d1d5db',
-                                    color: '#1f2937'
-                                }}
+                                className="block w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                                 placeholder={t('modal.limitPlaceholder')}
                             />
                         </div>
 
                         <div className="grid gap-3 sm:grid-cols-2">
                             <div className="space-y-1">
-                                <label htmlFor="start_date" className="text-sm font-medium" style={{ color: '#1f2937' }}>
-                                    {t('modal.startDateLabel')} <span style={{ color: '#dc2626' }}>*</span>
+                                <label htmlFor="start_date" className="text-sm font-medium text-foreground">
+                                    {t('modal.startDateLabel')} <span className="text-red-600">*</span>
                                 </label>
                                 <input
                                     id="start_date"
@@ -258,17 +237,12 @@ export default function BudgetModal({
                                     type="date"
                                     value={form.start_date}
                                     onChange={handleFormChange}
-                                    className="block w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
-                                    style={{
-                                        backgroundColor: '#ffffff',
-                                        borderColor: '#d1d5db',
-                                        color: '#1f2937'
-                                    }}
+                                    className="block w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label htmlFor="end_date" className="text-sm font-medium" style={{ color: '#1f2937' }}>
-                                    {t('modal.endDateLabel')} <span style={{ color: '#dc2626' }}>*</span>
+                                <label htmlFor="end_date" className="text-sm font-medium text-foreground">
+                                    {t('modal.endDateLabel')} <span className="text-red-600">*</span>
                                 </label>
                                 <input
                                     id="end_date"
@@ -276,18 +250,13 @@ export default function BudgetModal({
                                     type="date"
                                     value={form.end_date}
                                     onChange={handleFormChange}
-                                    className="block w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
-                                    style={{
-                                        backgroundColor: '#ffffff',
-                                        borderColor: '#d1d5db',
-                                        color: '#1f2937'
-                                    }}
+                                    className="block w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-1">
-                            <label htmlFor="description" className="text-sm font-medium" style={{ color: '#1f2937' }}>
+                            <label htmlFor="description" className="text-sm font-medium text-foreground">
                                 {t('modal.descriptionLabel')}
                             </label>
                             <textarea
@@ -296,12 +265,7 @@ export default function BudgetModal({
                                 value={form.description}
                                 onChange={handleFormChange}
                                 rows={3}
-                                className="block w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
-                                style={{
-                                    backgroundColor: '#ffffff',
-                                    borderColor: '#d1d5db',
-                                    color: '#1f2937'
-                                }}
+                                className="block w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                                 placeholder={t('modal.descriptionPlaceholder')}
                             />
                         </div>
@@ -313,12 +277,7 @@ export default function BudgetModal({
                             <button
                                 type="button"
                                 onClick={onClose}
-                                className="rounded-xl border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition hover:bg-muted"
-                                style={{
-                                    backgroundColor: '#ffffff',
-                                    borderColor: '#d1d5db',
-                                    color: '#1f2937'
-                                }}
+                                className="rounded-xl border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition hover:bg-muted dark:border-slate-700"
                             >
                                 {t('modal.cancel')}
                             </button>

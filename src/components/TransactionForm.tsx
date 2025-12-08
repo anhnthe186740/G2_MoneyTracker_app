@@ -209,25 +209,25 @@ export default function TransactionForm({
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div className="bg-white dark:bg-slate-900 rounded-lg shadow-xl p-6 w-full max-w-md border border-border dark:border-slate-800">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">{editTransaction ? t('form.editTitle') : t('form.addTitle')}</h2>
+                    <h2 className="text-2xl font-bold text-foreground">{editTransaction ? t('form.editTitle') : t('form.addTitle')}</h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-500 hover:text-gray-700"
+                        className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
                     >
                         <X size={24} />
                     </button>
                 </div>
 
                 {error && (
-                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded dark:bg-red-900/30 dark:text-red-200">
                         {error}
                     </div>
                 )}
 
                 {(hasNoWallets || hasNoCategories) && (
-                    <div className="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded">
+                    <div className="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded dark:bg-yellow-900/30 dark:text-yellow-200">
                         <p className="font-semibold mb-2">{t('form.cannotCreate')}</p>
                         {hasNoWallets && <p>{t('form.createWalletFirst')}</p>}
                         {hasNoCategories && <p>{t('form.createCategoryFirst', { type: formData.type === 'INCOME' ? t('form.categoryTypeIncome') : t('form.categoryTypeExpense') })}</p>}
@@ -276,7 +276,7 @@ export default function TransactionForm({
                         <select
                             value={formData.walletId}
                             onChange={(e) => setFormData({ ...formData, walletId: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                         >
                             <option value="">{t('form.walletSelect')}</option>
@@ -299,7 +299,7 @@ export default function TransactionForm({
                         <select
                             value={formData.categoryId}
                             onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                             size={filteredCategories.length > 8 ? 8 : undefined}
                         >
@@ -318,7 +318,7 @@ export default function TransactionForm({
                         <CurrencyInput
                             value={formData.amount}
                             onChange={(value) => setFormData({ ...formData, amount: value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             placeholder={t('form.amountPlaceholder')}
                             min={0}
                             required
@@ -331,7 +331,7 @@ export default function TransactionForm({
                         <DateInput
                             value={formData.date}
                             onChange={(value) => setFormData({ ...formData, date: value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                         />
                     </div>
@@ -342,7 +342,7 @@ export default function TransactionForm({
                         <textarea
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             rows={3}
                             placeholder={t('form.descriptionPlaceholder')}
                         />
@@ -353,14 +353,14 @@ export default function TransactionForm({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-4 py-2 border rounded hover:bg-gray-50"
+                            className="flex-1 px-4 py-2 border rounded hover:bg-gray-50 dark:hover:bg-slate-800 dark:border-slate-700"
                             disabled={loading}
                         >
                             {t('form.cancel')}
                         </button>
                         <button
                             type="submit"
-                            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
+                            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 disabled:bg-gray-400"
                             disabled={loading || hasNoWallets || hasNoCategories}
                         >
                             {loading ? t('form.saving') : t('form.save')}

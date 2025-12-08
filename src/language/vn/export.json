@@ -2,6 +2,8 @@
   "title": "Xuất báo cáo",
   "subtitle": "Xuất dữ liệu tài chính của bạn",
   "loading": "Đang tải...",
+  "pageTitle": "Tổng quan tài chính",
+  "pageSubtitle": "Xem tình hình tài chính tổng thể của bạn",
   "exportOptions": {
     "title": "Tùy chọn xuất",
     "format": "Định dạng",
@@ -19,7 +21,12 @@
     "last3Months": "3 tháng gần nhất",
     "last6Months": "6 tháng gần nhất",
     "thisYear": "Năm nay",
-    "custom": "Tùy chỉnh"
+    "custom": "Tùy chỉnh",
+    "1month": "1 tháng gần đây",
+    "3months": "3 tháng gần đây",
+    "6months": "6 tháng gần đây",
+    "1year": "1 năm gần đây",
+    "all": "Tất cả"
   },
   "dataTypes": {
     "all": "Tất cả",
@@ -30,14 +37,67 @@
   },
   "actions": {
     "export": "Xuất báo cáo",
+    "exportExcel": "Xuất Excel",
     "preview": "Xem trước",
-    "download": "Tải xuống"
+    "download": "Tải xuống",
+    "previous": "← Trước",
+    "next": "Sau →",
+    "today": "Hôm nay",
+    "collapse": "Thu gọn",
+    "viewMore": "Xem thêm ({{count}} giao dịch)"
   },
   "labels": {
     "startDate": "Từ ngày",
     "endDate": "Đến ngày",
     "includeCharts": "Bao gồm biểu đồ",
-    "includeSummary": "Bao gồm tổng hợp"
+    "includeSummary": "Bao gồm tổng hợp",
+    "viewData": "Xem dữ liệu:",
+    "month": "Tháng {{number}}",
+    "totalIncome": "Tổng thu nhập",
+    "totalExpense": "Tổng chi tiêu",
+    "savings": "Tiết kiệm",
+    "currentBalance": "Số dư hiện tại",
+    "expenseByCategory": "Phân loại chi tiêu",
+    "pieChartDescription": "Biểu đồ tròn hiển thị phân loại chi tiêu",
+    "cashFlowTrend": "Xu hướng dòng tiền",
+    "recentTransactions": "Giao dịch gần đây",
+    "noExpenseData": "Chưa có dữ liệu chi tiêu",
+    "noTransactions": "Chưa có giao dịch nào"
+  },
+  "csv": {
+    "headers": {
+      "date": "Ngày",
+      "type": "Loại",
+      "category": "Danh mục",
+      "wallet": "Ví",
+      "amount": "Số tiền",
+      "description": "Mô tả"
+    },
+    "types": {
+      "income": "Thu nhập",
+      "expense": "Chi tiêu"
+    },
+    "stats": {
+      "title": "THỐNG KÊ ({{period}})",
+      "totalIncome": "Tổng thu nhập",
+      "totalExpense": "Tổng chi tiêu",
+      "savings": "Tiết kiệm",
+      "currentBalance": "Số dư hiện tại"
+    },
+    "periodLabels": {
+      "1month": "1 tháng",
+      "3months": "3 tháng",
+      "6months": "6 tháng",
+      "1year": "1 năm",
+      "all": "Tất cả"
+    },
+    "filenameLabels": {
+      "1month": "Thang-{{month}}-{{year}}",
+      "3months": "Tong-quan-3-thang",
+      "6months": "Tong-quan-6-thang",
+      "1year": "Tong-quan-1-nam",
+      "all": "Tat-ca-thu-nhap-chi-tieu"
+    }
   },
   "toast": {
     "exportSuccess": "Xuất báo cáo thành công!",

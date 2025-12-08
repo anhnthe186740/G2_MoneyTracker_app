@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import { useTranslation } from "react-i18next";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
 import {
@@ -40,6 +41,7 @@ type Wallet = {
 };
 
 export default function ExportReports() {
+  const { t } = useTranslation('export');
   const auth = useContext(AuthContext) as any;
   const user = auth?.user;
 
@@ -105,10 +107,12 @@ export default function ExportReports() {
     setSelectedYear(new Date().getFullYear());
   };
 
+  const incomeLabel = t('labels.totalIncome');
+  const expenseLabel = t('labels.totalExpense');
+  
   const monthlyData: Array<{
     name: string;
-    "Thu nhập": number;
-    "Chi tiêu": number;
+    [key: string]: string | number;
   }> = [];
 
   for (let i = 0; i < 6; i++) {
@@ -155,13 +159,13 @@ export default function ExportReports() {
 
     monthlyData.push({
       name: monthLabel,
-      "Thu nhập": monthIncome,
-      "Chi tiêu": monthExpense,
+      [incomeLabel]: monthIncome,
+      [expenseLabel]: monthExpense,
     });
   }
 
-  const totalIncome = monthlyData.reduce((sum, m) => sum + m["Thu nhập"], 0);
-  const totalExpense = monthlyData.reduce((sum, m) => sum + m["Chi tiêu"], 0);
+  const totalIncome = monthlyData.reduce((sum, m) => sum + (m[incomeLabel] as number || 0), 0);
+  const totalExpense = monthlyData.reduce((sum, m) => sum + (m[expenseLabel] as number || 0), 0);
   const totalSavings = totalIncome - totalExpense;
 
   const currentBalance = wallets.reduce((sum, w) => sum + w.balance, 0);
@@ -246,14 +250,21 @@ export default function ExportReports() {
     const periodSavings = periodIncome - periodExpense;
 
     const periodLabels: Record<string, string> = {
-      "1month": "1 thang",
-      "3months": "3 thang",
-      "6months": "6 thang",
-      "1year": "1 nam",
-      all: "Tat ca",
+      "1month": t('csv.periodLabels.1month'),
+      "3months": t('csv.periodLabels.3months'),
+      "6months": t('csv.periodLabels.6months'),
+      "1year": t('csv.periodLabels.1year'),
+      all: t('csv.periodLabels.all'),
     };
 
-    const headers = ["Ngay", "Loai", "Danh muc", "Vi", "So tien", "Mo ta"];
+    const headers = [
+      t('csv.headers.date'),
+      t('csv.headers.type'),
+      t('csv.headers.category'),
+      t('csv.headers.wallet'),
+      t('csv.headers.amount'),
+      t('csv.headers.description')
+    ];
     const rows = sortedForExport.map((trans) => {
       const category = categories.find(
         (c) => String(c.id) === String(trans.category_id)
@@ -268,7 +279,7 @@ export default function ExportReports() {
 
       return [
         dateStr,
-        trans.type === "INCOME" ? "Thu nhap" : "Chi tieu",
+        trans.type === "INCOME" ? t('csv.types.income') : t('csv.types.expense'),
         category?.name || "",
         wallet?.name || "",
         trans.amount,
@@ -278,11 +289,11 @@ export default function ExportReports() {
 
     const stats = [
       [],
-      [`THONG KE (${periodLabels[exportPeriod]})`, "", "", "", "", ""],
-      ["Tong thu nhap", "", "", "", periodIncome, ""],
-      ["Tong chi tieu", "", "", "", periodExpense, ""],
-      ["Tiet kiem", "", "", "", periodSavings, ""],
-      ["So du hien tai", "", "", "", currentBalance, ""],
+      [t('csv.stats.title', { period: periodLabels[exportPeriod] }), "", "", "", "", ""],
+      [t('csv.stats.totalIncome'), "", "", "", periodIncome, ""],
+      [t('csv.stats.totalExpense'), "", "", "", periodExpense, ""],
+      [t('csv.stats.savings'), "", "", "", periodSavings, ""],
+      [t('csv.stats.currentBalance'), "", "", "", currentBalance, ""],
     ];
 
     const escapeCSV = (cell: any) => {
@@ -307,11 +318,11 @@ export default function ExportReports() {
     const now = new Date();
     
     const filenameLabels: Record<string, string> = {
-      "1month": `Thang-${now.getMonth() + 1}-${now.getFullYear()}`,
-      "3months": `Tong-quan-3-thang`,
-      "6months": `Tong-quan-6-thang`,
-      "1year": `Tong-quan-1-nam`,
-      all: "Tat-ca-thu-nhap-chi-tieu",
+      "1month": t('csv.filenameLabels.1month', { month: now.getMonth() + 1, year: now.getFullYear() }),
+      "3months": t('csv.filenameLabels.3months'),
+      "6months": t('csv.filenameLabels.6months'),
+      "1year": t('csv.filenameLabels.1year'),
+      all: t('csv.filenameLabels.all'),
     };
     
     const filename = `${filenameLabels[exportPeriod]}.csv`;
@@ -323,35 +334,35 @@ export default function ExportReports() {
   };
 
   if (loading) {
-    return <div className="p-4">Đang tải...</div>;
+    return <div className="p-4">{t('loading')}</div>;
   }
 
   return (
     <section className="space-y-6">
       <header className="flex justify-between items-start">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Tổng quan tài chính
+          <h1 className="text-3xl font-bold text-foreground">
+            {t('pageTitle')}
           </h1>
-          <p className="text-sm text-gray-500">
-            Xem tình hình tài chính tổng thể của bạn
+          <p className="text-sm text-muted-foreground">
+            {t('pageSubtitle')}
           </p>
         </div>
         <div className="flex items-center gap-3">
           <select
             value={exportPeriod}
             onChange={(e) => setExportPeriod(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+            className="px-4 py-2 border border-gray-300 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm bg-white dark:bg-slate-900 dark:text-foreground"
           >
-            <option value="1month">1 tháng gần đây</option>
-            <option value="3months">3 tháng gần đây</option>
-            <option value="6months">6 tháng gần đây</option>
-            <option value="1year">1 năm gần đây</option>
-            <option value="all">Tất cả</option>
+            <option value="1month">{t('dateRanges.1month')}</option>
+            <option value="3months">{t('dateRanges.3months')}</option>
+            <option value="6months">{t('dateRanges.6months')}</option>
+            <option value="1year">{t('dateRanges.1year')}</option>
+            <option value="all">{t('dateRanges.all')}</option>
           </select>
           <button
             onClick={exportToCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -366,38 +377,38 @@ export default function ExportReports() {
                 d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               />
             </svg>
-            Xuất Excel
+            {t('actions.exportExcel')}
           </button>
         </div>
       </header>
 
-      <div className="bg-white rounded-lg shadow p-4">
+      <div className="bg-white dark:bg-slate-900 rounded-lg shadow p-4 border border-gray-200 dark:border-slate-800">
         <div className="flex items-center justify-between">
           <div className="flex gap-2">
             <button
               onClick={goToPreviousMonth}
-              className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium transition-colors"
+              className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded text-sm font-medium transition-colors"
             >
-              ← Trước
+              {t('actions.previous')}
             </button>
             <button
               onClick={goToNextMonth}
-              className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium transition-colors"
+              className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded text-sm font-medium transition-colors"
             >
-              Sau →
+              {t('actions.next')}
             </button>
           </div>
 
           <div className="flex gap-2 items-center">
-            <span className="text-sm text-gray-600">Xem dữ liệu:</span>
+            <span className="text-sm text-muted-foreground">{t('labels.viewData')}</span>
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(Number(e.target.value))}
-              className="px-3 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-1.5 border border-gray-300 dark:border-slate-700 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-900 dark:text-foreground"
             >
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((m) => (
                 <option key={m} value={m}>
-                  Tháng {m}
+                  {t('labels.month', { number: m })}
                 </option>
               ))}
             </select>
@@ -405,7 +416,7 @@ export default function ExportReports() {
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(Number(e.target.value))}
-              className="px-3 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-1.5 border border-gray-300 dark:border-slate-700 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-900 dark:text-foreground"
             >
               {[2024, 2025].map((y) => (
                 <option key={y} value={y}>
@@ -417,25 +428,25 @@ export default function ExportReports() {
 
           <button
             onClick={goToToday}
-            className="px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium transition-colors"
+            className="px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-sm font-medium transition-colors"
           >
-            Hôm nay
+            {t('actions.today')}
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-4 gap-4">
-        <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-800 shadow-sm">
           <div className="flex justify-between items-center">
             <div>
-              <div className="text-sm text-gray-500 mb-1">Tổng thu nhập</div>
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-sm text-muted-foreground mb-1">{t('labels.totalIncome')}</div>
+              <div className="text-2xl font-bold text-foreground">
                 {format(totalIncome)} đ
               </div>
             </div>
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/40 rounded-full flex items-center justify-center">
               <svg
-                className="w-6 h-6 text-green-600"
+                className="w-6 h-6 text-green-600 dark:text-green-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -451,17 +462,17 @@ export default function ExportReports() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-800 shadow-sm">
           <div className="flex justify-between items-center">
             <div>
-              <div className="text-sm text-gray-500 mb-1">Tổng chi tiêu</div>
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-sm text-muted-foreground mb-1">{t('labels.totalExpense')}</div>
+              <div className="text-2xl font-bold text-foreground">
                 {format(totalExpense)} đ
               </div>
             </div>
-            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-red-100 dark:bg-red-900/40 rounded-full flex items-center justify-center">
               <svg
-                className="w-6 h-6 text-red-600"
+                className="w-6 h-6 text-red-600 dark:text-red-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -477,17 +488,17 @@ export default function ExportReports() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-800 shadow-sm">
           <div className="flex justify-between items-center">
             <div>
-              <div className="text-sm text-gray-500 mb-1">Tiết kiệm</div>
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-sm text-muted-foreground mb-1">{t('labels.savings')}</div>
+              <div className="text-2xl font-bold text-foreground">
                 {format(totalSavings)} đ
               </div>
             </div>
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/40 rounded-full flex items-center justify-center">
               <svg
-                className="w-6 h-6 text-blue-600"
+                className="w-6 h-6 text-blue-600 dark:text-blue-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -503,17 +514,17 @@ export default function ExportReports() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-800 shadow-sm">
           <div className="flex justify-between items-center">
             <div>
-              <div className="text-sm text-gray-500 mb-1">Số dư hiện tại</div>
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-sm text-muted-foreground mb-1">{t('labels.currentBalance')}</div>
+              <div className="text-2xl font-bold text-foreground">
                 {format(currentBalance)} đ
               </div>
             </div>
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/40 rounded-full flex items-center justify-center">
               <svg
-                className="w-6 h-6 text-purple-600"
+                className="w-6 h-6 text-purple-600 dark:text-purple-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -531,9 +542,9 @@ export default function ExportReports() {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">
-            Phân loại chi tiêu
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-800 shadow-sm">
+          <h3 className="text-lg font-bold text-foreground mb-4">
+            {t('labels.expenseByCategory')}
           </h3>
           {expenseByCategory.length > 0 ? (
             <div className="grid grid-cols-2 gap-4">
@@ -560,8 +571,8 @@ export default function ExportReports() {
                 </ResponsiveContainer>
               </div>
               <div className="flex flex-col justify-center space-y-3">
-                <div className="text-sm text-gray-500 mb-2">
-                  Biểu đồ tròn hiển thị phân loại chi tiêu
+                <div className="text-sm text-muted-foreground mb-2">
+                  {t('labels.pieChartDescription')}
                 </div>
                 {expenseByCategory.map((item, i) => (
                   <div
@@ -583,15 +594,15 @@ export default function ExportReports() {
               </div>
             </div>
           ) : (
-            <div className="flex items-center justify-center h-64 text-gray-400">
-              Chưa có dữ liệu chi tiêu
+                <div className="flex items-center justify-center h-64 text-gray-400 dark:text-gray-500">
+              {t('labels.noExpenseData')}
             </div>
           )}
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">
-            Xu hướng dòng tiền
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-800 shadow-sm">
+          <h3 className="text-lg font-bold text-foreground mb-4">
+            {t('labels.cashFlowTrend')}
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -621,7 +632,7 @@ export default function ExportReports() {
                 />
                 <Line
                   type="natural"
-                  dataKey="Thu nhập"
+                  dataKey={incomeLabel}
                   stroke="#22c55e"
                   strokeWidth={3}
                   dot={{
@@ -634,7 +645,7 @@ export default function ExportReports() {
                 />
                 <Line
                   type="natural"
-                  dataKey="Chi tiêu"
+                  dataKey={expenseLabel}
                   stroke="#ef4444"
                   strokeWidth={3}
                   dot={{
@@ -651,9 +662,9 @@ export default function ExportReports() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">
-          Giao dịch gần đây
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-gray-200 dark:border-slate-800 shadow-sm">
+        <h3 className="text-lg font-bold text-foreground mb-4">
+          {t('labels.recentTransactions')}
         </h3>
         {recentTransactions.length > 0 ? (
           <div className="space-y-3">
@@ -667,7 +678,7 @@ export default function ExportReports() {
               return (
                 <div
                   key={trans.id}
-                  className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0"
+                  className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-slate-800 last:border-0"
                 >
                   <div className="flex items-center gap-3">
                     <div
@@ -677,10 +688,10 @@ export default function ExportReports() {
                       <span style={{ color: category?.color }}>💳</span>
                     </div>
                     <div>
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-foreground">
                         {trans.description || category?.name}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-muted-foreground">
                         {wallet?.name} •{" "}
                         {new Date(trans.date).toLocaleDateString("vi-VN")}
                       </div>
@@ -689,8 +700,8 @@ export default function ExportReports() {
                   <div
                     className={`font-semibold ${
                       trans.type === "INCOME"
-                        ? "text-green-600"
-                        : "text-red-600"
+                        ? "text-green-600 dark:text-green-300"
+                        : "text-red-600 dark:text-red-300"
                     }`}
                   >
                     {trans.type === "INCOME" ? "+" : "-"}
@@ -701,8 +712,8 @@ export default function ExportReports() {
             })}
           </div>
         ) : (
-          <div className="text-center text-gray-400 py-8">
-            Chưa có giao dịch nào
+          <div className="text-center text-gray-400 dark:text-gray-500 py-8">
+            {t('labels.noTransactions')}
           </div>
         )}
 
@@ -710,11 +721,11 @@ export default function ExportReports() {
           <div className="flex justify-center mt-4">
             <button
               onClick={() => setShowAllTransactions(!showAllTransactions)}
-              className="px-6 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+              className="px-6 py-2 text-sm font-medium text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-800/40 transition-colors"
             >
               {showAllTransactions
-                ? "Thu gọn"
-                : `Xem thêm (${filteredTransactions.length - 5} giao dịch)`}
+                ? t('actions.collapse')
+                : t('actions.viewMore', { count: filteredTransactions.length - 5 })}
             </button>
           </div>
         )}

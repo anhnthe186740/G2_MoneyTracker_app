@@ -112,24 +112,24 @@ export default function RecurringTransactionList({
     };
 
     if (loading) {
-        return <div className="text-center py-8">{t('loading')}</div>;
+        return <div className="text-center py-8 text-muted-foreground">{t('loading')}</div>;
     }
 
     return (
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-900 rounded-lg shadow p-6 border border-border dark:border-slate-800">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">{t('table.title')}</h2>
+                <h2 className="text-2xl font-bold text-foreground">{t('table.title')}</h2>
             </div>
 
             {recurringTransactions.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                     {t('empty.noTransactions')}
                 </div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b">
+                            <tr className="border-b border-border dark:border-slate-800">
                                 <th className="text-left py-3 px-4">{t('table.headers.category')}</th>
                                 <th className="text-left py-3 px-4">{t('table.headers.wallet')}</th>
                                 <th className="text-left py-3 px-4">{t('table.headers.description')}</th>
@@ -140,11 +140,11 @@ export default function RecurringTransactionList({
                                 <th className="text-center py-3 px-4">{t('table.headers.actions')}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="divide-y divide-border dark:divide-slate-800">
                             {recurringTransactions.map((rt) => (
                                 <tr
                                     key={rt.id}
-                                    className={`border-b hover:bg-gray-50 ${!rt.isActive ? 'opacity-50' : ''}`}
+                                    className={`hover:bg-gray-50 dark:hover:bg-slate-800 ${!rt.isActive ? 'opacity-60' : ''}`}
                                 >
                                     <td className="py-3 px-4">
                                         <span
@@ -155,9 +155,9 @@ export default function RecurringTransactionList({
                                             {getCategoryName(rt.categoryId)}
                                         </span>
                                     </td>
-                                    <td className="py-3 px-4">{getWalletName(rt.walletId)}</td>
-                                    <td className="py-3 px-4">{rt.description}</td>
-                                    <td className="py-3 px-4">{frequencyLabels[rt.frequency]}</td>
+                                    <td className="py-3 px-4 text-foreground">{getWalletName(rt.walletId)}</td>
+                                    <td className="py-3 px-4 text-muted-foreground">{rt.description}</td>
+                                    <td className="py-3 px-4 text-foreground">{frequencyLabels[rt.frequency]}</td>
                                     <td className="py-3 px-4">
                                         {format(new Date(rt.nextDate), 'dd/MM/yyyy')}
                                     </td>
@@ -169,7 +169,7 @@ export default function RecurringTransactionList({
                                     <td className="py-3 px-4 text-center">
                                         <button
                                             onClick={() => handleToggleActive(rt.id, rt.isActive)}
-                                            className={`${rt.isActive ? 'text-green-600' : 'text-gray-400'
+                                            className={`${rt.isActive ? 'text-green-600 dark:text-green-300' : 'text-gray-400 dark:text-gray-500'
                                                 } hover:opacity-70`}
                                             title={rt.isActive ? t('toggle.on') : t('toggle.off')}
                                         >
@@ -180,14 +180,14 @@ export default function RecurringTransactionList({
                                         <div className="flex justify-center gap-2">
                                             <button
                                                 onClick={() => onEdit(rt)}
-                                                className="text-blue-600 hover:text-blue-800"
+                                                className="text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200"
                                                 title={t('actions.edit')}
                                             >
                                                 <Edit size={18} />
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(rt.id)}
-                                                className="text-red-600 hover:text-red-800"
+                                                className="text-red-600 hover:text-red-800 dark:text-red-300 dark:hover:text-red-200"
                                                 title={t('actions.delete')}
                                             >
                                                 <Trash2 size={18} />
