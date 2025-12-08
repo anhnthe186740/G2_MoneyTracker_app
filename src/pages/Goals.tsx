@@ -376,10 +376,10 @@ export default function Goals() {
       <section className="grid gap-3">
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="m-0 font-bold text-[32px] leading-tight text-slate-900">
+            <h2 className="m-0 font-bold text-[32px] leading-tight text-foreground">
               {t("title")}
             </h2>
-            <div className="mt-2 text-sm text-gray-500">{t("subtitle")}</div>
+            <div className="mt-2 text-sm text-muted-foreground">{t("subtitle")}</div>
           </div>
           <Button
             className="bg-[#0b122a] hover:bg-[#1a2645] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
@@ -391,13 +391,13 @@ export default function Goals() {
         </div>
         <div className="mt-4">
           {loading ? (
-            <div className="p-4 text-gray-500">{t("loading")}</div>
+            <div className="p-4 text-gray-500 dark:text-gray-400">{t("loading")}</div>
           ) : !Array.isArray(goals) ? (
-            <div className="p-4 text-red-700">{t("invalidData")}</div>
+            <div className="p-4 text-red-700 dark:text-red-300">{t("invalidData")}</div>
           ) : filtered.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-gray-200 bg-white p-6">
+            <div className="rounded-2xl border border-dashed border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6">
               <div className="min-h-[120px] flex items-center justify-center">
-                <div className="text-center text-sm text-gray-500">
+                <div className="text-center text-sm text-gray-500 dark:text-gray-400">
                   {t("empty.title")}
                 </div>
               </div>
@@ -428,7 +428,7 @@ export default function Goals() {
               />
 
               <div>
-                <h3 className="font-semibold text-xl mb-4 text-slate-900">
+                <h3 className="font-semibold text-xl mb-4 text-foreground">
                   {t("otherGoals.title")}
                 </h3>
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-3">

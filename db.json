@@ -64,7 +64,7 @@
       "user_id": 1,
       "name": "Vietcombank",
       "type": "BANK",
-      "balance": 39000000,
+      "balance": 40500000,
       "color": "#3498db",
       "created_at": "2024-01-15T09:00:00Z"
     },
@@ -73,7 +73,7 @@
       "user_id": 1,
       "name": "Ví Momo",
       "type": "E_WALLET",
-      "balance": 8000000,
+      "balance": 7400000,
       "color": "#8e44ad",
       "created_at": "2024-01-20T11:30:00Z"
     },
@@ -100,7 +100,7 @@
       "user_id": 1,
       "name": "VietinBank",
       "type": "BANK",
-      "balance": 11000000,
+      "balance": 12000000,
       "color": "#16a085",
       "created_at": "2024-03-01T14:00:00Z"
     },
@@ -579,39 +579,6 @@
       "date": "2025-12-06T17:00:00.000Z",
       "created_at": "2025-12-07T15:59:49.149Z",
       "recurring_transaction_id": "d3c5"
-    },
-    {
-      "id": "dd5e",
-      "user_id": "1",
-      "wallet_id": "1001",
-      "category_id": "2",
-      "amount": 600000,
-      "type": "INCOME",
-      "description": "",
-      "date": "2025-12-08T00:00:00.000Z",
-      "created_at": "2025-12-08T07:27:42.614Z"
-    },
-    {
-      "id": "8181",
-      "user_id": "1",
-      "wallet_id": "1000",
-      "category_id": "4",
-      "amount": 500000,
-      "type": "EXPENSE",
-      "description": "",
-      "date": "2025-12-08T00:00:00.000Z",
-      "created_at": "2025-12-08T07:28:02.766Z"
-    },
-    {
-      "id": "6436",
-      "user_id": "1",
-      "wallet_id": "1000",
-      "category_id": "3",
-      "amount": 1500000,
-      "type": "EXPENSE",
-      "description": "",
-      "date": "2025-12-08T00:00:00.000Z",
-      "created_at": "2025-12-08T07:28:47.230Z"
     }
   ],
   "recurring_transactions": [
@@ -854,14 +821,14 @@
       "id": "2"
     },
     {
+      "id": "3",
+      "user_id": 1,
       "name": "Học khoá React Master",
       "target_amount": 5000000,
-      "wallet_id": "2",
-      "deadline": "2025-12-30",
+      "current_amount": 2000000,
+      "deadline": "2024-06-15",
       "status": "In Progress",
-      "current_amount": 3000000,
-      "user_id": 1,
-      "id": "3"
+      "wallet_id": 2
     },
     {
       "id": "4",
@@ -1235,6 +1202,24 @@
       "message": "Giao dịch định kỳ \"Test3\" (9,896) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!",
       "is_read": false,
       "created_at": "2025-12-07T15:53:08.407Z"
+    },
+    {
+      "id": "bc4b",
+      "user_id": 1,
+      "type": "REMINDER",
+      "title": "Nhắc bạn ghi chép chi tiêu",
+      "message": "Bạn đã 3 ngày không ghi lại bất kỳ giao dịch nào. Hãy cập nhật ngay để theo dõi chi tiêu hiệu quả hơn!",
+      "is_read": false,
+      "created_at": "2025-12-08T02:35:28.453Z"
+    },
+    {
+      "id": "9c89",
+      "user_id": 1,
+      "type": "REMINDER",
+      "title": "Nhắc bạn ghi chép chi tiêu",
+      "message": "Bạn đã 3 ngày không ghi lại bất kỳ giao dịch nào. Hãy cập nhật ngay để theo dõi chi tiêu hiệu quả hơn!",
+      "is_read": false,
+      "created_at": "2025-12-08T02:35:28.458Z"
     }
   ],
   "app_settings": [

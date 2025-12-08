@@ -113,13 +113,13 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
     };
 
     if (loading) {
-        return <div className="text-center py-8">{t('loading')}</div>;
+        return <div className="text-center py-8 text-muted-foreground">{t('loading')}</div>;
     }
 
     return (
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white dark:bg-slate-900 rounded-lg shadow p-6 border border-border dark:border-slate-800">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">{t('table.title')}</h2>
+                <h2 className="text-2xl font-bold text-foreground">{t('table.title')}</h2>
 
                 <div className="flex gap-4">
                     {/* Filter */}
@@ -128,7 +128,7 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
                         <select
                             value={filterType}
                             onChange={(e) => setFilterType(e.target.value as 'ALL' | 'INCOME' | 'EXPENSE')}
-                            className="border rounded px-3 py-2"
+                            className="border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                         >
                             <option value="ALL">{t('table.filters.all')}</option>
                             <option value="INCOME">{t('table.filters.income')}</option>
@@ -139,7 +139,7 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
                     {/* Sort Order */}
                     <button
                         onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                        className="flex items-center gap-2 border rounded px-3 py-2 hover:bg-gray-50"
+                        className="flex items-center gap-2 border rounded px-3 py-2 hover:bg-gray-50 dark:hover:bg-slate-800 dark:border-slate-700 dark:text-foreground"
                     >
                         <ArrowUpDown size={20} />
                         {sortOrder === 'asc' ? t('table.sort.oldest') : t('table.sort.newest')}
@@ -148,12 +148,12 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
             </div>
 
             {filteredTransactions.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">{t('table.empty')}</div>
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">{t('table.empty')}</div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b">
+                            <tr className="border-b border-border dark:border-slate-800">
                                 <th className="text-left py-3 px-4">{t('table.headers.date')}</th>
                                 <th className="text-left py-3 px-4">{t('table.headers.category')}</th>
                                 <th className="text-left py-3 px-4">{t('table.headers.wallet')}</th>
@@ -162,9 +162,9 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
                                 <th className="text-center py-3 px-4">{t('table.headers.actions')}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="divide-y divide-border dark:divide-slate-800">
                             {filteredTransactions.map((transaction) => (
-                                <tr key={transaction.id} className="border-b hover:bg-gray-50">
+                                <tr key={transaction.id} className="hover:bg-gray-50 dark:hover:bg-slate-800">
                                     <td className="py-3 px-4">
                                         {format(new Date(transaction.date), 'dd/MM/yyyy')}
                                     </td>
@@ -187,14 +187,14 @@ export default function TransactionList({ userId, wallets, categories, onUpdate,
                                         <div className="flex justify-center gap-2">
                                             <button
                                                 onClick={() => onEdit(transaction)}
-                                                className="text-blue-600 hover:text-blue-800"
+                                                className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                                                 title={t('actions.edit')}
                                             >
                                                 <Edit size={18} />
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(transaction.id)}
-                                                className="text-red-600 hover:text-red-800"
+                                                className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                                                 title={t('actions.delete')}
                                             >
                                                 <Trash2 size={18} />

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useCallback } from 'react';
 import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { TransactionContext } from '../context/TransactionContext';
@@ -6,7 +6,6 @@ import type { Category, Wallet, Transaction } from '../types';
 import { checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
 import { useBudgetContext } from '../context/BudgetContext';
 import CurrencyInput from './CurrencyInput';
-import DateInput from './DateInput';
 
 interface TransactionFormProps {
     userId: number;
@@ -41,7 +40,7 @@ export default function TransactionForm({
     const validCategories = categories.filter(c => c.id !== null && c.id !== undefined && c.id !== 'NaN' && !Number.isNaN(c.id));
 
     // Initialize form data based on edit mode
-    const getInitialFormData = () => {
+    const getInitialFormData = useCallback(() => {
         if (editTransaction) {
             const walletId = editTransaction.walletId !== null && editTransaction.walletId !== undefined && editTransaction.walletId !== 'NaN'
                 ? String(editTransaction.walletId)
@@ -68,7 +67,7 @@ export default function TransactionForm({
             description: '',
             date: new Date().toISOString().split('T')[0],
         };
-    };
+    }, [editTransaction]);
 
     const [formData, setFormData] = useState(getInitialFormData);
     const [loading, setLoading] = useState(false);
@@ -77,7 +76,7 @@ export default function TransactionForm({
     // Only update form when editTransaction prop changes (on mount)
     useEffect(() => {
         setFormData(getInitialFormData());
-    }, [editTransaction?.id]); // Only trigger when transaction ID changes
+    }, [getInitialFormData]); // Only trigger when transaction data changes
 
     const filteredCategories = validCategories.filter(c => c.type === formData.type);
 
@@ -144,8 +143,8 @@ export default function TransactionForm({
             if (editTransaction) {
                 // Cập nhật giao dịch
                 await updateTransaction(editTransaction.id, {
-                    walletId: formData.walletId as any,
-                    categoryId: formData.categoryId as any,
+                    walletId: formData.walletId,
+                    categoryId: formData.categoryId,
                     amount: amount,
                     type: formData.type,
                     description: formData.description,
@@ -155,8 +154,8 @@ export default function TransactionForm({
                 // Tạo giao dịch mới
                 await createTransaction({
                     userId,
-                    walletId: formData.walletId as any,
-                    categoryId: formData.categoryId as any,
+                    walletId: formData.walletId,
+                    categoryId: formData.categoryId,
                     amount,
                     type: formData.type,
                     description: formData.description,
@@ -209,25 +208,25 @@ export default function TransactionForm({
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div className="bg-white dark:bg-slate-900 rounded-lg shadow-xl p-6 w-full max-w-md border border-border dark:border-slate-800">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">{editTransaction ? t('form.editTitle') : t('form.addTitle')}</h2>
+                    <h2 className="text-2xl font-bold text-foreground">{editTransaction ? t('form.editTitle') : t('form.addTitle')}</h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-500 hover:text-gray-700"
+                        className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
                     >
                         <X size={24} />
                     </button>
                 </div>
 
                 {error && (
-                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded dark:bg-red-900/30 dark:text-red-200">
                         {error}
                     </div>
                 )}
 
                 {(hasNoWallets || hasNoCategories) && (
-                    <div className="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded">
+                    <div className="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded dark:bg-yellow-900/30 dark:text-yellow-200">
                         <p className="font-semibold mb-2">{t('form.cannotCreate')}</p>
                         {hasNoWallets && (
                             <div className="flex flex-col gap-2">
@@ -289,7 +288,7 @@ export default function TransactionForm({
                         <select
                             value={formData.walletId}
                             onChange={(e) => setFormData({ ...formData, walletId: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                         >
                             <option value="">{t('form.walletSelect')}</option>
@@ -312,7 +311,7 @@ export default function TransactionForm({
                         <select
                             value={formData.categoryId}
                             onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                             size={filteredCategories.length > 8 ? 8 : undefined}
                         >
@@ -331,7 +330,7 @@ export default function TransactionForm({
                         <CurrencyInput
                             value={formData.amount}
                             onChange={(value) => setFormData({ ...formData, amount: value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             placeholder={t('form.amountPlaceholder')}
                             min={0}
                             required
@@ -341,10 +340,11 @@ export default function TransactionForm({
                     {/* Date */}
                     <div>
                         <label className="block text-sm font-medium mb-2">{t('form.dateLabel')}</label>
-                        <DateInput
+                        <input
+                            type="date"
                             value={formData.date}
-                            onChange={(value) => setFormData({ ...formData, date: value })}
-                            className="w-full border rounded px-3 py-2"
+                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                         />
                     </div>
@@ -355,7 +355,7 @@ export default function TransactionForm({
                         <textarea
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             rows={3}
                             placeholder={t('form.descriptionPlaceholder')}
                         />
@@ -366,14 +366,14 @@ export default function TransactionForm({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-4 py-2 border rounded hover:bg-gray-50"
+                            className="flex-1 px-4 py-2 border rounded hover:bg-gray-50 dark:hover:bg-slate-800 dark:border-slate-700"
                             disabled={loading}
                         >
                             {t('form.cancel')}
                         </button>
                         <button
                             type="submit"
-                            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
+                            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 disabled:bg-gray-400"
                             disabled={loading || hasNoWallets || hasNoCategories}
                         >
                             {loading ? t('form.saving') : t('form.save')}

@@ -360,7 +360,7 @@ export default function BudgetPage() {
                     onClick={() => setStatusFilter(value)}
                     className={`rounded-full px-3 py-1 font-medium transition
     ${active
-                        ? 'bg-[rgb(99_102_241)] text-white shadow-sm'
+                        ? 'bg-[rgb(99_102_241)] text-white shadow-sm dark:bg-blue-600'
                         : 'text-muted-foreground hover:text-foreground'
                       }`}
                   >
@@ -373,7 +373,7 @@ export default function BudgetPage() {
           </div>
         </div>
 
-        <div className="mt-4 overflow-x-auto rounded-2xl border bg-background">
+        <div className="mt-4 overflow-x-auto rounded-2xl border bg-background dark:border-slate-800">
           {filteredBudgets.length === 0 ? (
             <div className="p-6 text-center text-sm text-muted-foreground">
               {budgets.length === 0

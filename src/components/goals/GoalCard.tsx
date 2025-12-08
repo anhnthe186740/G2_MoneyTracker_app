@@ -53,27 +53,27 @@ export default function GoalCard({
     <div
       className={`rounded-xl p-4 ${
         completed
-          ? "bg-green-50 border-2 border-green-400 shadow-sm"
-          : "bg-white border border-gray-200 shadow-sm"
+          ? "bg-green-50 dark:bg-green-900/30 border-2 border-green-400 dark:border-green-600 shadow-sm"
+          : "bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 shadow-sm"
       } hover:shadow-md transition-shadow`}
     >
       <div className="flex justify-between items-start mb-2">
         <div>
-          <div className="font-bold text-gray-800">{goal.name}</div>
-          <div className="text-[11px] text-gray-500 mt-1">
+          <div className="font-bold text-gray-800 dark:text-foreground">{goal.name}</div>
+          <div className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
             {t("card.wallet")}: {wallet?.name || t("card.notAvailable")}
           </div>
           <div className="text-xs mt-1.5">
             {completed ? (
-              <span className="text-green-600 font-semibold">
+              <span className="text-green-600 dark:text-green-300 font-semibold">
                 {t("card.completed")}
               </span>
             ) : daysLeft !== null && daysLeft < 0 ? (
-              <span className="text-red-600 font-semibold">
+              <span className="text-red-600 dark:text-red-300 font-semibold">
                 {t("card.overdue")}
               </span>
             ) : (
-              <span className="text-gray-500">
+              <span className="text-gray-500 dark:text-gray-400">
                 {daysLeft !== null
                   ? t("card.daysLeft", { days: daysLeft })
                   : t("card.progress", { percent })}
@@ -84,14 +84,14 @@ export default function GoalCard({
         <div className="flex gap-2">
           <button
             onClick={onEdit}
-            className="border-none bg-transparent hover:bg-gray-100 cursor-pointer p-1 rounded transition-colors text-blue-600 text-sm"
+            className="border-none bg-transparent hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer p-1 rounded transition-colors text-blue-600 dark:text-blue-300 text-sm"
             aria-label="Edit"
           >
             ✏️
           </button>
           <button
             onClick={onDelete}
-            className="border-none bg-transparent hover:bg-gray-100 cursor-pointer p-1 rounded transition-colors text-red-600 text-sm"
+            className="border-none bg-transparent hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer p-1 rounded transition-colors text-red-600 dark:text-red-300 text-sm"
             aria-label="Delete"
           >
             🗑️
@@ -100,8 +100,8 @@ export default function GoalCard({
             onClick={onToggleFavorite}
             className={`border-none bg-transparent cursor-pointer p-1 rounded transition-all text-xl ${
               isFavorite
-                ? "text-yellow-500 hover:bg-yellow-100 hover:scale-110"
-                : "text-gray-400 hover:bg-gray-100 hover:scale-110 hover:text-yellow-400"
+                ? "text-yellow-500 hover:bg-yellow-100 dark:hover:bg-yellow-900/20 hover:scale-110"
+                : "text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:scale-110 hover:text-yellow-400 dark:text-gray-300"
             }`}
             aria-label={isFavorite ? "Bỏ yêu thích" : "Thêm vào yêu thích"}
           >
@@ -110,7 +110,7 @@ export default function GoalCard({
         </div>
       </div>
 
-      <div className="flex justify-between text-[13px] text-gray-500 mb-2">
+      <div className="flex justify-between text-[13px] text-gray-500 dark:text-gray-400 mb-2">
         <div>
           {t("card.current")}: {format(current)} {t("currency")}
         </div>
@@ -119,17 +119,17 @@ export default function GoalCard({
         </div>
       </div>
 
-      <div className="h-2.5 bg-gray-200 rounded-full overflow-hidden mb-2">
+      <div className="h-2.5 bg-gray-200 dark:bg-slate-800 rounded-full overflow-hidden mb-2">
         <div
-          className={`h-full ${completed ? "bg-green-500" : "bg-blue-500"}`}
+          className={`h-full ${completed ? "bg-green-500 dark:bg-green-400" : "bg-blue-500 dark:bg-blue-400"}`}
           style={{ width: `${Math.min(100, percent)}%` }}
         />
       </div>
-      <div className="text-center text-xs text-gray-500 mb-2">
+      <div className="text-center text-xs text-gray-500 dark:text-gray-400 mb-2">
         {Math.min(100, percent)}% {t("card.percentComplete")}
       </div>
 
-      <div className="border-t border-gray-100 mt-3 pt-3 text-[13px] text-gray-600 flex justify-between items-center">
+      <div className="border-t border-gray-100 dark:border-slate-800 mt-3 pt-3 text-[13px] text-gray-600 dark:text-gray-300 flex justify-between items-center">
         <div>
           {t("card.remaining")}:{" "}
           <span className="font-semibold">

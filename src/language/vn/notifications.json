@@ -14,8 +14,67 @@
   },
   "empty": "Không có thông báo nào",
   "new": "Mới",
+  "types": {
+    "WARNING": "Cảnh báo",
+    "SUCCESS": "Thành công",
+    "REMINDER": "Nhắc nhở",
+    "INFO": "Thông tin"
+  },
+  "ariaLabels": {
+    "warningIcon": "Biểu tượng thông báo cảnh báo",
+    "successIcon": "Biểu tượng thông báo thành công",
+    "reminderIcon": "Biểu tượng thông báo nhắc nhở",
+    "infoIcon": "Biểu tượng thông báo thông tin",
+    "markAsReadButton": "Đánh dấu thông báo này là đã đọc",
+    "markAllAsReadButton": "Đánh dấu tất cả thông báo là đã đọc"
+  },
   "toast": {
     "markedRead": "Đã đánh dấu là đã đọc",
     "markedAllRead": "Đã đánh dấu tất cả là đã đọc"
+  },
+  "messages": {
+    "inactivity": {
+      "title": "Nhắc bạn ghi chép chi tiêu",
+      "message3Days": "Bạn đã {{days}} ngày không ghi lại bất kỳ giao dịch nào. Hãy cập nhật ngay để theo dõi chi tiêu hiệu quả hơn!",
+      "message7Days": "Bạn đã {{days}} ngày không ghi lại bất kỳ giao dịch nào. Cập nhật ngay để tiếp tục theo dõi chi tiêu của mình!"
+    },
+    "lowBalance": {
+      "title": "Ví {{walletName}} sắp cạn",
+      "message": "Số dư ví {{walletName}} của bạn còn {{balance}}, dưới {{threshold}}. Hãy bổ sung thêm tiền để tránh thiếu hụt!"
+    },
+    "largeTransaction": {
+      "title": "Giao dịch chi tiêu lớn",
+      "message": "Bạn vừa thực hiện một giao dịch chi tiêu lớn: {{amount}} cho \"{{description}}\". Hãy kiểm tra lại chi tiêu của mình!",
+      "noDescription": "giao dịch không có mô tả"
+    },
+    "goalProgress": {
+      "title": "Tiến độ mục tiêu",
+      "message": "Chúc mừng! Bạn đã đạt {{progress}}% mục tiêu \"{{goalName}}\" ({{currentAmount}} / {{targetAmount}}). Tiếp tục cố gắng nhé!"
+    },
+    "goalCompletion": {
+      "title": "Mục tiêu đã hoàn thành",
+      "message": "🎉 Xin chúc mừng! Bạn đã đạt được mục tiêu \"{{goalName}}\" với số tiền {{amount}}. Thật tuyệt vời!"
+    },
+    "monthlySummary": {
+      "title": "Tóm tắt giao dịch tháng",
+      "message": "Tổng kết tháng {{month}}: Bạn đã chi {{totalSpent}}",
+      "messageWithIncome": "Tổng kết tháng {{month}}: Bạn đã chi {{totalSpent}} và thu {{totalIncome}}",
+      "messageWithCategory": "Tổng kết tháng {{month}}: Bạn đã chi {{totalSpent}} và thu {{totalIncome}}. Danh mục \"{{mainCategory}}\" chiếm phần lớn tổng chi tiêu.",
+      "messageWithCategoryNoIncome": "Tổng kết tháng {{month}}: Bạn đã chi {{totalSpent}}. Danh mục \"{{mainCategory}}\" chiếm phần lớn tổng chi tiêu."
+    },
+    "recurringTransaction": {
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "message": "Giao dịch định kỳ \"{{description}}\" ({{amount}}) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!"
+    },
+    "goalDeadline": {
+      "title": "Mục tiêu gần đến deadline",
+      "message": "Mục tiêu \"{{goalName}}\" sẽ hết hạn trong {{daysRemaining}} ngày. Bạn chỉ mới đạt {{progress}}% tiến độ ({{currentAmount}} / {{targetAmount}}). Hãy cố gắng thêm nhé!"
+    },
+    "budgetWarning": {
+      "title": "Cảnh báo ngân sách",
+      "message50": "Ngân sách cho danh mục \"{{categoryName}}\" đã đạt 50% hạn mức.",
+      "message80": "Ngân sách cho danh mục \"{{categoryName}}\" đã đạt 80% hạn mức.",
+      "message100": "Ngân sách cho danh mục \"{{categoryName}}\" đã vượt 100% hạn mức."
+    }
   }
 }

@@ -15,40 +15,60 @@
     }
   },
   "language": {
-    "label": "Language & Currency",
-    "title": "Language & Currency",
-    "description": "Regional display options",
-    "languageLabel": "Display Language",
-    "currencyLabel": "Currency Unit",
+    "label": "Language",
+    "title": "Language",
+    "description": "Choose your display language",
+    "languageLabel": "Display language",
     "options": {
       "vi": "🇻🇳 Vietnamese",
       "en": "🇺🇸 English"
-    },
-    "currencies": {
-      "VND": "💰 VND - Vietnamese Dong",
-      "USD": "💵 USD - US Dollar",
-      "EUR": "💶 EUR - Euro"
     }
   },
   "notifications": {
     "label": "Notifications",
     "title": "Notifications",
     "description": "Manage the types of notifications you want to receive",
+    "categories": {
+      "reminder": "Reminders",
+      "warning": "Warnings",
+      "success": "Success",
+      "info": "Information"
+    },
+    "inactivityReminders": {
+      "title": "Inactivity Reminders",
+      "description": "Remind when you haven't recorded transactions for a while"
+    },
+    "recurringTransactionReminders": {
+      "title": "Recurring Transaction Reminders",
+      "description": "Remind before recurring transactions are due"
+    },
+    "goalDeadlineReminders": {
+      "title": "Goal Deadline Reminders",
+      "description": "Remind when goals are approaching their deadline"
+    },
     "budgetAlerts": {
       "title": "Budget Alerts",
       "description": "Notify when spending is close to the limit"
     },
-    "transactionAlerts": {
-      "title": "New Transactions",
-      "description": "Notify when a transaction is recorded"
+    "lowBalanceAlerts": {
+      "title": "Low Balance Alerts",
+      "description": "Notify when wallet balance is running low"
     },
-    "weeklyReport": {
-      "title": "Weekly Report",
-      "description": "Receive weekly spending summary via email"
+    "largeTransactionAlerts": {
+      "title": "Large Transaction Alerts",
+      "description": "Notify when you make large expense transactions"
     },
-    "sound": {
-      "title": "Notification Sound",
-      "description": "Play sound when there's a new notification"
+    "goalProgressAlerts": {
+      "title": "Goal Progress Alerts",
+      "description": "Notify when you reach 50% of your goal"
+    },
+    "goalCompletionAlerts": {
+      "title": "Goal Completion Alerts",
+      "description": "Notify when you complete a goal"
+    },
+    "monthlySummaryAlerts": {
+      "title": "Monthly Summary",
+      "description": "Receive monthly spending and income summary"
     }
   },
   "actions": {

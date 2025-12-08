@@ -83,5 +83,14 @@
   "confirm": {
     "cancel": "Hủy ngân sách cho danh mục \"{{category}}\"?",
     "delete": "Xóa vĩnh viễn ngân sách này? Hành động không thể hoàn tác."
+  },
+  "errors": {
+    "fetchError": "Lỗi khi lấy ngân sách.",
+    "createError": "Lỗi khi tạo ngân sách.",
+    "updateError": "Lỗi khi cập nhật ngân sách.",
+    "deleteError": "Lỗi khi xóa ngân sách.",
+    "checkProgressError": "Lỗi khi kiểm tra tiến độ ngân sách:",
+    "contextError": "useBudgetContext phải được dùng bên trong BudgetProvider",
+    "categoryFallback": "Danh mục {{id}}"
   }
 }

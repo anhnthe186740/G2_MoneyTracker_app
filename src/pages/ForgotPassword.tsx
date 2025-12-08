@@ -127,7 +127,7 @@ export default function ForgotPassword() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 {/* Logo */}
                 <div className="flex justify-center mb-8">
@@ -136,13 +136,13 @@ export default function ForgotPassword() {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-3xl shadow-2xl p-8">
+                <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-slate-800">
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                        <h1 className="text-3xl font-bold text-foreground mb-2">
                             Quên mật khẩu?
                         </h1>
-                        <p className="text-gray-600">
+                        <p className="text-muted-foreground">
                             {step === 'email'
                                 ? 'Nhập email để nhận mã xác thực'
                                 : 'Nhập mã OTP đã được gửi đến email'}
@@ -153,7 +153,7 @@ export default function ForgotPassword() {
                     {step === 'email' && (
                         <form onSubmit={handleSendOTP} className="space-y-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-foreground mb-2">
                                     Email
                                 </label>
                                 <div className="relative">
@@ -163,7 +163,7 @@ export default function ForgotPassword() {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         placeholder="example@gmail.com"
-                                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                                        className="w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition bg-white dark:bg-slate-900 text-foreground"
                                         required
                                     />
                                 </div>
@@ -193,7 +193,7 @@ export default function ForgotPassword() {
                     {step === 'otp' && (
                         <div className="space-y-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-foreground mb-2">
                                     Mã OTP
                                 </label>
                                 <div className="relative">
@@ -214,10 +214,10 @@ export default function ForgotPassword() {
                                         }}
                                         placeholder="Nhập 6 chữ số"
                                         maxLength={6}
-                                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-center text-2xl tracking-widest font-bold"
+                                        className="w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition text-center text-2xl tracking-widest font-bold bg-white dark:bg-slate-900 text-foreground"
                                     />
                                 </div>
-                                <p className="text-xs text-gray-500 mt-2 text-center">
+                                <p className="text-xs text-muted-foreground mt-2 text-center">
                                     Mã OTP có hiệu lực trong 5 phút
                                 </p>
                             </div>
@@ -247,7 +247,7 @@ export default function ForgotPassword() {
                     <div className="mt-8 text-center">
                         <Link
                             to="/login"
-                            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition"
+                            className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition"
                         >
                             <ArrowLeft className="h-4 w-4" />
                             Quay lại đăng nhập

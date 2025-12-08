@@ -13,8 +13,8 @@ import registerVN from '../vn/register.json';
 import registerEN from '../en/register.json';
 import transactionsVN from '../vn/transactions.json';
 import transactionsEN from '../en/transactions.json';
-import accountsVN from '../vn/accounts.json';
-import accountsEN from '../en/accounts.json';
+import walletsVN from '../vn/wallets.json';
+import walletsEN from '../en/wallets.json';
 import budgetVN from '../vn/budget.json';
 import budgetEN from '../en/budget.json';
 import profileVN from '../vn/profile.json';
@@ -25,8 +25,6 @@ import goalsVN from '../vn/goals.json';
 import goalsEN from '../en/goals.json';
 import recurringVN from '../vn/recurring.json';
 import recurringEN from '../en/recurring.json';
-import analyticsVN from '../vn/analytics.json';
-import analyticsEN from '../en/analytics.json';
 import notificationsVN from '../vn/notifications.json';
 import notificationsEN from '../en/notifications.json';
 import exportVN from '../vn/export.json';
@@ -42,13 +40,12 @@ const resources = {
     login: loginVN,
     register: registerVN,
     transactions: transactionsVN,
-    accounts: accountsVN,
+    wallets: walletsVN,
     budget: budgetVN,
     profile: profileVN,
     sidebar: sidebarVN,
     goals: goalsVN,
     recurring: recurringVN,
-    analytics: analyticsVN,
     notifications: notificationsVN,
     export: exportVN,
     landingPage: landingPageVN,
@@ -60,13 +57,12 @@ const resources = {
     login: loginEN,
     register: registerEN,
     transactions: transactionsEN,
-    accounts: accountsEN,
+    wallets: walletsEN,
     budget: budgetEN,
     profile: profileEN,
     sidebar: sidebarEN,
     goals: goalsEN,
     recurring: recurringEN,
-    analytics: analyticsEN,
     notifications: notificationsEN,
     export: exportEN,
     landingPage: landingPageEN,
@@ -87,19 +83,20 @@ i18n
       'login',
       'register',
       'transactions',
-      'accounts',
+      'wallets',
       'budget',
       'profile',
       'sidebar',
       'goals',
       'recurring',
-      'analytics',
       'notifications',
       'export',
       'landingPage',
     ],
     interpolation: {
       escapeValue: false,
+      prefix: '{{',
+      suffix: '}}',
     },
     detection: {
       order: ['localStorage', 'navigator'],

@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { vi, enUS } from 'date-fns/locale';
 
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('vi-VN', {
@@ -7,9 +8,12 @@ export const formatCurrency = (amount: number): string => {
   }).format(amount);
 };
 
-export const formatDate = (dateString: string): string => {
-  return format(new Date(dateString), 'dd/MM/yyyy');
+export const formatDate = (dateString: string, locale?: string): string => {
+  const dateLocale = locale === 'en' ? enUS : vi;
+  return format(new Date(dateString), 'dd/MM/yyyy', { locale: dateLocale });
 };
-export const formatDateTime = (dateString: string): string => {
-  return format(new Date(dateString), 'dd/MM/yyyy HH:mm');
+
+export const formatDateTime = (dateString: string, locale?: string): string => {
+  const dateLocale = locale === 'en' ? enUS : vi;
+  return format(new Date(dateString), 'dd/MM/yyyy HH:mm', { locale: dateLocale });
 };
