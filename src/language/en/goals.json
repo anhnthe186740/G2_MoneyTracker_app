@@ -5,6 +5,15 @@
   "loadError": "Failed to load data",
   "invalidData": "Invalid goal data",
   "currency": "đ",
+  "favorites": {
+    "title": "Favorite Goals"
+  },
+  "allGoals": {
+    "title": "All Goals"
+  },
+  "otherGoals": {
+    "title": "Other Goals"
+  },
   "summary": {
     "totalGoals": "Total Goals",
     "completed": "Completed",
@@ -23,6 +32,7 @@
     "notAvailable": "N/A",
     "completed": "✓ Completed",
     "daysLeft": "{{days}} days left",
+    "overdue": "Overdue",
     "progress": "Progress: {{percent}}%",
     "current": "Current",
     "target": "Target",
@@ -62,6 +72,7 @@
   "validation": {
     "nameRequired": "Goal name is required",
     "amountPositive": "Target amount must be greater than 0",
+    "currentAmountRequired": "Please enter current amount (must be > 0)",
     "selectSourceWallet": "Please select a source wallet",
     "walletNotFound": "Source wallet not found",
     "insufficientBalance": "Insufficient balance in wallet \"{{wallet}}\" ({{balance}} đ remaining)",
