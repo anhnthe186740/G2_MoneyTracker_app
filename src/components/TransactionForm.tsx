@@ -5,6 +5,8 @@ import { TransactionContext } from '../context/TransactionContext';
 import type { Category, Wallet, Transaction } from '../types';
 import { checkExpensesWarning, checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
 import { useBudgetContext } from '../context/BudgetContext';
+import CurrencyInput from './CurrencyInput';
+import DateInput from './DateInput';
 
 interface TransactionFormProps {
     userId: number;
@@ -289,8 +291,8 @@ export default function TransactionForm({
                     {/* Category */}
                     <div>
                         <label className="block text-sm font-medium mb-2">
-                            {t('form.categoryLabel', { 
-                                count: filteredCategories.length, 
+                            {t('form.categoryLabel', {
+                                count: filteredCategories.length,
                                 type: formData.type === 'EXPENSE' ? t('form.categoryTypeExpense') : t('form.categoryTypeIncome')
                             })}
                         </label>
@@ -313,13 +315,12 @@ export default function TransactionForm({
                     {/* Amount */}
                     <div>
                         <label className="block text-sm font-medium mb-2">{t('form.amountLabel')}</label>
-                        <input
-                            type="number"
+                        <CurrencyInput
                             value={formData.amount}
-                            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                            onChange={(value) => setFormData({ ...formData, amount: value })}
                             className="w-full border rounded px-3 py-2"
                             placeholder={t('form.amountPlaceholder')}
-                            min="0"
+                            min={0}
                             required
                         />
                     </div>
@@ -327,10 +328,9 @@ export default function TransactionForm({
                     {/* Date */}
                     <div>
                         <label className="block text-sm font-medium mb-2">{t('form.dateLabel')}</label>
-                        <input
-                            type="date"
+                        <DateInput
                             value={formData.date}
-                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                            onChange={(value) => setFormData({ ...formData, date: value })}
                             className="w-full border rounded px-3 py-2"
                             required
                         />
