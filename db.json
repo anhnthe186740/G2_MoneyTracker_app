@@ -4,10 +4,11 @@
       "id": "1",
       "username": "AnhNT",
       "email": "AnhNT@email.com",
-      "password": "123",
-      "fullName": "Nguyễn Thế Anh",
+      "password": "1234",
+      "fullName": "Nguyễn Thế Anhh",
       "currency": "VND",
-      "createdAt": "2024-01-15T08:30:00Z"
+      "createdAt": "2024-01-15T08:30:00Z",
+      "avatar": "blob:http://localhost:5173/acb71f5c-ae66-4fd3-8d97-57dc5ad6eaa3"
     },
     {
       "id": "2",
@@ -35,6 +36,26 @@
       "fullName": "1",
       "currency": "VND",
       "createdAt": "2025-11-21T08:07:48.010Z"
+    },
+    {
+      "id": "3678",
+      "username": "patu3074",
+      "email": "patu3074@gmail.com",
+      "password": "$2b$11$CcV8Qxhy8AiwsEtm7XAYXOYWREteMprvHxdNROIOGq6UNhWUTPwsO",
+      "fullName": "Phan Anh Tú",
+      "currency": "VND",
+      "createdAt": "2025-12-08T02:46:00.863Z",
+      "avatar": "blob:http://localhost:5173/1ac6433b-3d55-46f0-921c-bb4e241a5ab3"
+    },
+    {
+      "id": "6f04",
+      "username": "he182346phananhtu",
+      "email": "he182346phananhtu@gmail.com",
+      "password": "1234",
+      "fullName": "Phan Anh Tú",
+      "currency": "VND",
+      "createdAt": "2025-12-08T07:03:44.005Z",
+      "avatar": "blob:http://localhost:5173/9b2261ba-59c2-4c24-919d-36ca3bb6e0bb"
     }
   ],
   "wallets": [
