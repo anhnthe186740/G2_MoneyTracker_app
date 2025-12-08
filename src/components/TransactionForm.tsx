@@ -3,7 +3,7 @@ import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { TransactionContext } from '../context/TransactionContext';
 import type { Category, Wallet, Transaction } from '../types';
-import { checkExpensesWarning, checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
+import { checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
 import { useBudgetContext } from '../context/BudgetContext';
 import CurrencyInput from './CurrencyInput';
 import DateInput from './DateInput';
@@ -229,7 +229,20 @@ export default function TransactionForm({
                 {(hasNoWallets || hasNoCategories) && (
                     <div className="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded">
                         <p className="font-semibold mb-2">{t('form.cannotCreate')}</p>
-                        {hasNoWallets && <p>{t('form.createWalletFirst')}</p>}
+                        {hasNoWallets && (
+                            <div className="flex flex-col gap-2">
+                                <p>{t('form.createWalletFirst')}</p>
+                                {onOpenWalletForm && (
+                                    <button
+                                        type="button"
+                                        onClick={onOpenWalletForm}
+                                        className="w-fit px-3 py-1.5 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-sm font-medium transition-colors"
+                                    >
+                                        + {t('actions.addWallet', 'Thêm ví mới')}
+                                    </button>
+                                )}
+                            </div>
+                        )}
                         {hasNoCategories && <p>{t('form.createCategoryFirst', { type: formData.type === 'INCOME' ? t('form.categoryTypeIncome') : t('form.categoryTypeExpense') })}</p>}
                     </div>
                 )}
