@@ -21,6 +21,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
     const [recurringTransactions, setRecurringTransactions] = useState<RecurringTransaction[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [processing, setProcessing] = useState(false); // Flag to prevent concurrent processing
 
     const getRecurringTransactions = useCallback(async (userId: number | string) => {
         try {
@@ -47,21 +48,8 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
 
             setRecurringTransactions(mapped);
 
-            // Kiểm tra và gửi thông báo nhắc nhở cho các giao dịch định kỳ sắp đến hạn
-            for (const rt of mapped) {
-                if (rt.isActive && rt.nextDate) {
-                    try {
-                        await sendRecurringTransactionReminder(rt.userId, {
-                            id: rt.id,
-                            description: rt.description,
-                            nextDate: rt.nextDate,
-                            amount: rt.amount,
-                        });
-                    } catch (notifyErr) {
-                        console.error(`Error sending reminder for recurring transaction ${rt.id}:`, notifyErr);
-                    }
-                }
-            }
+            // NOTE: Notifications are sent during processRecurringTransactions, not here
+            // to avoid duplicate notifications every time we reload the list
         } catch (err) {
             console.error('Error loading recurring transactions:', err);
             setError('Không thể tải danh sách giao dịch định kỳ');
@@ -79,7 +67,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
             return {
                 id: rt.id, // Keep original ID
                 userId: rt.user_id,
-walletId: rt.wallet_id,
+                walletId: rt.wallet_id,
                 categoryId: rt.category_id,
                 amount: rt.amount,
                 type: rt.type,
@@ -150,7 +138,7 @@ walletId: rt.wallet_id,
             if (recurringTransaction.userId !== undefined) updateData.user_id = recurringTransaction.userId;
             if (recurringTransaction.walletId !== undefined) updateData.wallet_id = recurringTransaction.walletId;
             if (recurringTransaction.categoryId !== undefined) updateData.category_id = recurringTransaction.categoryId;
-if (recurringTransaction.amount !== undefined) updateData.amount = recurringTransaction.amount;
+            if (recurringTransaction.amount !== undefined) updateData.amount = recurringTransaction.amount;
             if (recurringTransaction.type !== undefined) updateData.type = recurringTransaction.type;
             if (recurringTransaction.description !== undefined) updateData.description = recurringTransaction.description;
             if (recurringTransaction.frequency !== undefined) updateData.frequency = recurringTransaction.frequency;
@@ -194,7 +182,18 @@ if (recurringTransaction.amount !== undefined) updateData.amount = recurringTran
     }, [getRecurringTransactionById, getRecurringTransactions]);
 
     const processRecurringTransactions = useCallback(async (userId: number | string) => {
+        // Prevent concurrent processing using both state and localStorage
+        const lockKey = `processing_recurring_${userId}`;
+        const isLocked = localStorage.getItem(lockKey);
+
+        if (processing || isLocked) {
+            console.log('Already processing recurring transactions, skipping...', { processing, isLocked });
+            return;
+        }
+
         try {
+            setProcessing(true);
+            localStorage.setItem(lockKey, Date.now().toString());
             setLoading(true);
             setError(null);
 
@@ -211,7 +210,7 @@ if (recurringTransaction.amount !== undefined) updateData.amount = recurringTran
                 startDate: rt.start_date,
                 endDate: rt.end_date,
                 nextDate: rt.next_date,
-isActive: rt.is_active,
+                isActive: rt.is_active,
                 createdAt: rt.created_at
             }));
             const today = new Date();
@@ -234,21 +233,47 @@ isActive: rt.is_active,
                         continue;
                     }
 
-                    // Check if transaction already exists for this recurring transaction today
+                    // Check if transaction already exists for this recurring transaction on nextDate
                     // Use recurring_transaction_id to accurately track
-                    const existingTransactions = await api.get(`/transactions?user_id=${userId}&recurring_transaction_id=${rt.id}`);
-                    const todayStr = today.toISOString().split('T')[0];
-                    const alreadyProcessedToday = existingTransactions.data.some((t: any) => {
-                        const tDate = new Date(t.date).toISOString().split('T')[0];
-                        return tDate === todayStr;
+                    const existingTransactionsResponse = await api.get(
+                        `/transactions?user_id=${userId}&recurring_transaction_id=${rt.id}`
+                    );
+                    const nextDateStr = nextDate.toISOString().split('T')[0];
+                    const now = new Date();
+                    const fiveSecondsAgo = new Date(now.getTime() - 5000);
+
+                    // Check if already processed for this exact date
+                    // Also check for very recent duplicates (within 5 seconds)
+                    const alreadyProcessedForDate = existingTransactionsResponse.data.some((t: any) => {
+                        const tDate = new Date(t.date);
+                        tDate.setHours(0, 0, 0, 0);
+                        const tDateStr = tDate.toISOString().split('T')[0];
+
+                        if (tDateStr === nextDateStr) {
+                            // If same date, also check if created very recently
+                            const tCreatedAt = new Date(t.created_at);
+                            if (tCreatedAt >= fiveSecondsAgo) {
+                                console.log(`Recent duplicate detected for ${nextDateStr}, transaction ${t.id} created at ${t.created_at}`);
+                                return true;
+                            }
+                            return true;
+                        }
+                        return false;
                     });
 
-                    if (alreadyProcessedToday) {
-                        console.log(`Transaction already created today for recurring ${rt.id}, skipping...`);
+                    if (alreadyProcessedForDate) {
+                        console.log(`Transaction already exists for date ${nextDateStr} for recurring ${rt.id}, updating next_date...`);
+                        // Update next_date to move forward
+                        const newNextDate = calculateNextDate(nextDate, rt.frequency);
+                        console.log(`Updating next_date from ${nextDate.toDateString()} to ${newNextDate.toDateString()}`);
+                        await api.patch(`/recurring_transactions/${rt.id}`, {
+                            next_date: newNextDate.toISOString()
+                        });
                         continue;
                     }
 
                     // Create the transaction (map to snake_case)
+                    // Use nextDate as the transaction date to match the scheduled date
                     const newTransaction = {
                         user_id: rt.userId,
                         wallet_id: rt.walletId,
@@ -256,10 +281,38 @@ isActive: rt.is_active,
                         amount: rt.amount,
                         type: rt.type,
                         description: rt.description,
-                        date: today.toISOString(),
+                        date: nextDate.toISOString(), // Use nextDate instead of today
                         created_at: new Date().toISOString(),
                         recurring_transaction_id: rt.id, // Track which recurring created this
                     };
+
+                    // Calculate next date FIRST (as a lock mechanism)
+                    const newNextDate = calculateNextDate(nextDate, rt.frequency);
+                    console.log(`Updating next_date from ${nextDate.toDateString()} to ${newNextDate.toDateString()}`);
+
+                    // Update next_date immediately to prevent race condition
+                    await api.patch(`/recurring_transactions/${rt.id}`, {
+                        next_date: newNextDate.toISOString()
+                    });
+
+                    // Wait a tiny bit to ensure database is updated
+                    await new Promise(resolve => setTimeout(resolve, 100));
+
+                    // Double check one more time before creating
+                    const doubleCheckResponse = await api.get(
+                        `/transactions?user_id=${userId}&recurring_transaction_id=${rt.id}`
+                    );
+                    const stillNoDuplicate = !doubleCheckResponse.data.some((t: any) => {
+                        const tDate = new Date(t.date);
+                        tDate.setHours(0, 0, 0, 0);
+                        const tDateStr = tDate.toISOString().split('T')[0];
+                        return tDateStr === nextDateStr;
+                    });
+
+                    if (!stillNoDuplicate) {
+                        console.log(`Duplicate detected during double-check for ${nextDateStr}, skipping creation`);
+                        continue;
+                    }
 
                     console.log('Creating transaction:', newTransaction);
                     await api.post('/transactions', newTransaction);
@@ -269,12 +322,19 @@ isActive: rt.is_active,
                     console.log('Updating wallet balance...');
                     await updateWalletBalance(rt.walletId, rt.amount, rt.type, rt.userId);
 
-                    // Calculate next date based on frequency
-const newNextDate = calculateNextDate(nextDate, rt.frequency);
-                    console.log(`Updating next_date from ${nextDate.toDateString()} to ${newNextDate.toDateString()}`);
-                    await api.patch(`/recurring_transactions/${rt.id}`, {
-                        next_date: newNextDate.toISOString()
-                    });
+                    // Send notification for the created transaction
+                    try {
+                        await sendRecurringTransactionReminder(rt.userId, {
+                            id: rt.id,
+                            description: rt.description,
+                            nextDate: newNextDate.toISOString(), // Next occurrence
+                            amount: rt.amount,
+                        });
+                        console.log('Notification sent for recurring transaction:', rt.id);
+                    } catch (notifyErr) {
+                        console.error(`Error sending notification for recurring transaction ${rt.id}:`, notifyErr);
+                    }
+
                     console.log(`Recurring transaction ${rt.id} processed successfully`);
                 }
             }
@@ -287,8 +347,14 @@ const newNextDate = calculateNextDate(nextDate, rt.frequency);
             throw err;
         } finally {
             setLoading(false);
+            setProcessing(false);
+            // Clear lock after a short delay to ensure completion
+            const lockKey = `processing_recurring_${userId}`;
+            setTimeout(() => {
+                localStorage.removeItem(lockKey);
+            }, 1000);
         }
-    }, [getRecurringTransactions]);
+    }, [processing, getRecurringTransactions]);
 
     // Helper function to calculate next date
     const calculateNextDate = (currentDate: Date, frequency: RecurringTransaction['frequency']): Date => {
@@ -363,7 +429,7 @@ const newNextDate = calculateNextDate(nextDate, rt.frequency);
                 processRecurringTransactions,
             }}
         >
-{children}
+            {children}
         </RecurringTransactionContext.Provider>
     );
 };
