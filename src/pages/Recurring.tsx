@@ -265,10 +265,10 @@ export default function Recurring() {
           <button
             onClick={handleDeleteAll}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition-colors"
-            title="Xóa tất cả giao dịch định kỳ"
+            title={t('actions.deleteAllTooltip')}
           >
             <Trash2 size={18} />
-            Xóa hết
+            {t('actions.deleteAll')}
           </button>
           <button
             onClick={() => setShowRecurringForm(true)}

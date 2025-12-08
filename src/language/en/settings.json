@@ -15,19 +15,13 @@
     }
   },
   "language": {
-    "label": "Language & Currency",
-    "title": "Language & Currency",
-    "description": "Regional display options",
-    "languageLabel": "Display Language",
-    "currencyLabel": "Currency Unit",
+    "label": "Language",
+    "title": "Language",
+    "description": "Choose your display language",
+    "languageLabel": "Display language",
     "options": {
       "vi": "🇻🇳 Vietnamese",
       "en": "🇺🇸 English"
-    },
-    "currencies": {
-      "VND": "💰 VND - Vietnamese Dong",
-      "USD": "💵 USD - US Dollar",
-      "EUR": "💶 EUR - Euro"
     }
   },
   "notifications": {

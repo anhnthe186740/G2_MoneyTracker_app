@@ -15,19 +15,13 @@
     }
   },
   "language": {
-    "label": "Ngôn ngữ & Tiền tệ",
-    "title": "Ngôn ngữ & Tiền tệ",
-    "description": "Tùy chọn hiển thị theo khu vực",
+    "label": "Ngôn ngữ",
+    "title": "Ngôn ngữ",
+    "description": "Chọn ngôn ngữ hiển thị",
     "languageLabel": "Ngôn ngữ hiển thị",
-    "currencyLabel": "Đơn vị tiền tệ",
     "options": {
       "vi": "🇻🇳 Tiếng Việt",
       "en": "🇺🇸 English"
-    },
-    "currencies": {
-      "VND": "💰 VNĐ - Việt Nam Đồng",
-      "USD": "💵 USD - US Dollar",
-      "EUR": "💶 EUR - Euro"
     }
   },
   "notifications": {

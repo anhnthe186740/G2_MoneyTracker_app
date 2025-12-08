@@ -67,7 +67,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-8">
@@ -76,15 +76,15 @@ export default function Register() {
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl p-8">
-          <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-slate-800">
+          <h1 className="text-3xl font-bold text-center text-foreground mb-8">
             {t('title')}
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Full Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 {t('fullName')}
               </label>
               <input
@@ -92,14 +92,14 @@ export default function Register() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder={t('fullNamePlaceholder')}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition bg-white dark:bg-slate-900 text-foreground"
                 required
               />
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 {t('email')}
               </label>
               <input
@@ -107,14 +107,14 @@ export default function Register() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('emailPlaceholder')}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition bg-white dark:bg-slate-900 text-foreground"
                 required
               />
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 {t('password')}
               </label>
               <input
@@ -122,14 +122,14 @@ export default function Register() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={t('passwordPlaceholder')}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition bg-white dark:bg-slate-900 text-foreground"
                 required
               />
             </div>
 
             {/* Confirm Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 {t('confirmPassword')}
               </label>
               <input
@@ -137,13 +137,13 @@ export default function Register() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder={t('confirmPasswordPlaceholder')}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition bg-white dark:bg-slate-900 text-foreground"
                 required
               />
             </div>
 
             {/* Error */}
-            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+            {error && <p className="text-red-500 dark:text-red-300 text-sm text-center">{error}</p>}
 
             {/* Register Button */}
             <button
@@ -163,7 +163,7 @@ export default function Register() {
           </form>
 
           {/* Already have account */}
-          <p className="text-center mt-8 text-gray-600">
+          <p className="text-center mt-8 text-muted-foreground">
             {t('hasAccount')}{' '}
             <Link to="/login" className="text-indigo-600 font-semibold hover:underline">
               {t('login')}
@@ -172,7 +172,7 @@ export default function Register() {
 
           {/* Back home */}
           <div className="text-center mt-6">
-            <Link to="/" className="text-gray-500 text-sm hover:text-gray-700">
+            <Link to="/" className="text-gray-500 dark:text-gray-400 text-sm hover:text-gray-700 dark:hover:text-gray-200">
               {t('backHome')}
             </Link>
           </div>

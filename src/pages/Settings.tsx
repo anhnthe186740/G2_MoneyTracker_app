@@ -4,8 +4,6 @@ import { Bell, Check, Globe, Moon, Palette, RotateCcw, Save, Sun } from 'lucide-
 
 type Theme = 'light' | 'dark';
 type Language = 'vi' | 'en';
-type Currency = 'VND' | 'USD';
-
 interface NotificationSettings {
   inactivityReminders: boolean;
   recurringTransactionReminders: boolean;
@@ -48,29 +46,14 @@ const applyTheme = (theme: Theme) => {
 
 export default function Settings() {
   const { t, i18n } = useTranslation('settings');
-  
+
   const [theme, setTheme] = useState<Theme>(() => {
     const initialTheme = getInitialTheme();
     applyTheme(initialTheme);
     return initialTheme;
   });
   const [language, setLanguage] = useState<Language>(() => getInitialLanguage(i18n.language));
-  const [currency, setCurrency] = useState<Currency>(() => {
-    const saved = localStorage.getItem('app-settings');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (parsed.currency === 'VND' || parsed.currency === 'USD') {
-          return parsed.currency;
-        }
-      } catch (e) {
-        console.error('Error parsing saved settings:', e);
-      }
-    }
-    return 'VND';
-  });
   const [notifications, setNotifications] = useState<NotificationSettings>(() => {
-   
     const saved = localStorage.getItem('app-settings');
     if (saved) {
       try {
@@ -92,7 +75,7 @@ export default function Settings() {
         console.error('Error parsing saved settings:', e);
       }
     }
-  
+
     return {
       inactivityReminders: true,
       recurringTransactionReminders: true,
@@ -115,12 +98,14 @@ export default function Settings() {
     // Apply theme
     applyTheme(theme);
     // Save settings to localStorage
-    localStorage.setItem('app-settings', JSON.stringify({
-      theme,
-      language,
-      currency,
-      notifications,
-    }));
+    localStorage.setItem(
+      'app-settings',
+      JSON.stringify({
+        theme,
+        language,
+        notifications,
+      }),
+    );
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
@@ -129,7 +114,6 @@ export default function Settings() {
     const resetTheme = 'light';
     setTheme(resetTheme);
     setLanguage('vi');
-    setCurrency('VND');
     setNotifications({
       inactivityReminders: true,
       recurringTransactionReminders: true,
@@ -237,7 +221,7 @@ export default function Settings() {
           </div>
         </div>
 
-        {/* Language & Currency Section */}
+        {/* Language Section */}
         <div className="bg-card border rounded-2xl p-6 shadow-lg transition-all hover:shadow-xl">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2.5 rounded-xl !bg-white dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 border border-teal-600 dark:border-teal-400">
@@ -249,50 +233,25 @@ export default function Settings() {
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-3">
-              <label htmlFor="language" className="block text-sm font-medium text-foreground">
-                {t('language.languageLabel')}
-              </label>
-              <div className="relative">
-                <select
-                  id="language"
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value as Language)}
-                  style={{ backgroundColor: 'white', color: 'rgb(17, 24, 39)' }}
-                  className="w-full appearance-none rounded-xl border-2 border-border bg-white dark:!bg-gray-800 px-4 py-3.5 pr-10 text-gray-900 dark:!text-gray-100 font-medium transition-all focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 hover:border-blue-300"
-                >
-                  <option value="vi">{t('language.options.vi')}</option>
-                  <option value="en">{t('language.options.en')}</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
-                  <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <label htmlFor="currency" className="block text-sm font-medium text-foreground">
-                {t('language.currencyLabel')}
-              </label>
-              <div className="relative">
-                <select
-                  id="currency"
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value as Currency)}
-                  style={{ backgroundColor: 'white', color: 'rgb(17, 24, 39)' }}
-                  className="w-full appearance-none rounded-xl border-2 border-border bg-white dark:!bg-gray-800 px-4 py-3.5 pr-10 text-gray-900 dark:!text-gray-100 font-medium transition-all focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 hover:border-blue-300"
-                >
-                  <option value="VND">{t('language.currencies.VND')}</option>
-                  <option value="USD">{t('language.currencies.USD')}</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
-                  <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
+          <div className="space-y-3">
+            <label htmlFor="language" className="block text-sm font-medium text-foreground">
+              {t('language.languageLabel')}
+            </label>
+            <div className="relative">
+              <select
+                id="language"
+                value={language}
+                onChange={(e) => setLanguage(e.target.value as Language)}
+                style={{ backgroundColor: 'white', color: 'rgb(17, 24, 39)' }}
+                className="w-full appearance-none rounded-xl border-2 border-border bg-white dark:!bg-gray-800 px-4 py-3.5 pr-10 text-gray-900 dark:!text-gray-100 font-medium transition-all focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 hover:border-blue-300"
+              >
+                <option value="vi">{t('language.options.vi')}</option>
+                <option value="en">{t('language.options.en')}</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </div>
             </div>
           </div>

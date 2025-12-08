@@ -154,6 +154,11 @@ export const checkExpensesWarning = async (
   totalExpenses: number,
   budget: number
 ) => {
+  // kiểm tra settings
+  if (!isNotificationEnabled('budgetAlerts')) {
+    return;
+  }
+
   if (totalExpenses > budget * 0.8) {
     const key = `expenses-warning-${userId}`;
     if (!hasSentNotification(userId, 'WARNING', key)) {

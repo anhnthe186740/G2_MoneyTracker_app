@@ -1,7 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-// import ICU from 'i18next-icu'; // Temporarily disabled to fix interpolation
 import commonVN from '../vn/common.json';
 import commonEN from '../en/common.json';
 import settingsVN from '../vn/settings.json';
@@ -71,7 +70,6 @@ const resources = {
 };
 
 i18n
-  // .use(ICU) // Temporarily disabled to fix interpolation
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
