@@ -290,8 +290,8 @@ export default function TransactionForm({
                     {/* Category */}
                     <div>
                         <label className="block text-sm font-medium mb-2">
-                            {t('form.categoryLabel', { 
-                                count: filteredCategories.length, 
+                            {t('form.categoryLabel', {
+                                count: filteredCategories.length,
                                 type: formData.type === 'EXPENSE' ? t('form.categoryTypeExpense') : t('form.categoryTypeIncome')
                             })}
                         </label>

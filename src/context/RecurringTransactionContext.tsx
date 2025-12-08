@@ -172,13 +172,13 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
 
             // Reload recurring transactions
             await getRecurringTransactions(recurringTransaction.userId);
-            
+
             // If nextDate is today or past and isActive, process immediately
             const nextDate = new Date(recurringTransaction.nextDate);
             nextDate.setHours(0, 0, 0, 0);
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            
+
             if (recurringTransaction.isActive && nextDate <= today) {
                 console.log('=== New recurring transaction needs immediate processing ===');
                 // Wait a bit for database to be ready
@@ -187,10 +187,10 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
                 setLoading(true);
                 const response = await api.get<any[]>(`/recurring_transactions?user_id=${recurringTransaction.userId}`);
                 const newRt = response.data[response.data.length - 1]; // Get the last created one
-                
+
                 if (newRt && newRt.is_active) {
                     console.log('Creating immediate transaction for new recurring:', newRt.id);
-                    
+
                     // Create transaction
                     const newTransaction = {
                         user_id: newRt.user_id,
@@ -203,20 +203,20 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
                         created_at: new Date().toISOString(),
                         recurring_transaction_id: newRt.id,
                     };
-                    
+
                     await api.post('/transactions', newTransaction);
                     console.log('Immediate transaction created');
-                    
+
                     // Update wallet balance
                     await updateWalletBalance(newRt.wallet_id, newRt.amount, newRt.type, newRt.user_id);
-                    
+
                     // Update next_date
                     const frequency = newRt.frequency;
                     const newNextDate = calculateNextDate(nextDate, frequency);
                     await api.patch(`/recurring_transactions/${newRt.id}`, {
                         next_date: newNextDate.toISOString()
                     });
-                    
+
                     // Send notification
                     try {
                         await sendRecurringTransactionReminder(newRt.user_id, {

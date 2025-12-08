@@ -271,8 +271,8 @@ export default function RecurringTransactionForm({
                     {/* Category */}
                     <div>
                         <label className="block text-sm font-medium mb-2">
-                            {t('form.categoryLabel', { 
-                                count: filteredCategories.length, 
+                            {t('form.categoryLabel', {
+                                count: filteredCategories.length,
                                 type: formData.type === 'INCOME' ? t('form.categoryTypeIncome') : t('form.categoryTypeExpense')
                             })}
                         </label>
