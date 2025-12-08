@@ -52,9 +52,13 @@ export default function Profile() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-    setFormData({ ...formData, avatar: url });
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result as string;
+      setPreview(base64String);
+      setFormData({ ...formData, avatar: base64String });
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleUpdateInfo = async (e: React.FormEvent) => {
@@ -164,35 +168,7 @@ export default function Profile() {
         </div>
       )}
 
-      {/* User Header Card */}
-      <div className="bg-card border border-border rounded-2xl p-6">
-        <div className="flex items-center gap-6">
-          <label className="relative cursor-pointer group">
-            <div className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center text-white text-3xl font-bold overflow-hidden">
-              {preview ? (
-                <img src={preview} alt="Avatar" className="w-full h-full object-cover" />
-              ) : (
-                <UserIcon className="w-10 h-10" />
-              )}
-            </div>
-            <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
-            <div className="absolute bottom-0 right-0 bg-blue-600 text-white p-1.5 rounded-full shadow-lg group-hover:bg-blue-700 transition">
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-              </svg>
-            </div>
-          </label>
 
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold text-foreground">{user?.fullName || t('user')}</h2>
-            <p className="text-muted-foreground">{user?.email}</p>
-            <div className="mt-2 inline-flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
-              <CheckCircle className="w-3 h-3" />
-              {t('changeAvatar')}
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Account Information Section */}
       <div className="bg-card border border-border rounded-2xl overflow-hidden">
@@ -209,6 +185,39 @@ export default function Profile() {
         </div>
 
         <div className="p-6">
+          <div className="flex items-center gap-6 mb-8 border-b border-border pb-6">
+            <label className={`relative ${isEditingInfo ? 'cursor-pointer group' : ''}`}>
+              <div className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center text-white text-3xl font-bold overflow-hidden">
+                {preview ? (
+                  <img src={preview} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <UserIcon className="w-10 h-10" />
+                )}
+              </div>
+              {isEditingInfo && (
+                <>
+                  <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+                  <div className="absolute bottom-0 right-0 bg-blue-600 text-white p-1.5 rounded-full shadow-lg group-hover:bg-blue-700 transition">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                  </div>
+                </>
+              )}
+            </label>
+
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-foreground">{user?.fullName || t('user')}</h2>
+              <p className="text-muted-foreground">{user?.email}</p>
+              {isEditingInfo && (
+                <div className="mt-2 inline-flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                  <CheckCircle className="w-3 h-3" />
+                  {t('changeAvatar')}
+                </div>
+              )}
+            </div>
+          </div>
+
           {isEditingInfo ? (
             <form onSubmit={handleUpdateInfo} className="space-y-4">
               <div className="flex items-start gap-3">
