@@ -19,6 +19,14 @@
     "submit": "Gửi",
     "close": "Đóng"
   },
+  "pagination": {
+    "showing": "Hiển thị",
+    "of": "trong tổng số",
+    "items": "mục",
+    "previousPage": "Trang trước",
+    "nextPage": "Trang sau",
+    "page": "Trang"
+  },
   "currency": {
     "VND": "VNĐ (Việt Nam Đồng)",
     "USD": "USD (US Dollar)",

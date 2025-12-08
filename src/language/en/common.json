@@ -19,6 +19,14 @@
     "submit": "Submit",
     "close": "Close"
   },
+  "pagination": {
+    "showing": "Showing",
+    "of": "of",
+    "items": "items",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "page": "Page"
+  },
   "currency": {
     "VND": "VND (Vietnamese Dong)",
     "USD": "USD (US Dollar)",

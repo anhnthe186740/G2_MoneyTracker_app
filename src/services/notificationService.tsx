@@ -1,8 +1,76 @@
 import api from './api';
+import i18n from '../language/i18next/config';
 
 // Format số tiền - sẽ sử dụng locale mặc định của trình duyệt
 const formatCurrency = (amount: number): string => {
   return amount.toLocaleString();
+};
+
+// Helper function để dịch text với namespace notifications
+const t = (key: string, options?: Record<string, string | number>): string => {
+  return i18n.t(key, { ns: 'notifications', ...options });
+};
+
+// Interface cho notification settings
+interface NotificationSettings {
+  inactivityReminders?: boolean;
+  recurringTransactionReminders?: boolean;
+  goalDeadlineReminders?: boolean;
+  budgetAlerts?: boolean;
+  lowBalanceAlerts?: boolean;
+  largeTransactionAlerts?: boolean;
+  goalProgressAlerts?: boolean;
+  goalCompletionAlerts?: boolean;
+  monthlySummaryAlerts?: boolean;
+}
+
+// Lấy notification settings từ localStorage
+const getNotificationSettings = (): NotificationSettings => {
+  if (typeof window === 'undefined') {
+    // Default: tất cả đều bật
+    return {
+      inactivityReminders: true,
+      recurringTransactionReminders: true,
+      goalDeadlineReminders: true,
+      budgetAlerts: true,
+      lowBalanceAlerts: true,
+      largeTransactionAlerts: true,
+      goalProgressAlerts: true,
+      goalCompletionAlerts: true,
+      monthlySummaryAlerts: true,
+    };
+  }
+
+  try {
+    const saved = localStorage.getItem('app-settings');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.notifications) {
+        return parsed.notifications;
+      }
+    }
+  } catch (error) {
+    console.error('Error reading notification settings:', error);
+  }
+
+  // Default: tất cả đều bật
+  return {
+    inactivityReminders: true,
+    recurringTransactionReminders: true,
+    goalDeadlineReminders: true,
+    budgetAlerts: true,
+    lowBalanceAlerts: true,
+    largeTransactionAlerts: true,
+    goalProgressAlerts: true,
+    goalCompletionAlerts: true,
+    monthlySummaryAlerts: true,
+  };
+};
+
+// Kiểm tra xem loại thông báo có được bật không
+const isNotificationEnabled = (settingKey: keyof NotificationSettings): boolean => {
+  const settings = getNotificationSettings();
+  return settings[settingKey] !== false; // Mặc định là true nếu không có trong settings
 };
 
 // Hàm gửi thông báo
@@ -33,6 +101,11 @@ export const checkInactivity = async (
   userId: string | number,
   lastTransactionDate: string | null | undefined
 ) => {
+  // Kiểm tra settings
+  if (!isNotificationEnabled('inactivityReminders')) {
+    return;
+  }
+
   if (!lastTransactionDate) {
     // Nếu chưa có giao dịch nào, không gửi thông báo
     return;
@@ -53,8 +126,8 @@ export const checkInactivity = async (
       await sendNotification(
         userId,
         'REMINDER',
-        'Nhắc bạn ghi chép chi tiêu',
-        `Bạn đã ${diffDays} ngày không ghi lại bất kỳ giao dịch nào. Hãy cập nhật ngay để theo dõi chi tiêu hiệu quả hơn!`
+        t('messages.inactivity.title'),
+        t('messages.inactivity.message3Days', { days: diffDays })
       );
       markNotificationAsSent(userId, 'REMINDER', key);
     }
@@ -66,8 +139,8 @@ export const checkInactivity = async (
       await sendNotification(
         userId,
         'REMINDER',
-        'Nhắc bạn ghi chép chi tiêu',
-        `Bạn đã ${diffDays} ngày không ghi lại bất kỳ giao dịch nào. Cập nhật ngay để tiếp tục theo dõi chi tiêu của mình!`
+        t('messages.inactivity.title'),
+        t('messages.inactivity.message7Days', { days: diffDays })
       );
       markNotificationAsSent(userId, 'REMINDER', key);
     }
@@ -81,6 +154,11 @@ export const checkExpensesWarning = async (
   totalExpenses: number,
   budget: number
 ) => {
+  // kiểm tra settings
+  if (!isNotificationEnabled('budgetAlerts')) {
+    return;
+  }
+
   if (totalExpenses > budget * 0.8) {
     const key = `expenses-warning-${userId}`;
     if (!hasSentNotification(userId, 'WARNING', key)) {
@@ -100,6 +178,11 @@ export const checkLowBalance = async (
   userId: string | number,
   wallet: { name: string; balance: number }
 ) => {
+  // Kiểm tra settings
+  if (!isNotificationEnabled('lowBalanceAlerts')) {
+    return;
+  }
+
   const LOW_BALANCE_THRESHOLD = 200000; // 200.000 VND
   if (wallet.balance < LOW_BALANCE_THRESHOLD && wallet.balance >= 0) {
     const key = `low-balance-${userId}-${wallet.name}`;
@@ -107,8 +190,12 @@ export const checkLowBalance = async (
       await sendNotification(
         userId,
         'WARNING',
-        `Ví ${wallet.name} sắp cạn`,
-        `Số dư ví ${wallet.name} của bạn còn ${formatCurrency(wallet.balance)}, dưới ${formatCurrency(LOW_BALANCE_THRESHOLD)}. Hãy bổ sung thêm tiền để tránh thiếu hụt!`
+        t('messages.lowBalance.title', { walletName: wallet.name }),
+        t('messages.lowBalance.message', {
+          walletName: wallet.name,
+          balance: formatCurrency(wallet.balance),
+          threshold: formatCurrency(LOW_BALANCE_THRESHOLD)
+        })
       );
       markNotificationAsSent(userId, 'WARNING', key);
     }
@@ -120,6 +207,11 @@ export const checkLargeTransaction = async (
   userId: string | number,
   transaction: { description: string; amount: number; type?: 'INCOME' | 'EXPENSE' }
 ) => {
+  // Kiểm tra settings
+  if (!isNotificationEnabled('largeTransactionAlerts')) {
+    return;
+  }
+
   const LARGE_TRANSACTION_THRESHOLD = 10000000; // 10 triệu VND
   // Chỉ cảnh báo cho giao dịch CHI TIÊU lớn, không cảnh báo cho thu nhập
   if (
@@ -129,13 +221,16 @@ export const checkLargeTransaction = async (
     const transactionLabel =
       transaction.description?.trim() && transaction.description.trim().length > 0
         ? transaction.description.trim()
-        : 'giao dịch không có mô tả';
+        : t('messages.largeTransaction.noDescription');
 
     await sendNotification(
       userId,
       'WARNING',
-      'Giao dịch chi tiêu lớn',
-      `Bạn vừa thực hiện một giao dịch chi tiêu lớn: ${formatCurrency(transaction.amount)} cho "${transactionLabel}". Hãy kiểm tra lại chi tiêu của mình!`
+      t('messages.largeTransaction.title'),
+      t('messages.largeTransaction.message', {
+        amount: formatCurrency(transaction.amount),
+        description: transactionLabel
+      })
     );
   }
 };
@@ -145,6 +240,11 @@ export const checkGoalProgress = async (
   userId: string | number,
   goal: { id: string | number; name: string; current_amount: number; target_amount: number }
 ) => {
+  // Kiểm tra settings
+  if (!isNotificationEnabled('goalProgressAlerts')) {
+    return;
+  }
+
   if (goal.target_amount <= 0) return;
   const progress = (goal.current_amount / goal.target_amount) * 100;
 
@@ -155,8 +255,13 @@ export const checkGoalProgress = async (
       await sendNotification(
         userId,
         'SUCCESS',
-        'Tiến độ mục tiêu',
-        `Chúc mừng! Bạn đã đạt ${Math.round(progress)}% mục tiêu "${goal.name}" (${formatCurrency(goal.current_amount)} / ${formatCurrency(goal.target_amount)}). Tiếp tục cố gắng nhé!`
+        t('messages.goalProgress.title'),
+        t('messages.goalProgress.message', {
+          progress: Math.round(progress),
+          goalName: goal.name,
+          currentAmount: formatCurrency(goal.current_amount),
+          targetAmount: formatCurrency(goal.target_amount)
+        })
       );
       markNotificationAsSent(userId, 'SUCCESS', key);
     }
@@ -168,6 +273,11 @@ export const checkGoalCompletion = async (
   userId: string | number,
   goal: { id: string | number; name: string; current_amount: number; target_amount: number }
 ) => {
+  // Kiểm tra settings
+  if (!isNotificationEnabled('goalCompletionAlerts')) {
+    return;
+  }
+
   if (goal.target_amount <= 0) return;
   if (goal.current_amount >= goal.target_amount) {
     const key = `goal-completion-${userId}-${goal.id}`;
@@ -175,8 +285,11 @@ export const checkGoalCompletion = async (
       await sendNotification(
         userId,
         'SUCCESS',
-        'Mục tiêu đã hoàn thành',
-        `🎉 Xin chúc mừng! Bạn đã đạt được mục tiêu "${goal.name}" với số tiền ${formatCurrency(goal.current_amount)}. Thật tuyệt vời!`
+        t('messages.goalCompletion.title'),
+        t('messages.goalCompletion.message', {
+          goalName: goal.name,
+          amount: formatCurrency(goal.current_amount)
+        })
       );
       markNotificationAsSent(userId, 'SUCCESS', key);
     }
@@ -191,18 +304,40 @@ export const sendMonthlySummary = async (
   totalIncome: number,
   mainCategory?: string
 ) => {
+  // Kiểm tra settings
+  if (!isNotificationEnabled('monthlySummaryAlerts')) {
+    return;
+  }
+
   const key = `monthly-summary-${userId}-${month}`;
   if (!hasSentNotification(userId, 'INFO', key)) {
-    let message = `Tổng kết tháng ${month}: Bạn đã chi ${formatCurrency(totalSpent)}`;
-    if (totalIncome > 0) {
-      message += ` và thu ${formatCurrency(totalIncome)}`;
-    }
-    if (mainCategory) {
-      message += `. Danh mục "${mainCategory}" chiếm phần lớn tổng chi tiêu.`;
+    let message: string;
+    if (mainCategory && totalIncome > 0) {
+      message = t('messages.monthlySummary.messageWithCategory', {
+        month,
+        totalSpent: formatCurrency(totalSpent),
+        totalIncome: formatCurrency(totalIncome),
+        mainCategory
+      });
+    } else if (mainCategory && totalIncome === 0) {
+      message = t('messages.monthlySummary.messageWithCategoryNoIncome', {
+        month,
+        totalSpent: formatCurrency(totalSpent),
+        mainCategory
+      });
+    } else if (totalIncome > 0) {
+      message = t('messages.monthlySummary.messageWithIncome', {
+        month,
+        totalSpent: formatCurrency(totalSpent),
+        totalIncome: formatCurrency(totalIncome)
+      });
     } else {
-      message += '.';
+      message = t('messages.monthlySummary.message', {
+        month,
+        totalSpent: formatCurrency(totalSpent)
+      });
     }
-    await sendNotification(userId, 'INFO', 'Tóm tắt giao dịch tháng', message);
+    await sendNotification(userId, 'INFO', t('messages.monthlySummary.title'), message);
     markNotificationAsSent(userId, 'INFO', key);
   }
 };
@@ -217,6 +352,11 @@ export const sendRecurringTransactionReminder = async (
     amount: number;
   }
 ) => {
+  // Kiểm tra settings
+  if (!isNotificationEnabled('recurringTransactionReminders')) {
+    return;
+  }
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const nextDate = new Date(recurringTransaction.nextDate);
@@ -230,8 +370,11 @@ export const sendRecurringTransactionReminder = async (
       await sendNotification(
         userId,
         'REMINDER',
-        'Nhắc nhở giao dịch định kỳ',
-        `Giao dịch định kỳ "${recurringTransaction.description}" (${formatCurrency(recurringTransaction.amount)}) sẽ được thực hiện vào ngày mai. Hãy kiểm tra số dư ví của bạn!`
+        t('messages.recurringTransaction.title'),
+        t('messages.recurringTransaction.message', {
+          description: recurringTransaction.description,
+          amount: formatCurrency(recurringTransaction.amount)
+        })
       );
       markNotificationAsSent(userId, 'REMINDER', key);
     }
@@ -249,6 +392,11 @@ export const sendGoalDeadlineReminder = async (
     target_amount: number;
   }
 ) => {
+  // Kiểm tra settings
+  if (!isNotificationEnabled('goalDeadlineReminders')) {
+    return;
+  }
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const deadline = new Date(goal.deadline);
@@ -263,8 +411,14 @@ export const sendGoalDeadlineReminder = async (
       await sendNotification(
         userId,
         'REMINDER',
-        'Mục tiêu gần đến deadline',
-        `Mục tiêu "${goal.name}" sẽ hết hạn trong ${daysRemaining} ngày. Bạn chỉ mới đạt ${Math.round(progress)}% tiến độ (${formatCurrency(goal.current_amount)} / ${formatCurrency(goal.target_amount)}). Hãy cố gắng thêm nhé!`
+        t('messages.goalDeadline.title'),
+        t('messages.goalDeadline.message', {
+          goalName: goal.name,
+          daysRemaining,
+          progress: Math.round(progress),
+          currentAmount: formatCurrency(goal.current_amount),
+          targetAmount: formatCurrency(goal.target_amount)
+        })
       );
       markNotificationAsSent(userId, 'REMINDER', key);
     }

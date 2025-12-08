@@ -15,40 +15,60 @@
     }
   },
   "language": {
-    "label": "Ngôn ngữ & Tiền tệ",
-    "title": "Ngôn ngữ & Tiền tệ",
-    "description": "Tùy chọn hiển thị theo khu vực",
+    "label": "Ngôn ngữ",
+    "title": "Ngôn ngữ",
+    "description": "Chọn ngôn ngữ hiển thị",
     "languageLabel": "Ngôn ngữ hiển thị",
-    "currencyLabel": "Đơn vị tiền tệ",
     "options": {
       "vi": "🇻🇳 Tiếng Việt",
       "en": "🇺🇸 English"
-    },
-    "currencies": {
-      "VND": "💰 VNĐ - Việt Nam Đồng",
-      "USD": "💵 USD - US Dollar",
-      "EUR": "💶 EUR - Euro"
     }
   },
   "notifications": {
     "label": "Thông báo",
     "title": "Thông báo",
     "description": "Quản lý các loại thông báo bạn muốn nhận",
+    "categories": {
+      "reminder": "Nhắc nhở",
+      "warning": "Cảnh báo",
+      "success": "Thành công",
+      "info": "Thông tin"
+    },
+    "inactivityReminders": {
+      "title": "Nhắc nhở không hoạt động",
+      "description": "Nhắc nhở khi bạn lâu không ghi chép giao dịch"
+    },
+    "recurringTransactionReminders": {
+      "title": "Nhắc nhở giao dịch định kỳ",
+      "description": "Nhắc nhở trước khi giao dịch định kỳ đến hạn"
+    },
+    "goalDeadlineReminders": {
+      "title": "Nhắc nhở deadline mục tiêu",
+      "description": "Nhắc nhở khi mục tiêu sắp đến hạn"
+    },
     "budgetAlerts": {
       "title": "Cảnh báo ngân sách",
       "description": "Thông báo khi chi tiêu gần đạt giới hạn"
     },
-    "transactionAlerts": {
-      "title": "Giao dịch mới",
-      "description": "Thông báo khi có giao dịch được ghi nhận"
+    "lowBalanceAlerts": {
+      "title": "Cảnh báo số dư thấp",
+      "description": "Thông báo khi số dư ví sắp cạn"
     },
-    "weeklyReport": {
-      "title": "Báo cáo hàng tuần",
-      "description": "Nhận tổng kết chi tiêu mỗi tuần qua email"
+    "largeTransactionAlerts": {
+      "title": "Cảnh báo giao dịch lớn",
+      "description": "Thông báo khi bạn thực hiện giao dịch chi tiêu lớn"
     },
-    "sound": {
-      "title": "Âm thanh thông báo",
-      "description": "Phát âm thanh khi có thông báo mới"
+    "goalProgressAlerts": {
+      "title": "Thông báo tiến độ mục tiêu",
+      "description": "Thông báo khi bạn đạt 50% mục tiêu"
+    },
+    "goalCompletionAlerts": {
+      "title": "Thông báo hoàn thành mục tiêu",
+      "description": "Thông báo khi bạn hoàn thành một mục tiêu"
+    },
+    "monthlySummaryAlerts": {
+      "title": "Tổng kết hàng tháng",
+      "description": "Nhận tổng kết chi tiêu và thu nhập hàng tháng"
     }
   },
   "actions": {

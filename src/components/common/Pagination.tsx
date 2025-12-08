@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface PaginationProps {
   currentPage: number;
@@ -17,6 +18,8 @@ export default function Pagination({
   totalItems,
   showInfo = true,
 }: PaginationProps) {
+  const { t } = useTranslation('common');
+  
   // Tính toán số item hiển thị
   const startItem = totalItems ? (currentPage - 1) * itemsPerPage + 1 : 0;
   const endItem = totalItems
@@ -75,9 +78,9 @@ export default function Pagination({
       {/* Thông tin số item */}
       {showInfo && totalItems && (
         <div className="text-sm text-muted-foreground">
-          Hiển thị <span className="font-medium text-foreground">{startItem}</span> -{' '}
-          <span className="font-medium text-foreground">{endItem}</span> trong tổng số{' '}
-          <span className="font-medium text-foreground">{totalItems}</span> mục
+          {t('pagination.showing')} <span className="font-medium text-foreground">{startItem}</span> -{' '}
+          <span className="font-medium text-foreground">{endItem}</span> {t('pagination.of')}{' '}
+          <span className="font-medium text-foreground">{totalItems}</span> {t('pagination.items')}
         </div>
       )}
 
@@ -89,7 +92,7 @@ export default function Pagination({
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
           className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-muted bg-background text-muted-foreground transition-all hover:bg-muted hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-background disabled:hover:text-muted-foreground"
-          aria-label="Trang trước"
+          aria-label={t('pagination.previousPage')}
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -121,7 +124,7 @@ export default function Pagination({
                     ? 'bg-primary text-primary-foreground border-primary shadow-sm font-semibold'
                     : 'border-muted bg-background text-foreground hover:bg-muted hover:border-primary/30'
                 }`}
-                aria-label={`Trang ${pageNum}`}
+                aria-label={`${t('pagination.page')} ${pageNum}`}
                 aria-current={isActive ? 'page' : undefined}
               >
                 {pageNum}
@@ -136,7 +139,7 @@ export default function Pagination({
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-muted bg-background text-muted-foreground transition-all hover:bg-muted hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-background disabled:hover:text-muted-foreground"
-          aria-label="Trang sau"
+          aria-label={t('pagination.nextPage')}
         >
           <ChevronRight className="w-5 h-5" />
         </button>

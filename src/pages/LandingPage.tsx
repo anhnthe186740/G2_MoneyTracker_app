@@ -54,14 +54,14 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
       <header className="container mx-auto px-6 py-6">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
               <PieChart className="w-7 h-7 text-white" />
             </div>
-            <span className="text-2xl text-blue-900">MoneyTracker</span>
+            <span className="text-2xl text-blue-900 dark:text-blue-200">MoneyTracker</span>
           </div>
           
           <div className="flex gap-3">
@@ -79,11 +79,11 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </header>
 
       <section className="container mx-auto px-6 py-20 text-center">
-        <h1 className="text-5xl text-blue-900 mb-6">
+        <h1 className="text-5xl text-blue-900 dark:text-white mb-6">
           {t('hero.title')}
         </h1>
         
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+        <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
           {t('hero.subtitle')}
         </p>
         <div className="flex justify-center">
@@ -98,7 +98,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       <section className="container mx-auto px-6 py-16">
-        <h2 className="text-3xl text-center text-gray-800 mb-12">
+        <h2 className="text-3xl text-center text-gray-800 dark:text-white mb-12">
           {t('features.title')}
         </h2>
         
@@ -106,17 +106,17 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
           {features.map((feature, index) => (
             <div 
               key={index} 
-              className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow" 
+              className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-slate-800" 
             >
               <div className="mb-4">{feature.icon}</div>
-              <h3 className="text-gray-800 mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <h3 className="text-gray-800 dark:text-foreground mb-2">{feature.title}</h3>
+              <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <footer className="container mx-auto px-6 py-8 text-center text-gray-600">
+      <footer className="container mx-auto px-6 py-8 text-center text-gray-600 dark:text-gray-400">
         <p>© 2025 MoneyTracker. Quản lý tài chính cá nhân thông minh của G2-FA team.</p>
       </footer>
     </div>

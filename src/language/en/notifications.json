@@ -14,8 +14,67 @@
   },
   "empty": "No notifications",
   "new": "New",
+  "types": {
+    "WARNING": "Warning",
+    "SUCCESS": "Success",
+    "REMINDER": "Reminder",
+    "INFO": "Information"
+  },
+  "ariaLabels": {
+    "warningIcon": "Warning notification icon",
+    "successIcon": "Success notification icon",
+    "reminderIcon": "Reminder notification icon",
+    "infoIcon": "Information notification icon",
+    "markAsReadButton": "Mark this notification as read",
+    "markAllAsReadButton": "Mark all notifications as read"
+  },
   "toast": {
     "markedRead": "Marked as read",
     "markedAllRead": "Marked all as read"
+  },
+  "messages": {
+    "inactivity": {
+      "title": "Expense Recording Reminder",
+      "message3Days": "You haven't recorded any transactions for {{days}} days. Please update now to track your expenses more effectively!",
+      "message7Days": "You haven't recorded any transactions for {{days}} days. Update now to continue tracking your expenses!"
+    },
+    "lowBalance": {
+      "title": "Wallet {{walletName}} is running low",
+      "message": "Your {{walletName}} wallet balance is {{balance}}, below {{threshold}}. Please add more money to avoid shortage!"
+    },
+    "largeTransaction": {
+      "title": "Large expense transaction",
+      "message": "You just made a large expense transaction: {{amount}} for \"{{description}}\". Please review your expenses!",
+      "noDescription": "transaction without description"
+    },
+    "goalProgress": {
+      "title": "Goal progress",
+      "message": "Congratulations! You have reached {{progress}}% of your goal \"{{goalName}}\" ({{currentAmount}} / {{targetAmount}}). Keep it up!"
+    },
+    "goalCompletion": {
+      "title": "Goal completed",
+      "message": "🎉 Congratulations! You have achieved your goal \"{{goalName}}\" with {{amount}}. Excellent!"
+    },
+    "monthlySummary": {
+      "title": "Monthly transaction summary",
+      "message": "Summary for {{month}}: You spent {{totalSpent}}",
+      "messageWithIncome": "Summary for {{month}}: You spent {{totalSpent}} and earned {{totalIncome}}",
+      "messageWithCategory": "Summary for {{month}}: You spent {{totalSpent}} and earned {{totalIncome}}. Category \"{{mainCategory}}\" accounted for most of your expenses.",
+      "messageWithCategoryNoIncome": "Summary for {{month}}: You spent {{totalSpent}}. Category \"{{mainCategory}}\" accounted for most of your expenses."
+    },
+    "recurringTransaction": {
+      "title": "Recurring transaction reminder",
+      "message": "Recurring transaction \"{{description}}\" ({{amount}}) will be executed tomorrow. Please check your wallet balance!"
+    },
+    "goalDeadline": {
+      "title": "Goal approaching deadline",
+      "message": "Goal \"{{goalName}}\" will expire in {{daysRemaining}} days. You have only reached {{progress}}% progress ({{currentAmount}} / {{targetAmount}}). Keep trying!"
+    },
+    "budgetWarning": {
+      "title": "Budget warning",
+      "message50": "Budget for category \"{{categoryName}}\" has reached 50% of the limit.",
+      "message80": "Budget for category \"{{categoryName}}\" has reached 80% of the limit.",
+      "message100": "Budget for category \"{{categoryName}}\" has exceeded 100% of the limit."
+    }
   }
 }

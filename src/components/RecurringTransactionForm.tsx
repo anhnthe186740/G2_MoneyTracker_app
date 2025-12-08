@@ -189,6 +189,7 @@ export default function RecurringTransactionForm({
             onSuccess();
             onClose();
         } catch (err) {
+            console.error('Recurring transaction error:', err);
             setError(editTransaction ? t('form.updateError') : t('form.createError'));
         } finally {
             setLoading(false);
@@ -197,19 +198,19 @@ export default function RecurringTransactionForm({
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="bg-white dark:bg-slate-900 rounded-lg shadow-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto border border-border dark:border-slate-800">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">{editTransaction ? t('form.editTitle') : t('form.addTitle')}</h2>
+                    <h2 className="text-2xl font-bold text-foreground">{editTransaction ? t('form.editTitle') : t('form.addTitle')}</h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-500 hover:text-gray-700"
+                        className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100"
                     >
                         <X size={24} />
                     </button>
                 </div>
 
                 {error && (
-                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded dark:bg-red-900/30 dark:text-red-200">
                         {error}
                     </div>
                 )}
@@ -217,7 +218,7 @@ export default function RecurringTransactionForm({
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Type */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">{t('form.type')}</label>
+                        <label className="block text-sm font-medium mb-2 text-foreground">{t('form.type')}</label>
                         <div className="flex gap-4">
                             <label className="flex items-center">
                                 <input
@@ -252,11 +253,11 @@ export default function RecurringTransactionForm({
 
                     {/* Wallet */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">{t('form.wallet')}</label>
+                        <label className="block text-sm font-medium mb-2 text-foreground">{t('form.wallet')}</label>
                         <select
                             value={formData.walletId}
                             onChange={(e) => setFormData({ ...formData, walletId: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                         >
                             <option value="">{t('form.walletSelect')}</option>
@@ -270,7 +271,7 @@ export default function RecurringTransactionForm({
 
                     {/* Category */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <label className="block text-sm font-medium mb-2 text-foreground">
                             {t('form.categoryLabel', {
                                 count: filteredCategories.length,
                                 type: formData.type === 'INCOME' ? t('form.categoryTypeIncome') : t('form.categoryTypeExpense')
@@ -279,7 +280,7 @@ export default function RecurringTransactionForm({
                         <select
                             value={formData.categoryId}
                             onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                         >
                             <option value="">{t('form.categorySelect')}</option>
@@ -293,11 +294,11 @@ export default function RecurringTransactionForm({
 
                     {/* Amount */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">{t('form.amount')}</label>
+                        <label className="block text-sm font-medium mb-2 text-foreground">{t('form.amount')}</label>
                         <CurrencyInput
                             value={formData.amount}
                             onChange={(value) => setFormData({ ...formData, amount: value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             placeholder={t('form.amountPlaceholder')}
                             min={0}
                             required
@@ -306,14 +307,14 @@ export default function RecurringTransactionForm({
 
                     {/* Frequency */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">{t('form.frequency')}</label>
+                        <label className="block text-sm font-medium mb-2 text-foreground">{t('form.frequency')}</label>
                         <select
                             value={formData.frequency}
                             onChange={(e) => setFormData({
                                 ...formData,
                                 frequency: e.target.value as typeof formData.frequency
                             })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                         >
                             <option value="DAILY">{t('frequency.daily')}</option>
@@ -325,46 +326,46 @@ export default function RecurringTransactionForm({
 
                     {/* Start Date */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">{t('form.startDate')}</label>
+                        <label className="block text-sm font-medium mb-2 text-foreground">{t('form.startDate')}</label>
                         <input
                             type="date"
                             value={formData.startDate}
                             onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                         />
                     </div>
 
                     {/* Next Date */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">{t('form.nextDate')}</label>
+                        <label className="block text-sm font-medium mb-2 text-foreground">{t('form.nextDate')}</label>
                         <input
                             type="date"
                             value={formData.nextDate}
                             onChange={(e) => setFormData({ ...formData, nextDate: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                         />
                     </div>
 
                     {/* End Date (Optional) */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">{t('form.endDate')}</label>
+                        <label className="block text-sm font-medium mb-2 text-foreground">{t('form.endDate')}</label>
                         <input
                             type="date"
                             value={formData.endDate}
                             onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                         />
                     </div>
 
                     {/* Description */}
                     <div>
-                        <label className="block text-sm font-medium mb-2">{t('form.description')}</label>
+                        <label className="block text-sm font-medium mb-2 text-foreground">{t('form.description')}</label>
                         <textarea
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             rows={3}
                             placeholder={t('form.descriptionPlaceholder')}
                         />
@@ -379,7 +380,7 @@ export default function RecurringTransactionForm({
                             onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
                             className="mr-2"
                         />
-                        <label htmlFor="isActive" className="text-sm font-medium">
+                        <label htmlFor="isActive" className="text-sm font-medium text-foreground">
                             {t('form.isActive')}
                         </label>
                     </div>
@@ -389,14 +390,14 @@ export default function RecurringTransactionForm({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-4 py-2 border rounded hover:bg-gray-50"
+                            className="flex-1 px-4 py-2 border rounded hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-slate-800"
                             disabled={loading}
                         >
                             {t('form.cancel')}
                         </button>
                         <button
                             type="submit"
-                            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400"
+                            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 disabled:bg-gray-400"
                             disabled={loading}
                         >
                             {loading ? t('form.saving') : t('form.save')}

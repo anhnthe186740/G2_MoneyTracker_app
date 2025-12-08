@@ -83,5 +83,14 @@
   "confirm": {
     "cancel": "Cancel budget for category \"{{category}}\"?",
     "delete": "Permanently delete this budget? This action cannot be undone."
+  },
+  "errors": {
+    "fetchError": "Error fetching budgets.",
+    "createError": "Error creating budget.",
+    "updateError": "Error updating budget.",
+    "deleteError": "Error deleting budget.",
+    "checkProgressError": "Error checking budget progress:",
+    "contextError": "useBudgetContext must be used within BudgetProvider",
+    "categoryFallback": "Category {{id}}"
   }
 }

@@ -48,7 +48,7 @@ export default function FavoriteGoals({
 
   return (
     <div className="mb-6">
-      <h3 className="font-semibold text-xl mb-4 text-slate-900 flex items-center gap-2">
+      <h3 className="font-semibold text-xl mb-4 text-foreground flex items-center gap-2">
         ⭐ {t("favorites.title")}
       </h3>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-3">

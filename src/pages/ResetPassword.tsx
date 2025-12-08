@@ -77,7 +77,7 @@ export default function ResetPassword() {
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
                     <Loader2 className="h-8 w-8 animate-spin mx-auto text-indigo-600" />
-                    <p className="mt-4 text-gray-600">Đang kiểm tra...</p>
+                    <p className="mt-4 text-gray-600 dark:text-gray-300">Đang kiểm tra...</p>
                 </div>
             </div>
         );
@@ -85,26 +85,26 @@ export default function ResetPassword() {
 
     if (success) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
                 <div className="w-full max-w-md">
-                    <div className="bg-white rounded-3xl shadow-2xl p-8 text-center">
+                    <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl p-8 text-center border border-gray-200 dark:border-slate-800">
                         <div className="flex justify-center mb-6">
                             <div className="bg-green-100 rounded-full p-4">
                                 <CheckCircle className="text-green-600 w-12 h-12" />
                             </div>
                         </div>
 
-                        <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                        <h1 className="text-2xl font-bold text-foreground mb-4">
                             Đổi mật khẩu thành công!
                         </h1>
 
-                        <p className="text-gray-600 mb-8">
+                        <p className="text-muted-foreground mb-8">
                             Mật khẩu của bạn đã được cập nhật. Bạn có thể đăng nhập ngay bây giờ.
                         </p>
 
                         <Link
                             to="/login"
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-xl transition flex items-center justify-center gap-2"
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-semibold py-4 rounded-xl transition flex items-center justify-center gap-2"
                         >
                             Quay về trang đăng nhập
                         </Link>
@@ -115,7 +115,7 @@ export default function ResetPassword() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 {/* Logo */}
                 <div className="flex justify-center mb-8">
@@ -124,13 +124,13 @@ export default function ResetPassword() {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-3xl shadow-2xl p-8">
+                <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-slate-800">
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                        <h1 className="text-3xl font-bold text-foreground mb-2">
                             Đặt lại mật khẩu
                         </h1>
-                        <p className="text-gray-600">
+                        <p className="text-muted-foreground">
                             Tạo mật khẩu mới cho tài khoản của bạn
                         </p>
 
@@ -139,7 +139,7 @@ export default function ResetPassword() {
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* New Password */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-2">
                                 Mật khẩu mới
                             </label>
                             <div className="relative">
@@ -149,7 +149,7 @@ export default function ResetPassword() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Nhập mật khẩu mới"
-                                    className="w-full pl-11 pr-11 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                                    className="w-full pl-11 pr-11 py-3 border border-gray-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition bg-white dark:bg-slate-900 text-foreground"
                                     required
                                 />
                                 <button
@@ -168,7 +168,7 @@ export default function ResetPassword() {
 
                         {/* Confirm Password */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-2">
                                 Xác nhận mật khẩu
                             </label>
                             <div className="relative">
@@ -178,7 +178,7 @@ export default function ResetPassword() {
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     placeholder="Nhập lại mật khẩu mới"
-                                    className="w-full pl-11 pr-11 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                                    className="w-full pl-11 pr-11 py-3 border border-gray-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition bg-white dark:bg-slate-900 text-foreground"
                                     required
                                 />
                                 <button
@@ -199,7 +199,7 @@ export default function ResetPassword() {
                         <button
                             type="submit"
                             disabled={loading || !password || password !== confirmPassword}
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-xl transition flex items-center justify-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-semibold py-4 rounded-xl transition flex items-center justify-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
                             {loading ? (
                                 <>
@@ -216,10 +216,10 @@ export default function ResetPassword() {
                     </form>
 
                     {/* Back to Login */}
-                    <div className="mt-6 text-center">
+                        <div className="mt-6 text-center">
                         <Link
                             to="/login"
-                            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition"
+                            className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition"
                         >
                             <ArrowLeft className="h-4 w-4" />
                             Quay lại đăng nhập

@@ -221,16 +221,16 @@ export default function Recurring() {
 
       {/* Warning if no wallets or categories */}
       {hasNoData && (
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 dark:bg-yellow-900/30 dark:border-yellow-600/60">
           <div className="flex items-start justify-between">
             <div className="flex">
               <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                <svg className="h-5 w-5 text-yellow-400 dark:text-yellow-300" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
               </div>
               <div className="ml-3">
-                <p className="text-sm text-yellow-700">
+                <p className="text-sm text-yellow-700 dark:text-yellow-200">
                   <strong>{t('warning.title')}</strong>
                   {wallets.length === 0 && categories.length === 0 && ` ${t('warning.noWalletNoCategory')}`}
                   {wallets.length === 0 && categories.length > 0 && ` ${t('warning.noWallet')}`}
@@ -248,24 +248,27 @@ export default function Recurring() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-card rounded-lg shadow p-6 border border-border">
             <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.totalWallets')}</h3>
-            <p className="text-3xl font-bold text-blue-600">{wallets.length}</p>
+            <p className="text-3xl font-bold text-blue-600 dark:text-blue-300">{wallets.length}</p>
           </div>
           <div className="bg-card rounded-lg shadow p-6 border border-border">
             <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.totalBalance')}</h3>
-            <p className="text-3xl font-bold text-green-600">
+            <p className="text-3xl font-bold text-green-600 dark:text-green-300">
               {wallets.reduce((sum, w) => sum + w.balance, 0).toLocaleString()} {t('currency')}
             </p>
           </div>
           <div className="bg-card rounded-lg shadow p-6 border border-border">
             <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.categories')}</h3>
-            <p className="text-3xl font-bold text-purple-600">{categories.length}</p>
+            <p className="text-3xl font-bold text-purple-600 dark:text-purple-300">{categories.length}</p>
           </div>
         </div>
 
         <div className="flex justify-end gap-3">
           <button
+
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition-colors"
+
             onClick={handleCleanupInvalidData}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700"
+
             title={t('actions.deleteAllTooltip')}
           >
             <Trash2 size={18} />
@@ -276,7 +279,7 @@ export default function Recurring() {
             disabled={hasNoData}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${hasNoData
               ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-              : 'bg-purple-600 text-white hover:bg-purple-700'
+              : 'bg-purple-600 text-white hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600'
               }`}
             title={hasNoData ? t('actions.createWalletFirst') : t('actions.addRecurringTooltip')}
           >

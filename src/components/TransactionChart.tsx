@@ -63,11 +63,11 @@ export default function TransactionChart({ userId }: TransactionChartProps) {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-6">{t('chart.title')}</h2>
+        <div className="bg-white dark:bg-slate-900 rounded-lg shadow p-6 border border-border dark:border-slate-800">
+            <h2 className="text-2xl font-bold mb-6 text-foreground">{t('chart.title')}</h2>
 
             {chartData.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                     {t('chart.noData')}
                 </div>
             ) : (

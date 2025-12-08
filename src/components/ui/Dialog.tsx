@@ -67,11 +67,13 @@ export function DialogContent({ children, className = '', onClose }: DialogConte
   const defaultWidthClass = hasCustomWidth ? '' : 'max-w-md w-full';
   
   return (
-    <div className={`bg-white rounded-2xl shadow-2xl mx-4 max-h-[90vh] overflow-y-auto relative ${defaultWidthClass} ${className}`}>
+    <div
+      className={`bg-white dark:bg-slate-900 rounded-2xl shadow-2xl mx-4 max-h-[90vh] overflow-y-auto relative border border-border dark:border-slate-800 ${defaultWidthClass} ${className}`}
+    >
       {onClose && (
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100 z-10"
         >
           <X className="w-5 h-5" />
         </button>
@@ -94,7 +96,7 @@ interface DialogTitleProps {
 }
 
 export function DialogTitle({ children }: DialogTitleProps) {
-  return <h2 className="text-2xl font-semibold text-gray-900">{children}</h2>;
+  return <h2 className="text-2xl font-semibold text-foreground">{children}</h2>;
 }
 
 interface DialogDescriptionProps {
@@ -102,6 +104,6 @@ interface DialogDescriptionProps {
 }
 
 export function DialogDescription({ children }: DialogDescriptionProps) {
-  return <p className="text-sm text-gray-500 mt-2">{children}</p>;
+  return <p className="text-sm text-muted-foreground mt-2">{children}</p>;
 }
 
