@@ -264,13 +264,11 @@ export default function Recurring() {
 
         <div className="flex justify-end gap-3">
           <button
-<<<<<<< HEAD
-            onClick={handleDeleteAll}
+
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition-colors"
-=======
+
             onClick={handleCleanupInvalidData}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700"
->>>>>>> develop
+
             title={t('actions.deleteAllTooltip')}
           >
             <Trash2 size={18} />

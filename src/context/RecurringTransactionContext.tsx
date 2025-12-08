@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import { createContext, useState, useCallback, type ReactNode } from 'react';
 import api from '../services/api';
 import type { RecurringTransaction } from '../types';
 import { sendRecurringTransactionReminder } from '../services/notificationService';
@@ -14,6 +14,41 @@ interface RecurringTransactionContextType {
     deleteRecurringTransaction: (id: number | string) => Promise<void>;
     processRecurringTransactions: (userId: number | string) => Promise<void>;
 }
+
+type RecurringTransactionApi = {
+    id: number | string;
+    user_id: number | string;
+    wallet_id: number | string;
+    category_id: number | string;
+    amount: number;
+    type: 'INCOME' | 'EXPENSE';
+    description: string;
+    frequency: RecurringTransaction['frequency'];
+    start_date: string;
+    end_date?: string;
+    next_date: string;
+    is_active: boolean;
+    created_at: string;
+};
+
+type WalletApi = {
+    id: number | string;
+    user_id: number | string;
+    balance: number;
+};
+
+type TransactionApi = {
+    id: number | string;
+    user_id: number | string;
+    wallet_id: number | string;
+    category_id: number | string;
+    amount: number;
+    type: 'INCOME' | 'EXPENSE';
+    description: string;
+    date: string;
+    created_at: string;
+    recurring_transaction_id?: number | string;
+};
 
 // Helper function to calculate next date (defined outside component)
 const calculateNextDate = (currentDate: Date, frequency: RecurringTransaction['frequency']): Date => {
@@ -43,9 +78,9 @@ const updateWalletBalance = async (walletId: number | string, amount: number, ty
 
     try {
         // If userId is provided, use it to filter wallets to avoid ID collision
-        let wallet;
+        let wallet: WalletApi | undefined;
         if (userId) {
-            const walletsResponse = await api.get<any[]>(`/wallets?id=${walletId}&user_id=${userId}`);
+            const walletsResponse = await api.get<WalletApi[]>(`/wallets?id=${walletId}&user_id=${userId}`);
             if (walletsResponse.data && walletsResponse.data.length > 0) {
                 wallet = walletsResponse.data[0];
                 console.log(`Found wallet via query: id=${wallet.id}, user_id=${wallet.user_id}, balance=${wallet.balance}`);
@@ -53,7 +88,7 @@ const updateWalletBalance = async (walletId: number | string, amount: number, ty
                 throw new Error(`Wallet not found: id=${walletId}, user_id=${userId}`);
             }
         } else {
-            const walletResponse = await api.get<any>(`/wallets/${walletId}`);
+            const walletResponse = await api.get<WalletApi>(`/wallets/${walletId}`);
             wallet = walletResponse.data;
             console.log(`Found wallet via direct GET: id=${wallet.id}, balance=${wallet.balance}`);
         }
@@ -76,6 +111,7 @@ const updateWalletBalance = async (walletId: number | string, amount: number, ty
 
 export const RecurringTransactionContext = createContext<RecurringTransactionContextType | undefined>(undefined);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const RecurringTransactionProvider = ({ children }: { children: ReactNode }) => {
     const [recurringTransactions, setRecurringTransactions] = useState<RecurringTransaction[]>([]);
     const [loading, setLoading] = useState(false);
@@ -86,10 +122,10 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
         try {
             setLoading(true);
             setError(null);
-            const response = await api.get<any[]>(`/recurring_transactions?user_id=${userId}`);
+            const response = await api.get<RecurringTransactionApi[]>(`/recurring_transactions?user_id=${userId}`);
 
             // Map snake_case to camelCase - keep IDs as original type
-            const mapped = response.data.map((rt: any) => ({
+            const mapped = response.data.map((rt) => ({
                 id: rt.id, // Keep original ID (string or number)
                 userId: rt.user_id,
                 walletId: rt.wallet_id, // Keep as string or number
@@ -119,7 +155,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
 
     const getRecurringTransactionById = useCallback(async (id: number | string): Promise<RecurringTransaction | null> => {
         try {
-            const response = await api.get<any>(`/recurring_transactions/${id}`);
+            const response = await api.get<RecurringTransactionApi>(`/recurring_transactions/${id}`);
             const rt = response.data;
 
             // Map snake_case to camelCase
@@ -185,7 +221,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
                 await new Promise(resolve => setTimeout(resolve, 200));
                 // Process without lock check (this is a fresh creation)
                 setLoading(true);
-                const response = await api.get<any[]>(`/recurring_transactions?user_id=${recurringTransaction.userId}`);
+                const response = await api.get<RecurringTransactionApi[]>(`/recurring_transactions?user_id=${recurringTransaction.userId}`);
                 const newRt = response.data[response.data.length - 1]; // Get the last created one
 
                 if (newRt && newRt.is_active) {
@@ -251,7 +287,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
             if (!oldTransaction) throw new Error('Recurring transaction not found');
 
             // Map camelCase to snake_case for db.json
-            const updateData: any = {};
+            const updateData: Record<string, unknown> = {};
             if (recurringTransaction.userId !== undefined) updateData.user_id = recurringTransaction.userId;
             if (recurringTransaction.walletId !== undefined) updateData.wallet_id = recurringTransaction.walletId;
             if (recurringTransaction.categoryId !== undefined) updateData.category_id = recurringTransaction.categoryId;
@@ -314,8 +350,8 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
             setLoading(true);
             setError(null);
 
-            const response = await api.get<any[]>(`/recurring_transactions?user_id=${userId}`);
-            const recurringTransactionsList = response.data.map((rt: any) => ({
+            const response = await api.get<RecurringTransactionApi[]>(`/recurring_transactions?user_id=${userId}`);
+            const recurringTransactionsList = response.data.map((rt) => ({
                 id: rt.id, // Keep original ID (string or number)
                 userId: rt.user_id,
                 walletId: rt.wallet_id,
@@ -352,7 +388,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
 
                     // Check if transaction already exists for this recurring transaction on nextDate
                     // Use recurring_transaction_id to accurately track
-                    const existingTransactionsResponse = await api.get(
+                    const existingTransactionsResponse = await api.get<TransactionApi[]>(
                         `/transactions?user_id=${userId}&recurring_transaction_id=${rt.id}`
                     );
                     const nextDateStr = nextDate.toISOString().split('T')[0];
@@ -361,7 +397,7 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
 
                     // Check if already processed for this exact date
                     // Also check for very recent duplicates (within 5 seconds)
-                    const alreadyProcessedForDate = existingTransactionsResponse.data.some((t: any) => {
+                    const alreadyProcessedForDate = existingTransactionsResponse.data.some((t) => {
                         const tDate = new Date(t.date);
                         tDate.setHours(0, 0, 0, 0);
                         const tDateStr = tDate.toISOString().split('T')[0];
@@ -416,10 +452,10 @@ export const RecurringTransactionProvider = ({ children }: { children: ReactNode
                     await new Promise(resolve => setTimeout(resolve, 100));
 
                     // Double check one more time before creating
-                    const doubleCheckResponse = await api.get(
+                    const doubleCheckResponse = await api.get<TransactionApi[]>(
                         `/transactions?user_id=${userId}&recurring_transaction_id=${rt.id}`
                     );
-                    const stillNoDuplicate = !doubleCheckResponse.data.some((t: any) => {
+                    const stillNoDuplicate = !doubleCheckResponse.data.some((t) => {
                         const tDate = new Date(t.date);
                         tDate.setHours(0, 0, 0, 0);
                         const tDateStr = tDate.toISOString().split('T')[0];

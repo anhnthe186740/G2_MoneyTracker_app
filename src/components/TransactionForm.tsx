@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect, useCallback } from 'react';
 import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { TransactionContext } from '../context/TransactionContext';
@@ -40,7 +40,7 @@ export default function TransactionForm({
     const validCategories = categories.filter(c => c.id !== null && c.id !== undefined && c.id !== 'NaN' && !Number.isNaN(c.id));
 
     // Initialize form data based on edit mode
-    const getInitialFormData = () => {
+    const getInitialFormData = useCallback(() => {
         if (editTransaction) {
             const walletId = editTransaction.walletId !== null && editTransaction.walletId !== undefined && editTransaction.walletId !== 'NaN'
                 ? String(editTransaction.walletId)
@@ -67,7 +67,7 @@ export default function TransactionForm({
             description: '',
             date: new Date().toISOString().split('T')[0],
         };
-    };
+    }, [editTransaction]);
 
     const [formData, setFormData] = useState(getInitialFormData);
     const [loading, setLoading] = useState(false);
@@ -76,7 +76,7 @@ export default function TransactionForm({
     // Only update form when editTransaction prop changes (on mount)
     useEffect(() => {
         setFormData(getInitialFormData());
-    }, [editTransaction?.id]); // Only trigger when transaction ID changes
+    }, [getInitialFormData]); // Only trigger when transaction data changes
 
     const filteredCategories = validCategories.filter(c => c.type === formData.type);
 
@@ -143,8 +143,8 @@ export default function TransactionForm({
             if (editTransaction) {
                 // Cập nhật giao dịch
                 await updateTransaction(editTransaction.id, {
-                    walletId: formData.walletId as any,
-                    categoryId: formData.categoryId as any,
+                    walletId: formData.walletId,
+                    categoryId: formData.categoryId,
                     amount: amount,
                     type: formData.type,
                     description: formData.description,
@@ -154,8 +154,8 @@ export default function TransactionForm({
                 // Tạo giao dịch mới
                 await createTransaction({
                     userId,
-                    walletId: formData.walletId as any,
-                    categoryId: formData.categoryId as any,
+                    walletId: formData.walletId,
+                    categoryId: formData.categoryId,
                     amount,
                     type: formData.type,
                     description: formData.description,
@@ -343,13 +343,8 @@ export default function TransactionForm({
                         <input
                             type="date"
                             value={formData.date}
-<<<<<<< HEAD
-                            onChange={(value) => setFormData({ ...formData, date: value })}
-                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
-=======
                             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                            className="w-full border rounded px-3 py-2"
->>>>>>> develop
+                            className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
                             required
                         />
                     </div>
