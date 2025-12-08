@@ -120,40 +120,30 @@ export default function Recurring() {
     await loadData();
   };
 
-  const handleDeleteAll = async () => {
-    if (!window.confirm('⚠️ BẠN CÓ CHẮC CHẮN MUỐN XÓA TẤT CẢ GIAO DỊCH ĐỊNH KỲ?\n\nLưu ý: Thao tác này sẽ xóa tất cả giao dịch định kỳ của bạn và KHÔNG THỂ HOÀN TÁC!')) {
-      return;
-    }
-
-    // Double confirmation
-    if (!window.confirm('Xác nhận lần cuối: Xóa hết tất cả giao dịch định kỳ?')) {
+  const handleCleanupInvalidData = async () => {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa TẤT CẢ giao dịch định kỳ? Hành động này không thể hoàn tác!')) {
       return;
     }
 
     try {
       setLoading(true);
 
-      // Get all recurring transactions
+      // Get all recurring transactions for this user
       const recurringRes = await api.get(`/recurring_transactions?user_id=${user.id}`);
       const allRecurring = recurringRes.data;
 
-      if (allRecurring.length === 0) {
-        alert('Không có giao dịch định kỳ nào để xóa');
-        return;
-      }
-
-      // Delete all recurring transactions
+      // Delete ALL recurring transactions
       let deletedCount = 0;
       for (const rt of allRecurring) {
         await api.delete(`/recurring_transactions/${rt.id}`);
         deletedCount++;
       }
 
-      alert(`✅ Đã xóa thành công ${deletedCount} giao dịch định kỳ`);
+      alert(`Đã xóa thành công ${deletedCount} giao dịch định kỳ`);
       await handleUpdate();
     } catch (error) {
       console.error('Error deleting all recurring transactions:', error);
-      alert('❌ Có lỗi xảy ra khi xóa giao dịch định kỳ');
+      alert('Có lỗi xảy ra khi xóa giao dịch định kỳ');
     } finally {
       setLoading(false);
     }
@@ -191,9 +181,20 @@ export default function Recurring() {
     setEditRecurringTransaction(null);
   };
 
-  const handleRecurringSuccess = () => {
+  const handleRecurringSuccess = async () => {
     handleCloseRecurringForm();
-    handleUpdate();
+    await handleUpdate();
+    
+    // Process recurring transactions immediately to create transactions if nextDate is today or past
+    try {
+      console.log('=== Processing recurring transactions after save ===');
+      await processRecurringTransactions(user.id);
+      // Reload data again to show newly created transactions
+      await loadData();
+      console.log('=== Processing complete after save ===');
+    } catch (error) {
+      console.error('Error processing recurring transactions after save:', error);
+    }
   };
 
   if (loading) {
@@ -225,7 +226,7 @@ export default function Recurring() {
             <div className="flex">
               <div className="flex-shrink-0">
                 <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+<path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
               </div>
               <div className="ml-3">
@@ -243,59 +244,59 @@ export default function Recurring() {
 
       {/* Main Content */}
       <div className="space-y-6">
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-card rounded-lg shadow p-6 border border-border">
-            <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.totalWallets')}</h3>
-            <p className="text-3xl font-bold text-blue-600">{wallets.length}</p>
-          </div>
-          <div className="bg-card rounded-lg shadow p-6 border border-border">
-            <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.totalBalance')}</h3>
-            <p className="text-3xl font-bold text-green-600">
-              {wallets.reduce((sum, w) => sum + w.balance, 0).toLocaleString()} {t('currency')}
-            </p>
-          </div>
-          <div className="bg-card rounded-lg shadow p-6 border border-border">
-            <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.categories')}</h3>
-            <p className="text-3xl font-bold text-purple-600">{categories.length}</p>
-          </div>
-        </div>
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-card rounded-lg shadow p-6 border border-border">
+                <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.totalWallets')}</h3>
+                <p className="text-3xl font-bold text-blue-600">{wallets.length}</p>
+              </div>
+              <div className="bg-card rounded-lg shadow p-6 border border-border">
+                <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.totalBalance')}</h3>
+                <p className="text-3xl font-bold text-green-600">
+                  {wallets.reduce((sum, w) => sum + w.balance, 0).toLocaleString()} {t('currency')}
+                </p>
+              </div>
+              <div className="bg-card rounded-lg shadow p-6 border border-border">
+                <h3 className="text-lg font-semibold text-muted-foreground mb-2">{t('summary.categories')}</h3>
+                <p className="text-3xl font-bold text-purple-600">{categories.length}</p>
+</div>
+            </div>
 
-        <div className="flex justify-end gap-3">
-          <button
-            onClick={handleDeleteAll}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
-            title="Xóa tất cả giao dịch định kỳ"
-          >
-            <Trash2 size={18} />
-            Xóa hết
-          </button>
-          <button
-            onClick={() => setShowRecurringForm(true)}
-            disabled={hasNoData}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${hasNoData
-              ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-              : 'bg-purple-600 text-white hover:bg-purple-700'
-              }`}
-            title={hasNoData ? t('actions.createWalletFirst') : t('actions.addRecurringTooltip')}
-          >
-            <Plus size={20} />
-            {t('actions.addRecurring')}
-          </button>
-        </div>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={handleCleanupInvalidData}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700"
+                title={t('actions.deleteAllTooltip')}
+              >
+                <Trash2 size={18} />
+                {t('actions.deleteAll')}
+              </button>
+              <button
+                onClick={() => setShowRecurringForm(true)}
+                disabled={hasNoData}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${hasNoData
+                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                  : 'bg-purple-600 text-white hover:bg-purple-700'
+                  }`}
+                title={hasNoData ? t('actions.createWalletFirst') : t('actions.addRecurringTooltip')}
+              >
+                <Plus size={20} />
+                {t('actions.addRecurring')}
+              </button>
+            </div>
 
-        {/* Recurring Transaction List */}
-        {!hasNoData && (
-          <RecurringTransactionList
-            key={`recurring-list-${categories.length}-${categories.map(c => c.id).join(',')}`}
-            userId={user.id}
-            wallets={wallets}
-            categories={categories}
-            onUpdate={handleUpdate}
-            onEdit={handleEditRecurringTransaction}
-          />
-        )}
-      </div>
+            {/* Recurring Transaction List */}
+            {!hasNoData && (
+              <RecurringTransactionList
+                key={`recurring-list-${categories.length}-${categories.map(c => c.id).join(',')}`}
+                userId={user.id}
+                wallets={wallets}
+                categories={categories}
+                onUpdate={handleUpdate}
+                onEdit={handleEditRecurringTransaction}
+              />
+            )}
+          </div>
 
       {/* Recurring Transaction Form Modal */}
       {showRecurringForm && (
