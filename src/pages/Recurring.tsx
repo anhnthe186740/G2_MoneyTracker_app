@@ -120,40 +120,30 @@ export default function Recurring() {
     await loadData();
   };
 
-  const handleDeleteAll = async () => {
-    if (!window.confirm('⚠️ BẠN CÓ CHẮC CHẮN MUỐN XÓA TẤT CẢ GIAO DỊCH ĐỊNH KỲ?\n\nLưu ý: Thao tác này sẽ xóa tất cả giao dịch định kỳ của bạn và KHÔNG THỂ HOÀN TÁC!')) {
-      return;
-    }
-
-    // Double confirmation
-    if (!window.confirm('Xác nhận lần cuối: Xóa hết tất cả giao dịch định kỳ?')) {
+  const handleCleanupInvalidData = async () => {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa TẤT CẢ giao dịch định kỳ? Hành động này không thể hoàn tác!')) {
       return;
     }
 
     try {
       setLoading(true);
 
-      // Get all recurring transactions
+      // Get all recurring transactions for this user
       const recurringRes = await api.get(`/recurring_transactions?user_id=${user.id}`);
       const allRecurring = recurringRes.data;
 
-      if (allRecurring.length === 0) {
-        alert('Không có giao dịch định kỳ nào để xóa');
-        return;
-      }
-
-      // Delete all recurring transactions
+      // Delete ALL recurring transactions
       let deletedCount = 0;
       for (const rt of allRecurring) {
         await api.delete(`/recurring_transactions/${rt.id}`);
         deletedCount++;
       }
 
-      alert(`✅ Đã xóa thành công ${deletedCount} giao dịch định kỳ`);
+      alert(`Đã xóa thành công ${deletedCount} giao dịch định kỳ`);
       await handleUpdate();
     } catch (error) {
       console.error('Error deleting all recurring transactions:', error);
-      alert('❌ Có lỗi xảy ra khi xóa giao dịch định kỳ');
+      alert('Có lỗi xảy ra khi xóa giao dịch định kỳ');
     } finally {
       setLoading(false);
     }
@@ -191,9 +181,20 @@ export default function Recurring() {
     setEditRecurringTransaction(null);
   };
 
-  const handleRecurringSuccess = () => {
+  const handleRecurringSuccess = async () => {
     handleCloseRecurringForm();
-    handleUpdate();
+    await handleUpdate();
+
+    // Process recurring transactions immediately to create transactions if nextDate is today or past
+    try {
+      console.log('=== Processing recurring transactions after save ===');
+      await processRecurringTransactions(user.id);
+      // Reload data again to show newly created transactions
+      await loadData();
+      console.log('=== Processing complete after save ===');
+    } catch (error) {
+      console.error('Error processing recurring transactions after save:', error);
+    }
   };
 
   if (loading) {
@@ -263,12 +264,12 @@ export default function Recurring() {
 
         <div className="flex justify-end gap-3">
           <button
-            onClick={handleDeleteAll}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
-            title="Xóa tất cả giao dịch định kỳ"
+            onClick={handleCleanupInvalidData}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700"
+            title={t('actions.deleteAllTooltip')}
           >
             <Trash2 size={18} />
-            Xóa hết
+            {t('actions.deleteAll')}
           </button>
           <button
             onClick={() => setShowRecurringForm(true)}

@@ -6,7 +6,6 @@ import type { Category, Wallet, Transaction } from '../types';
 import { checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
 import { useBudgetContext } from '../context/BudgetContext';
 import CurrencyInput from './CurrencyInput';
-import DateInput from './DateInput';
 
 interface TransactionFormProps {
     userId: number;
@@ -341,9 +340,10 @@ export default function TransactionForm({
                     {/* Date */}
                     <div>
                         <label className="block text-sm font-medium mb-2">{t('form.dateLabel')}</label>
-                        <DateInput
+                        <input
+                            type="date"
                             value={formData.date}
-                            onChange={(value) => setFormData({ ...formData, date: value })}
+                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                             className="w-full border rounded px-3 py-2"
                             required
                         />
