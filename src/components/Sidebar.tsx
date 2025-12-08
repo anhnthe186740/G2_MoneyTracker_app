@@ -41,9 +41,10 @@ interface SidebarProps {
   onNavigate: (screen: string) => void;
   onLogout: () => void;
   userName: string;
+  avatar?: string;
 }
 
-export default function Sidebar({ currentScreen, onNavigate, onLogout, userName }: SidebarProps) {
+export default function Sidebar({ currentScreen, onNavigate, onLogout, userName, avatar }: SidebarProps) {
   const { t } = useTranslation('sidebar');
   const { unreadCount } = useNotificationsContext();
   
@@ -66,8 +67,12 @@ export default function Sidebar({ currentScreen, onNavigate, onLogout, userName 
 
       <div className="p-4 border-b border-border">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-400/50 rounded-full flex items-center justify-center">
-            <User className="w-5 h-5 text-blue-600 dark:text-blue-800" />
+          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-400/50 rounded-full flex items-center justify-center overflow-hidden">
+            {avatar ? (
+              <img src={avatar} alt={userName || t('user')} className="w-full h-full object-cover" />
+            ) : (
+              <User className="w-5 h-5 text-blue-600 dark:text-blue-800" />
+            )}
           </div>
           <div>
             <p className="text-foreground">{userName || t('user')}</p>

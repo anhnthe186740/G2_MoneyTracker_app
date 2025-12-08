@@ -37,6 +37,7 @@ export default function SidebarLayout() {
         onNavigate={handleNavigate}
         onLogout={logout}
         userName={user?.fullName ?? t('user')}
+        avatar={user?.avatar}
       />
 
       <main className="ml-64 flex-1 bg-muted/10">
