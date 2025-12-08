@@ -6,8 +6,6 @@ import type { Category, Wallet, RecurringTransaction } from '../types';
 import { checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
 import { useBudgetContext } from '../context/BudgetContext';
 import CurrencyInput from './CurrencyInput';
-import DateInput from './DateInput';
-import { calculateNextDate } from '../utils/dateFormat';
 
 interface RecurringTransactionFormProps {
     userId: number;
@@ -48,14 +46,6 @@ export default function RecurringTransactionForm({
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
-    // Auto-calculate nextDate when startDate or frequency changes
-    useEffect(() => {
-        if (formData.startDate && !editTransaction) {
-            const nextDate = calculateNextDate(formData.startDate, formData.frequency);
-            setFormData(prev => ({ ...prev, nextDate }));
-        }
-    }, [formData.startDate, formData.frequency, editTransaction]);
 
     useEffect(() => {
         if (editTransaction) {
@@ -335,33 +325,60 @@ export default function RecurringTransactionForm({
 
                     {/* Start Date */}
                     <div>
+<<<<<<< HEAD
                         <label className="block text-sm font-medium mb-2 text-foreground">{t('form.startDate')}</label>
                         <DateInput
                             value={formData.startDate}
                             onChange={(value) => setFormData({ ...formData, startDate: value })}
                             className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
+=======
+                        <label className="block text-sm font-medium mb-2">{t('form.startDate')}</label>
+                        <input
+                            type="date"
+                            value={formData.startDate}
+                            onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                            className="w-full border rounded px-3 py-2"
+>>>>>>> develop
                             required
                         />
                     </div>
 
                     {/* Next Date */}
                     <div>
+<<<<<<< HEAD
                         <label className="block text-sm font-medium mb-2 text-foreground">{t('form.nextDate')}</label>
                         <DateInput
                             value={formData.nextDate}
                             onChange={(value) => setFormData({ ...formData, nextDate: value })}
                             className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
+=======
+                        <label className="block text-sm font-medium mb-2">{t('form.nextDate')}</label>
+                        <input
+                            type="date"
+                            value={formData.nextDate}
+                            onChange={(e) => setFormData({ ...formData, nextDate: e.target.value })}
+                            className="w-full border rounded px-3 py-2"
+>>>>>>> develop
                             required
                         />
                     </div>
 
                     {/* End Date (Optional) */}
                     <div>
+<<<<<<< HEAD
                         <label className="block text-sm font-medium mb-2 text-foreground">{t('form.endDate')}</label>
                         <DateInput
                             value={formData.endDate}
                             onChange={(value) => setFormData({ ...formData, endDate: value })}
                             className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
+=======
+                        <label className="block text-sm font-medium mb-2">{t('form.endDate')}</label>
+                        <input
+                            type="date"
+                            value={formData.endDate}
+                            onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                            className="w-full border rounded px-3 py-2"
+>>>>>>> develop
                         />
                     </div>
 

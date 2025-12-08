@@ -3,10 +3,9 @@ import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { TransactionContext } from '../context/TransactionContext';
 import type { Category, Wallet, Transaction } from '../types';
-import { checkExpensesWarning, checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
+import { checkLowBalance, checkLargeTransaction } from '../services/notificationService';  // Import các hàm kiểm tra
 import { useBudgetContext } from '../context/BudgetContext';
 import CurrencyInput from './CurrencyInput';
-import DateInput from './DateInput';
 
 interface TransactionFormProps {
     userId: number;
@@ -229,7 +228,20 @@ export default function TransactionForm({
                 {(hasNoWallets || hasNoCategories) && (
                     <div className="mb-4 p-4 bg-yellow-100 text-yellow-800 rounded dark:bg-yellow-900/30 dark:text-yellow-200">
                         <p className="font-semibold mb-2">{t('form.cannotCreate')}</p>
-                        {hasNoWallets && <p>{t('form.createWalletFirst')}</p>}
+                        {hasNoWallets && (
+                            <div className="flex flex-col gap-2">
+                                <p>{t('form.createWalletFirst')}</p>
+                                {onOpenWalletForm && (
+                                    <button
+                                        type="button"
+                                        onClick={onOpenWalletForm}
+                                        className="w-fit px-3 py-1.5 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-sm font-medium transition-colors"
+                                    >
+                                        + {t('actions.addWallet', 'Thêm ví mới')}
+                                    </button>
+                                )}
+                            </div>
+                        )}
                         {hasNoCategories && <p>{t('form.createCategoryFirst', { type: formData.type === 'INCOME' ? t('form.categoryTypeIncome') : t('form.categoryTypeExpense') })}</p>}
                     </div>
                 )}
@@ -328,10 +340,16 @@ export default function TransactionForm({
                     {/* Date */}
                     <div>
                         <label className="block text-sm font-medium mb-2">{t('form.dateLabel')}</label>
-                        <DateInput
+                        <input
+                            type="date"
                             value={formData.date}
+<<<<<<< HEAD
                             onChange={(value) => setFormData({ ...formData, date: value })}
                             className="w-full border rounded px-3 py-2 bg-white dark:bg-slate-900 dark:border-slate-700 dark:text-foreground"
+=======
+                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                            className="w-full border rounded px-3 py-2"
+>>>>>>> develop
                             required
                         />
                     </div>
