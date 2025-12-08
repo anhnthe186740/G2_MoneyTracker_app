@@ -16,6 +16,9 @@ import Notifications from './pages/Notifications';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import ExportReports from './pages/ExportReports';
+import OTPTestPage from './pages/OTPTestPage';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   const { user, loading } = useContext(AuthContext)!;
@@ -27,6 +30,12 @@ function App() {
       <Routes>
         {/* Landing Page - công khai, không cần đăng nhập */}
         <Route path="/" element={<LandingPage />} />
+        {/* OTP Test Page - công khai, để test chức năng OTP */}
+        <Route path="/otp-test" element={<OTPTestPage />} />
+        {/* Forgot Password - công khai */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        {/* Reset Password - công khai nhưng cần verify OTP */}
+        <Route path="/reset-password" element={<ResetPassword />} />
         {/* Dashboard - yêu cầu đăng nhập */}
         <Route
           element={user ? <SidebarLayout /> : <Navigate to="/login" replace />}

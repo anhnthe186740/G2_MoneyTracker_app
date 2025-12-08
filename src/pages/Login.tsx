@@ -88,9 +88,9 @@ export default function Login() {
 
             {/* Forgot password */}
             <div className="text-right">
-              <a href="#" className="text-indigo-600 text-sm hover:underline">
+              <Link to="/forgot-password" className="text-indigo-600 text-sm hover:underline">
                 {t('forgotPassword')}
-              </a>
+              </Link>
             </div>
 
             {/* Submit button */}

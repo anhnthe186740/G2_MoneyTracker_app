@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, type ReactNode, type Dispatch, type SetStateAction } from 'react';
+import bcrypt from 'bcryptjs';
 import api from '../services/api';
 import { type User } from '../types';
 
@@ -33,14 +34,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (identifier: string, password: string) => {
     try {
-      setLoading(true); // Có thể thêm loading state khi đang call API
+      setLoading(true);
       const res = await api.get<User[]>('/users');
 
+      // Tìm user theo username hoặc email
       const foundUser = res.data.find(u =>
-        (u.username === identifier || u.email === identifier) && u.password === password
+        u.username === identifier || u.email === identifier
       );
 
-      if (foundUser) {
+      if (!foundUser) {
+        setLoading(false);
+        return false;
+      }
+
+      // Check if password field exists
+      if (!foundUser.password) {
+        setLoading(false);
+        return false;
+      }
+
+      // Verify password - hỗ trợ cả plain text (legacy) và bcrypt hash
+      let passwordMatch = false;
+
+      // Check if password is hashed (bcrypt hashes start with $2a$ or $2b$)
+      if (foundUser.password.startsWith('$2a$') || foundUser.password.startsWith('$2b$')) {
+        // Password đã hash - dùng bcrypt compare
+        passwordMatch = await bcrypt.compare(password, foundUser.password);
+      } else {
+        // Password chưa hash (plain text) - compare trực tiếp
+        passwordMatch = foundUser.password === password;
+      }
+
+      if (passwordMatch) {
         // FIX LỖI 3: Thêm comment ignore dòng destructuring password không dùng tới
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password: _unused, ...safeUser } = foundUser;
@@ -50,6 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoading(false);
         return true;
       }
+
       setLoading(false);
       return false;
     } catch (err) {
