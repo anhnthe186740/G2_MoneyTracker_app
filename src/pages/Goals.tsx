@@ -17,7 +17,7 @@ type Goal = {
   current_amount: number;
   deadline: string;
   status: string;
-  wallet_id: number;
+  wallet_id: number | string;
 };
 
 type Wallet = {
@@ -57,8 +57,10 @@ export default function Goals() {
   const [addMoneyAmount, setAddMoneyAmount] = useState<string>("");
   const [addMoneyFromWallet, setAddMoneyFromWallet] = useState<string>("");
 
-  const getWallet = (walletId: number) =>
-    wallets.find((w) => Number(w.id) === Number(walletId));
+  const getWallet = (walletId: number | string | undefined) => {
+    if (!walletId) return undefined;
+    return wallets.find((w) => Number(w.id) === Number(walletId));
+  };
     
   const calcProgress = (goalId: string) => {
     const goal = goals.find((g) => g.id === goalId);
@@ -156,10 +158,10 @@ export default function Goals() {
       return;
     }
 
-    if (!editingId && initAmount > 0) {
+    if (!editingId) {
       const srcWalletId = Number(sourceWallet);
 
-      if (isNaN(srcWalletId) || srcWalletId <= 0) {
+      if (isNaN(srcWalletId) || srcWalletId <= 0 || !sourceWallet) {
         setError(t("validation.selectSourceWallet"));
         return;
       }
@@ -182,15 +184,11 @@ export default function Goals() {
     }
 
     try {
-      const walletId = editingId
-        ? selectedWallet
-        : initAmount > 0
-        ? sourceWallet
-        : null;
+      const walletId = editingId ? selectedWallet : sourceWallet;
       const payload: any = {
         name,
         target_amount: target,
-        wallet_id: walletId || null,
+        wallet_id: walletId ? Number(walletId) : null,
         deadline: dueDate,
         status: selectedStatus,
       };
@@ -226,21 +224,19 @@ export default function Goals() {
           createdGoalId = data.id;
           setGoals((prev) => [...prev, data]);
 
-          if (initAmount > 0 && walletId) {
-            const wallet = wallets.find(
-              (w) => String(w.id) === String(walletId)
-            );
-            if (wallet) {
-              await api.patch(`/wallets/${wallet.id}`, {
-                balance: wallet.balance - initAmount,
-              });
+          const wallet = wallets.find(
+            (w) => String(w.id) === String(walletId)
+          );
+          if (wallet) {
+            await api.patch(`/wallets/${wallet.id}`, {
+              balance: wallet.balance - initAmount,
+            });
 
-              const { data: walletsData } = await api.get<Wallet[]>("/wallets");
-              const filteredWallets = walletsData.filter(
-                (w: Wallet) => String(w.user_id) === String(user.id)
-              );
-              setWallets(filteredWallets);
-            }
+            const { data: walletsData } = await api.get<Wallet[]>("/wallets");
+            const filteredWallets = walletsData.filter(
+              (w: Wallet) => String(w.user_id) === String(user.id)
+            );
+            setWallets(filteredWallets);
           }
         } catch (walletErr) {
           if (createdGoalId) {
