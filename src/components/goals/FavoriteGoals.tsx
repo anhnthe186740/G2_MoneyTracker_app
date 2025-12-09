@@ -9,7 +9,7 @@ type Goal = {
   current_amount: number;
   deadline: string;
   status: string;
-  wallet_id: number;
+  wallet_id: number | string;
 };
 
 type Wallet = {
@@ -24,7 +24,7 @@ interface FavoriteGoalsProps {
   goals: Goal[];
   wallets: Wallet[];
   calcProgress: (goalId: string) => { current: number; percent: number; completed: boolean };
-  getWallet: (walletId: number) => Wallet | undefined;
+  getWallet: (walletId: number | string | undefined) => Wallet | undefined;
   onEdit: (goal: Goal) => void;
   onDelete: (goal: Goal) => void;
   onToggleFavorite: (goalId: string) => void;

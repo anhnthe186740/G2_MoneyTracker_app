@@ -9,7 +9,7 @@ type Goal = {
   current_amount: number;
   deadline: string;
   status: string;
-  wallet_id: number;
+  wallet_id: number | string;
 };
 
 type Wallet = {
