@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
    
-    allowedHosts: ['uncogged-amy-fruitfully.ngrok-free.dev'],
+    allowedHosts: ['fnb1v7gd-5173.asse.devtunnels.ms'],
     host: true,
     
     proxy: {

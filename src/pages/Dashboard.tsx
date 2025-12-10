@@ -1,8 +1,8 @@
-import axios from "axios";
 import { Wallet, Loader2, Eye, EyeOff, Target, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
+import api from "../services/api";
 import {
   PieChart,
   Pie,
@@ -64,10 +64,10 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         const [wRes, tRes, cRes, gRes] = await Promise.all([
-          axios.get("http://localhost:3001/wallets"),
-          axios.get("http://localhost:3001/transactions"),
-          axios.get("http://localhost:3001/categories"),
-          axios.get("http://localhost:3001/goals"),
+          api.get("/wallets"),
+          api.get("/transactions"),
+          api.get("/categories"),
+          api.get("/goals"),
         ]);
 
         setWallets(wRes.data);

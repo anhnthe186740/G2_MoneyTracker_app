@@ -424,7 +424,7 @@ export default function Settings() {
                   </button>
                 </div>
 
-                {/* Large Transaction Alerts */}
+                
                 <div className="flex items-center justify-between p-4 rounded-xl hover:bg-muted/50 transition-colors">
                   <div className="flex items-center gap-4">
                     <div className="p-2 rounded-lg bg-orange-100 text-orange-600">
