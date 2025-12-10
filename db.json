@@ -52,7 +52,7 @@
       "user_id": 1,
       "name": "Vietcombank",
       "type": "BANK",
-      "balance": 99204677,
+      "balance": 95904677,
       "color": "#3498db",
       "created_at": "2024-01-15T09:00:00Z"
     },
@@ -61,7 +61,7 @@
       "user_id": 1,
       "name": "Ví Momo",
       "type": "E_WALLET",
-      "balance": 100000,
+      "balance": 7420000,
       "color": "#8e44ad",
       "created_at": "2024-01-20T11:30:00Z"
     },
@@ -718,6 +718,28 @@
       "description": "",
       "date": "2025-12-10T00:00:00.000Z",
       "created_at": "2025-12-10T02:21:00.696Z"
+    },
+    {
+      "id": "76b3",
+      "user_id": "1",
+      "wallet_id": "1",
+      "category_id": "5",
+      "amount": 300000,
+      "type": "EXPENSE",
+      "description": "",
+      "date": "2025-12-10T00:00:00.000Z",
+      "created_at": "2025-12-10T02:27:14.531Z"
+    },
+    {
+      "id": "7b6e",
+      "user_id": "1",
+      "wallet_id": "1",
+      "category_id": "4",
+      "amount": 3000000,
+      "type": "EXPENSE",
+      "description": "",
+      "date": "2025-12-10T00:00:00.000Z",
+      "created_at": "2025-12-10T02:27:35.770Z"
     }
   ],
   "recurring_transactions": [
@@ -862,15 +884,19 @@
       "name": "Mua MacBook Pro M3",
       "target_amount": 45000000,
       "current_amount": 25000000,
-      "deadline": "2024-08-30"
+      "deadline": "2024-08-30",
+      "status": "In Progress",
+      "wallet_id": 1000,
+      "is_favorite": false
     },
     {
-      "id": "2",
-      "user_id": 1,
       "name": "Du lịch Đà Lạt",
       "target_amount": 8000000,
+      "wallet_id": 1000,
+      "deadline": "2024-05-30",
+      "status": "In Progress",
       "current_amount": 3200000,
-      "deadline": "2024-05-30"
+      "user_id": 1
     },
     {
       "id": "3",
@@ -878,7 +904,9 @@
       "name": "Học khoá React Master",
       "target_amount": 5000000,
       "current_amount": 2000000,
-      "deadline": "2024-06-15"
+      "deadline": "2024-06-15",
+      "status": "In Progress",
+      "wallet_id": 1001
     },
     {
       "id": "4",
@@ -1059,6 +1087,15 @@
       "message": "Ngân sách cho danh mục \"Y tế\" đã đạt 50% hạn mức.",
       "is_read": false,
       "created_at": "2025-12-10T02:20:38.786Z"
+    },
+    {
+      "id": "bb70",
+      "user_id": 1,
+      "type": "WARNING",
+      "title": "Cảnh báo ngân sách",
+      "message": "Ngân sách cho danh mục \"Di chuyển\" đã đạt 50% hạn mức.",
+      "is_read": false,
+      "created_at": "2025-12-10T02:27:35.952Z"
     }
   ],
   "app_settings": [

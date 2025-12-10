@@ -29,14 +29,14 @@
   },
   "card": {
     "wallet": "Wallet",
-    "notAvailable": "N/A",
+    "notAvailable": "No wallet",
     "completed": "✓ Completed",
     "daysLeft": "{{days}} days left",
     "overdue": "Overdue",
     "progress": "Progress: {{percent}}%",
     "current": "Current",
     "target": "Target",
-    "percentComplete": "{{percent}}% complete",
+    "percentComplete": "complete",
     "remaining": "Remaining"
   },
   "empty": {
