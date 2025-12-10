@@ -8,6 +8,7 @@ import GoalsSummary from "../components/goals/GoalsSummary";
 import GoalModal from "../components/goals/GoalModal";
 import AddMoneyModal from "../components/goals/AddMoneyModal";
 import FavoriteGoals from "../components/goals/FavoriteGoals";
+import { checkGoalProgress, checkGoalCompletion, sendGoalDeadlineReminder } from "../services/notificationService";
 
 type Goal = {
   id: string;
@@ -120,6 +121,23 @@ export default function Goals() {
           );
           setGoals(filteredGoals);
           setWallets(filteredWallets);
+
+          // Kiểm tra deadline reminders cho tất cả mục tiêu
+          try {
+            for (const goal of filteredGoals) {
+              if (goal.deadline && goal.status !== 'completed') {
+                await sendGoalDeadlineReminder(user.id, {
+                  id: goal.id,
+                  name: goal.name,
+                  deadline: goal.deadline,
+                  current_amount: goal.current_amount || 0,
+                  target_amount: goal.target_amount,
+                });
+              }
+            }
+          } catch (notifyErr) {
+            console.error('Error checking goal deadlines:', notifyErr);
+          }
         } else {
           setGoals(Array.isArray(goalsRes.data) ? goalsRes.data : []);
           setWallets(Array.isArray(walletsRes.data) ? walletsRes.data : []);
@@ -359,6 +377,27 @@ export default function Goals() {
 
       setWallets(filteredWallets);
       setGoals(filteredGoals);
+
+      // Gửi thông báo về tiến độ và hoàn thành mục tiêu
+      const updatedGoal = filteredGoals.find((g) => g.id === addMoneyGoalId);
+      if (updatedGoal && user?.id) {
+        try {
+          await checkGoalProgress(user.id, {
+            id: updatedGoal.id,
+            name: updatedGoal.name,
+            current_amount: updatedGoal.current_amount,
+            target_amount: updatedGoal.target_amount,
+          });
+          await checkGoalCompletion(user.id, {
+            id: updatedGoal.id,
+            name: updatedGoal.name,
+            current_amount: updatedGoal.current_amount,
+            target_amount: updatedGoal.target_amount,
+          });
+        } catch (notifyErr) {
+          console.error('Error sending goal notifications:', notifyErr);
+        }
+      }
 
       setAddMoneyOpen(false);
       setAddMoneyGoalId("");

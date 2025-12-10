@@ -5,12 +5,20 @@ import React, {
   useContext,
   useCallback,
   useEffect,
+  useRef,
 } from 'react';
 import api from '../services/api';
 import type { Budget } from '../types/index';
 import { useNotificationsContext } from './NotificationContext'; // Sử dụng đúng hook
 import { useCategoryContext } from './CategoryContext';
+import { AuthContext } from './AuthContext';
 import i18n from '../language/i18next/config';
+import { sendNotification, hasSentNotification, markNotificationAsSent, clearNotificationSent } from '../services/notificationService';
+
+// Helper function để format currency
+const formatCurrency = (amount: number): string => {
+  return amount.toLocaleString();
+};
 
 // Kiểu dữ liệu cho context (tránh dùng any)
 interface BudgetContextType {
@@ -45,6 +53,8 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { refresh } = useNotificationsContext(); // Lấy các hàm từ NotificationContext
+  const authContext = useContext(AuthContext);
+  const user = authContext?.user ?? null;
   const [notifiedLevels, setNotifiedLevels] = useState<
     Record<string, 0 | 50 | 80 | 100>
   >(() => {
@@ -68,6 +78,38 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
     >
   >({});
   const { categories } = useCategoryContext();
+  
+  // Ref để track user đã load budgets chưa
+  const loadedUserIdRef = useRef<number | string | null>(null);
+
+  // ======== TỰ ĐỘNG LOAD BUDGETS KHI CÓ USER ========
+  
+  // Tự động load budgets khi user đăng nhập hoặc thay đổi
+  useEffect(() => {
+    if (!user?.id) {
+      // Nếu không có user, reset ref và clear budgets
+      if (loadedUserIdRef.current !== null) {
+        console.log('[BudgetContext] No user, clearing budgets and resetting ref');
+        loadedUserIdRef.current = null;
+        setBudgets([]);
+      }
+      return;
+    }
+
+    const userId = user.id;
+    // Chỉ load nếu chưa load cho user này và không đang loading
+    if (loadedUserIdRef.current !== userId && !loading) {
+      console.log(`[BudgetContext] Auto-loading budgets for user ${userId}`);
+      loadedUserIdRef.current = userId;
+      getBudgets(userId).catch((err) => {
+        console.error('[BudgetContext] Error loading budgets:', err);
+        loadedUserIdRef.current = null; // Reset nếu lỗi
+      });
+    } else if (loadedUserIdRef.current === userId) {
+      console.log(`[BudgetContext] Budgets already loaded for user ${userId}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]); // Chỉ phụ thuộc vào user.id để tránh loop
 
   // ======== CRUD BUDGET ========
 
@@ -78,9 +120,12 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const response = await api.get(`/budgets?user_id=${userId}`);
       setBudgets(response.data);
+      loadedUserIdRef.current = userId; // Đánh dấu đã load cho user này
+      console.log(`[BudgetContext] Loaded ${response.data.length} budgets for user ${userId}`);
     } catch (error) {
       setError(i18n.t('errors.fetchError', { ns: 'budget' }));
-      console.error(error);
+      console.error('[BudgetContext] Error loading budgets:', error);
+      loadedUserIdRef.current = null; // Reset nếu lỗi
     } finally {
       setLoading(false);
     }
@@ -107,6 +152,10 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
               'budgetNotifiedLevels',
               JSON.stringify(next)
             );
+            // Xóa các notification keys cũ cho budget này (nếu có)
+            [50, 80, 100].forEach(level => {
+              clearNotificationSent(created.user_id, 'WARNING', `budget-${created.id}-${level}`);
+            });
           }
           return next;
         });
@@ -147,6 +196,11 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
               'budgetNotifiedLevels',
               JSON.stringify(next)
             );
+            // Xóa các notification keys cũ cho budget này để có thể gửi lại thông báo
+            [50, 80, 100].forEach(level => {
+              clearNotificationSent(updatedBudget.user_id, 'WARNING', `budget-${updatedBudget.id}-${level}`);
+            });
+            console.log(`[Budget ${updatedBudget.id}] Reset notification levels and cleared old notification keys`);
           }
           return next;
         });
@@ -211,22 +265,31 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
           `/transactions?user_id=${budget.user_id}&category_id=${budget.category_id}&type=EXPENSE`
         );
 
+        // Normalize dates để so sánh chính xác (set về 00:00:00)
         const start = new Date(budget.start_date);
-        const end = new Date(
-          budget.end_date || new Date().toISOString().slice(0, 10)
-        );
+        start.setHours(0, 0, 0, 0);
+        
+        const endDateStr = budget.end_date || new Date().toISOString().slice(0, 10);
+        const end = new Date(endDateStr);
+        end.setHours(23, 59, 59, 999); // Set về cuối ngày để bao gồm cả ngày kết thúc
+
+        console.log(`[Budget ${budget.id}] Checking transactions from ${start.toISOString()} to ${end.toISOString()}`);
 
         const txsInRange = (response.data as any[]).filter((tx) => {
           if (!tx.date) return false;
-          const d = new Date(tx.date);
-          if (Number.isNaN(d.getTime())) return false;
-          return d >= start && d <= end;
+          const txDate = new Date(tx.date);
+          txDate.setHours(0, 0, 0, 0);
+          if (Number.isNaN(txDate.getTime())) return false;
+          const inRange = txDate >= start && txDate <= end;
+          return inRange;
         });
 
         const totalSpent = txsInRange.reduce(
           (sum, tx) => sum + (Number(tx.amount) || 0),
           0
         );
+
+        console.log(`[Budget ${budget.id}] Found ${txsInRange.length} transactions, total spent: ${totalSpent}, limit: ${budget.limit_amount}`);
 
         const progress = (totalSpent / budget.limit_amount) * 100;
 
@@ -247,13 +310,54 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
         };
 
         const level = getLevel(progress);
-        if (level === 0) return;
+        console.log(`[Budget ${budget.id}] Progress: ${progress.toFixed(2)}%, Level: ${level}%`);
+        
+        if (level === 0) {
+          console.log(`[Budget ${budget.id}] Level is 0, skipping notification`);
+          return;
+        }
 
         const key = String(budget.id);
         const lastLevel = notifiedLevels[key] ?? 0;
+        console.log(`[Budget ${budget.id}] Last notified level: ${lastLevel}%, Current level: ${level}%, Progress: ${progress.toFixed(2)}%`);
 
-        // Đã gửi cảnh báo level này rồi hoặc cao hơn → không gửi lại
-        if (lastLevel >= level) return;
+        // Tạo notification key để check duplicate
+        const notificationKey = `budget-${budget.id}-${level}`;
+        
+        // Kiểm tra xem đã gửi thông báo cho level này chưa (check localStorage)
+        const hasSentInStorage = hasSentNotification(budget.user_id, 'WARNING', notificationKey);
+        
+        console.log(`[Budget ${budget.id}] Checking duplicate prevention:`);
+        console.log(`  - Last notified level: ${lastLevel}%`);
+        console.log(`  - Current level: ${level}%`);
+        console.log(`  - Has sent in storage: ${hasSentInStorage}`);
+        console.log(`  - Notification key: ${notificationKey}`);
+        
+        // Nếu đã gửi ở level này hoặc level cao hơn VÀ đã xác nhận trong storage → không gửi lại
+        if (lastLevel >= level && hasSentInStorage) {
+          console.log(`[Budget ${budget.id}] ✅ Already notified at level ${lastLevel}% (>= ${level}%) and confirmed in storage, skipping`);
+          return;
+        }
+        
+        // Nếu notifiedLevels nói đã gửi nhưng không có trong storage (inconsistency)
+        // Có thể là bug hoặc data bị mất, trong trường hợp này vẫn gửi lại để đảm bảo
+        if (lastLevel >= level && !hasSentInStorage) {
+          console.log(`[Budget ${budget.id}] ⚠️ notifiedLevels says ${lastLevel}% but no notification in storage - possible data loss, will send notification`);
+          // Không sync, mà sẽ gửi lại thông báo để đảm bảo user nhận được
+          // Reset notifiedLevels để cho phép gửi lại
+          setNotifiedLevels((prev) => {
+            const next = { ...prev };
+            delete next[key];
+            if (typeof window !== 'undefined') {
+              window.localStorage.setItem(
+                'budgetNotifiedLevels',
+                JSON.stringify(next)
+              );
+            }
+            return next;
+          });
+          // Tiếp tục để gửi thông báo
+        }
 
         // Kiểm tra settings - xem budget alerts có được bật không
         try {
@@ -262,13 +366,16 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
             const parsed = JSON.parse(saved);
             if (parsed.notifications && parsed.notifications.budgetAlerts === false) {
               // Budget alerts đã bị tắt, không gửi thông báo
+              console.log(`[Budget ${budget.id}] Budget alerts are disabled in settings, skipping`);
               return;
             }
           }
         } catch (error) {
-          console.error('Error reading notification settings:', error);
+          console.error('[Budget] Error reading notification settings:', error);
           // Nếu có lỗi, vẫn gửi thông báo (default behavior)
         }
+        
+        console.log(`[Budget ${budget.id}] Proceeding to send notification for level ${level}%`);
 
         // Tìm tên danh mục để hiển thị đẹp trong thông báo
         const category = categories.find(
@@ -297,31 +404,88 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
             categoryName 
           });
         }
+        
+        // Kiểm tra message có rỗng không
+        if (!message || message.trim() === '') {
+          console.error(`[Budget ${budget.id}] Message is empty for level ${level}%`);
+          console.error(`[Budget ${budget.id}] Category name: ${categoryName}`);
+          // Fallback message nếu không tìm thấy translation
+          message = `Ngân sách ${categoryName} đã đạt ${level}% (${formatCurrency(totalSpent)} / ${formatCurrency(budget.limit_amount)})`;
+        }
+        
+        console.log(`[Budget ${budget.id}] Prepared message for level ${level}%: ${message}`);
 
-        // Gửi notification sang json-server
-        await api.post('/notifications', {
-          user_id: budget.user_id,
-          type: 'WARNING', // phù hợp với type đã khai báo trong model Notification
-          title: i18n.t('messages.budgetWarning.title', { ns: 'notifications' }),
-          message,
-          is_read: false,
-          created_at: new Date().toISOString(),
-        });
-        console.log(message);
+        // Gửi notification sử dụng notificationService
+        // Key đã được định nghĩa ở trên: budget-{budgetId}-{level}
+        // Kiểm tra lại một lần nữa để tránh race condition (nếu nhiều lần gọi cùng lúc)
+        const alreadySent = hasSentNotification(budget.user_id, 'WARNING', notificationKey);
+        console.log(`[Budget ${budget.id}] Final check - Has sent notification: ${alreadySent} for key: ${notificationKey}`);
+        
+        if (alreadySent) {
+          console.log(`⏭️ [Budget ${budget.id}] Budget notification already sent for level ${level}%, skipping...`);
+          // Vẫn cập nhật notifiedLevels để đảm bảo sync với localStorage
+          setNotifiedLevels((prev) => {
+            const next = { ...prev, [key]: level };
+            if (typeof window !== 'undefined') {
+              window.localStorage.setItem(
+                'budgetNotifiedLevels',
+                JSON.stringify(next)
+              );
+            }
+            return next;
+          });
+          return;
+        }
+        
+        // Nếu chưa gửi, tiến hành gửi thông báo
+        try {
+          console.log(`[Budget ${budget.id}] 🚀 Sending notification for level ${level}%...`);
+          console.log(`[Budget ${budget.id}] User ID: ${budget.user_id}`);
+          console.log(`[Budget ${budget.id}] Title: ${i18n.t('messages.budgetWarning.title', { ns: 'notifications' })}`);
+          console.log(`[Budget ${budget.id}] Message: ${message}`);
+          
+          await sendNotification(
+            budget.user_id,
+            'WARNING',
+            i18n.t('messages.budgetWarning.title', { ns: 'notifications' }),
+            message
+          );
+          console.log(`✅ [Budget ${budget.id}] Budget notification sent successfully at ${level}%`);
 
-        // Refresh notifications
-        refresh();
+          // Đánh dấu đã gửi NGAY SAU KHI gửi thành công
+          markNotificationAsSent(budget.user_id, 'WARNING', notificationKey);
+          console.log(`[Budget ${budget.id}] ✅ Marked notification as sent in localStorage`);
 
-        setNotifiedLevels((prev) => {
-          const next = { ...prev, [key]: level };
-          if (typeof window !== 'undefined') {
-            window.localStorage.setItem(
-              'budgetNotifiedLevels',
-              JSON.stringify(next)
-            );
-          }
-          return next;
-        });
+          // Cập nhật notifiedLevels sau khi gửi thành công
+          setNotifiedLevels((prev) => {
+            const next = { ...prev, [key]: level };
+            if (typeof window !== 'undefined') {
+              window.localStorage.setItem(
+                'budgetNotifiedLevels',
+                JSON.stringify(next)
+              );
+            }
+            console.log(`[Budget ${budget.id}] ✅ Updated notifiedLevels to ${level}%`);
+            return next;
+          });
+
+          // Refresh notifications để hiển thị ngay
+          // Đợi một chút để đảm bảo API đã xử lý xong
+          await new Promise(resolve => setTimeout(resolve, 500));
+          console.log(`[Budget ${budget.id}] 🔄 Refreshing notification list...`);
+          await refresh();
+          console.log(`[Budget ${budget.id}] ✅ Notification list refreshed`);
+        } catch (notifyErr) {
+          console.error(`❌ [Budget ${budget.id}] Error sending budget notification:`, notifyErr);
+          console.error(`❌ [Budget ${budget.id}] Error details:`, {
+            userId: budget.user_id,
+            level,
+            notificationKey,
+            error: notifyErr
+          });
+          // Nếu lỗi khi gửi, không cập nhật notifiedLevels để có thể thử lại lần sau
+          return;
+        }
       } catch (error) {
         console.error(i18n.t('errors.checkProgressError', { ns: 'budget' }), error);
       }
@@ -342,19 +506,29 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
   // ======== SHORT POLLING THEO THỜI GIAN THỰC ========
 
   useEffect(() => {
-    if (!budgets.length) return;
+    if (!budgets.length) {
+      console.log('[BudgetContext] No budgets, skipping check');
+      return;
+    }
+
+    console.log(`[BudgetContext] Checking ${budgets.length} budgets...`);
 
     // Chạy kiểm tra ngay lập tức khi danh sách ngân sách thay đổi
     budgets.forEach((budget) => {
       if (budget.status === 'ACTIVE') {
+        console.log(`[BudgetContext] Checking active budget ${budget.id}`);
         void checkProgress(budget);
+      } else {
+        console.log(`[BudgetContext] Skipping budget ${budget.id} with status: ${budget.status}`);
       }
     });
 
     const intervalId = window.setInterval(() => {
+      console.log(`[BudgetContext] Periodic check triggered for ${budgets.length} budgets`);
       budgets.forEach((budget) => {
         if (budget.status === 'ACTIVE') {
           // Kiểm tra tiến độ cho từng budget đang hoạt động
+          console.log(`[BudgetContext] Periodic check for budget ${budget.id}`);
           void checkProgress(budget);
         }
       });
@@ -362,6 +536,7 @@ export const BudgetProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Cleanup: clear interval khi budgets thay đổi hoặc unmount
     return () => {
+      console.log('[BudgetContext] Cleaning up interval');
       window.clearInterval(intervalId);
     };
   }, [budgets, checkProgress]);

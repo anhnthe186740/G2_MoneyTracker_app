@@ -81,17 +81,35 @@ export const sendNotification = async (
   message: string
 ) => {
   try {
-    await api.post('/notifications', {
+    const notificationData = {
       user_id: typeof userId === 'number' ? userId : Number(userId),
       type: type,
       title: title,
       message: message,
       is_read: false,
       created_at: new Date().toISOString(),
+    };
+    
+    console.log(`📤 [sendNotification] Sending notification to API:`, {
+      userId: notificationData.user_id,
+      type: notificationData.type,
+      title: notificationData.title,
+      messageLength: notificationData.message.length
     });
+    
+    const response = await api.post('/notifications', notificationData);
+    console.log(`✅ [sendNotification] Notification sent successfully:`, response.data);
     console.log(`✅ Thông báo đã được gửi cho user ${userId}: ${title}`);
+    
+    return response.data; // Trả về notification đã tạo
   } catch (error) {
-    console.error('❌ Error sending notification:', error);
+    console.error('❌ [sendNotification] Error sending notification:', error);
+    console.error('❌ [sendNotification] Error details:', {
+      userId,
+      type,
+      title,
+      error
+    });
     throw error; // Throw để caller có thể handle
   }
 };
@@ -222,16 +240,35 @@ export const checkLargeTransaction = async (
       transaction.description?.trim() && transaction.description.trim().length > 0
         ? transaction.description.trim()
         : t('messages.largeTransaction.noDescription');
-
-    await sendNotification(
-      userId,
-      'WARNING',
-      t('messages.largeTransaction.title'),
-      t('messages.largeTransaction.message', {
-        amount: formatCurrency(transaction.amount),
-        description: transactionLabel
-      })
-    );
+    
+    // Tạo key dựa trên amount, description và timestamp để đảm bảo mỗi giao dịch có key riêng
+    // Sử dụng timestamp để tránh trùng lặp khi có nhiều giao dịch giống nhau
+    const timestamp = Date.now();
+    const key = `large-transaction-${userId}-${transaction.amount}-${timestamp}`;
+    
+    // Kiểm tra xem đã gửi thông báo cho giao dịch tương tự trong vòng 1 phút chưa
+    // (để tránh gửi nhiều thông báo cho cùng một giao dịch nếu được gọi nhiều lần)
+    const recentKey = `large-transaction-recent-${userId}-${transaction.amount}`;
+    const recentSent = hasSentNotification(userId, 'WARNING', recentKey);
+    
+    if (!recentSent) {
+      await sendNotification(
+        userId,
+        'WARNING',
+        t('messages.largeTransaction.title'),
+        t('messages.largeTransaction.message', {
+          amount: formatCurrency(transaction.amount),
+          description: transactionLabel
+        })
+      );
+      markNotificationAsSent(userId, 'WARNING', key);
+      markNotificationAsSent(userId, 'WARNING', recentKey);
+      
+      // Xóa recentKey sau 1 phút để cho phép gửi lại cho giao dịch mới
+      setTimeout(() => {
+        clearNotificationSent(userId, 'WARNING', recentKey);
+      }, 60000); // 1 phút
+    }
   }
 };
 
@@ -426,7 +463,7 @@ export const sendGoalDeadlineReminder = async (
 };
 
 // Kiểm tra nếu thông báo đã được gửi
-const hasSentNotification = (
+export const hasSentNotification = (
   userId: string | number,
   type: string,
   key: string
@@ -441,7 +478,7 @@ const hasSentNotification = (
 };
 
 // Đánh dấu thông báo đã gửi
-const markNotificationAsSent = (
+export const markNotificationAsSent = (
   userId: string | number,
   type: string,
   key: string
